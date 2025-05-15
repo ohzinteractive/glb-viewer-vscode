@@ -1,0 +1,21 @@
+{
+  "name": "ohzi-vscode-glb-viewer",
+  "version": "1.0.0",
+  "main": "./extension.js",
+  "repository": "git@github.com:ohzinteractive/vscode-glb-viewer.git",
+  "author": "Gianni Ballerini <Gianniballerini@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.1.2",
+    "pug": "^3.0.3",
+    "scss": "^0.2.4",
+    "vite": "^6.3.5",
+    "vite-plugin-pug": "^0.4.1"
+  },
+  "scripts": {
+    "dev": "concurrently \"vite build --watch\" \"npm run watch-extension\"",
+    "build": "vite build && cp src/extension/extension.js extension.js",
+    "watch-extension": "chokidar 'src/extension/extension.js' -c 'cp src/extension/extension.js ./extension.js' --initial"
+  }
+}
