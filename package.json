@@ -5,17 +5,30 @@
   "repository": "git@github.com:ohzinteractive/vscode-glb-viewer.git",
   "author": "Gianni Ballerini <Gianniballerini@gmail.com>",
   "license": "MIT",
+  "type": "module",
+  "dependencies": {
+  },
   "devDependencies": {
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "pug": "^3.0.3",
-    "scss": "^0.2.4",
+    "sass": "^1.77.6",
+    "standardx": "^7.0.0",
+    "stylelint": "^15.3.0",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-order": "^6.0.3",
     "vite": "^6.3.5",
-    "vite-plugin-pug": "^0.4.1"
+    "vite-plugin-pug-transformer": "^1.0.5"
   },
   "scripts": {
     "dev": "concurrently \"vite build --watch\" \"npm run watch-extension\"",
     "build": "vite build && cp src/extension/extension.js extension.js",
     "watch-extension": "chokidar 'src/extension/extension.js' -c 'cp src/extension/extension.js ./extension.js' --initial"
+  },
+  "standardx": {
+    "ignore": [
+      "vite.config.mjs",
+      "rollup.config.mjs"
+    ]
   }
 }
