@@ -4,8 +4,19 @@ const path = require('path');
 
 function setupWebview(panel)
 {
-  const htmlPath = path.join(__dirname, '../../dist/webview/index.html');
-  const html = fs.readFileSync(htmlPath, 'utf8');
+  const distPath = path.join(__dirname, 'dist', 'webview');
+  const htmlPath = path.join(distPath, 'index.html');
+  let html = fs.readFileSync(htmlPath, 'utf8');
+
+  // Replace all /assets/... with webview URIs
+  html = html.replace(/(["'])\/assets\/([^"']+\.(js|css))\1/g, (match, quote, assetFile) =>
+  {
+    const assetFullPath = path.join(distPath, 'assets', assetFile);
+    const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
+    return `${quote}${webviewUri.toString()}${quote}`;
+  });
+
+  console.log('html', html);
   panel.webview.html = html;
 }
 
@@ -15,6 +26,7 @@ function activate(context)
     vscode.window.registerWebviewPanelSerializer('customView', {
       async deserializeWebviewPanel(panel)
       {
+        console.log('deserializeWebviewPanel');
         setupWebview(panel);
       }
     })
