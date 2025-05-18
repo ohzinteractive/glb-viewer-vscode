@@ -11,14 +11,22 @@
   "dependencies": {
   },
   "activationEvents": [
-    "onCommand:extension.openCustomWebview"
+    "onFileSystem:file",
+    "onFileSystem:vsls",
+    "onCommand:extension.viewGLB",
+    "onCustomEditor:glbViewer.customEditor"
   ],
   "contributes": {
-    "commands": [
+    "customEditors": [
       {
-        "command": "extension.openCustomWebview",
-        "title": "Open Custom Webview"
-      }]
+        "viewType": "glbViewer.customEditor",
+        "displayName": "GLB Viewer",
+        "selector": [
+          { "filenamePattern": "*.glb" }
+        ],
+        "priority": "option"
+      }
+    ]
   },
   "devDependencies": {
     "chokidar-cli": "^3.0.0",
