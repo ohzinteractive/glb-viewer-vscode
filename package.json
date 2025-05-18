@@ -2,10 +2,13 @@
   "name": "ohzi-vscode-glb-viewer",
   "version": "1.0.0",
   "main": "./extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ohzinteractive/vscode-glb-viewer"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
-  "repository": "git@github.com:ohzinter`acti`ve/vscode-glb-viewer.git",
   "author": "Gianni Ballerini <Gianniballerini@gmail.com>",
   "license": "MIT",
   "dependencies": {
