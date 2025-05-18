@@ -19,8 +19,12 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".",
-          "endsPattern": "compiled successfully"
+          "endsPattern": "built in"
         }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
       }
     }
   ]

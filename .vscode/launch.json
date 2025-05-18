@@ -11,7 +11,8 @@
       ],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
-      ]
+      ],
+      "preLaunchTask": "yarn: dev"
     }
   ]
 }
