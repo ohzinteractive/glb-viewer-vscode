@@ -63,7 +63,7 @@ class UIController
           this.$tree.style.width = new_width + 'px';
         }
       }
-      if (this.isDragging)
+      if (this.is_dragging)
       {
         const new_x = e.clientX - this.offset_x;
         const new_y = e.clientY - this.offset_y;
@@ -75,7 +75,7 @@ class UIController
         this.$tree_container.style.top = Math.min(Math.max(0, new_y), max_y) + 'px';
       }
 
-      if (this.isDraggingDetails)
+      if (this.is_dragging_details)
       {
         const new_x = e.clientX - this.offset_x_details;
         const new_y = e.clientY - this.offset_y_details;
@@ -118,7 +118,12 @@ class UIController
 
     const $node = document.createElement('div');
     $node.className = 'tree-node';
-    $node.style.paddingLeft = depth * 10 + 'px';
+
+    // depth 0 -> first level
+    if (depth === 0)
+    {
+      $node.style.paddingLeft = '0px';
+    }
 
     const $icon = document.createElement('div');
     $icon.className = 'tree-node__icon';
@@ -194,7 +199,7 @@ class UIController
 
       $action.addEventListener('click', (e) =>
       {
-        e.stopPropagation(); // Prevent triggering the label click
+        e.stopPropagation();
         const new_visibility = !object3d.visible;
         toggle_children_visibility(object3d, new_visibility);
         update_children_eye_icons(object3d, new_visibility);
@@ -205,7 +210,7 @@ class UIController
       $icon.innerHTML = ICON_OBJECT;
       $action.addEventListener('click', (e) =>
       {
-        e.stopPropagation(); // Prevent triggering the label click
+        e.stopPropagation();
         object3d.visible = !object3d.visible;
         $action.innerHTML = object3d.visible ? ICON_CLOSED_EYE : ICON_OPEN_EYE;
       });

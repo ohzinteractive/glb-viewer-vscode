@@ -1,3 +1,9 @@
+$ptr: 0.0625rem;
+
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
 body, html {
   --background-color: #252526;
   --background-color-alt: #444;
@@ -43,8 +49,8 @@ div.hidden {
   flex-direction: column;
 
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 10 * $ptr;
+  left: 10 * $ptr;
   z-index: 10;
 
   width: fit-content;
@@ -54,7 +60,7 @@ div.hidden {
 
   background: var(--background-color);
 
-  border-radius: 4px;
+  border-radius: 4 * $ptr;
   overflow: hidden;
 }
 
@@ -65,7 +71,7 @@ div.hidden {
 
   justify-content: center;
 
-  padding: 5px;
+  padding: 5 * $ptr;
 
   background: var(--background-color);
   cursor: move;
@@ -74,13 +80,13 @@ div.hidden {
 .tree-header:hover {
   background: var(--background-color-alt);
 
-  box-shadow: 0 0 8px rgb(0 0 0 / 20%);
+  box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
 }
 
 .tree {
-  padding: 10px;
+  padding: 10 * $ptr;
 
-  width: 200px;
+  width: 200 * $ptr;
   height: 100%;
 
   color: var(--text-color);
@@ -93,6 +99,8 @@ div.hidden {
 }
 
 .tree-node {
+  padding-left: 10 * $ptr;
+
   font-family: monospace;
   user-select: none;
 }
@@ -103,9 +111,9 @@ div.hidden {
   align-items: center;
   cursor: pointer;
 
-  padding: 2px 4px;
+  padding: 2 * $ptr 4 * $ptr;
 
-  border-radius: 4px;
+  border-radius: 4 * $ptr;
 }
 
 .tree-node__label-wrapper:hover {
@@ -121,10 +129,10 @@ div.hidden {
 
   justify-content: center;
 
-  margin-right: 4px;
+  margin-right: 4 * $ptr;
 
-  width: 16px;
-  height: 16px;
+  width: 16 * $ptr;
+  height: 16 * $ptr;
   transition: transform 0.1s ease;
 }
 
@@ -133,7 +141,7 @@ div.hidden {
 
   min-width: 0;
 
-  font-size: 13px;
+  font-size: 13 * $ptr;
 
   text-overflow: ellipsis;
 
@@ -150,12 +158,12 @@ div.hidden {
 
   justify-content: center;
 
-  width: 16px;
-  height: 16px;
+  width: 16 * $ptr;
+  height: 16 * $ptr;
 }
 
 .tree-node__children {
-  margin-left: 0; /* padding handled by depth * 10px */
+  margin-left: 0; /* padding handled by depth * 10 * $ptr */
 }
 
 .splitter {
@@ -169,14 +177,14 @@ div.hidden {
   top: 0;
   right: 0;
 
-  width: 16px;
+  width: 16 * $ptr;
   height: 100%;
 
   color: var(--text-color);
 
   background: var(--background-color);
 
-  border-left: 1px solid var(--text-color);
+  border-left: 1 * $ptr solid var(--text-color);
 
   cursor: col-resize;
 
@@ -184,8 +192,8 @@ div.hidden {
   transition: opacity 0.3s ease-in-out;
 
   svg {
-    width: 12px;
-    height: 12px;
+    width: 12 * $ptr;
+    height: 12 * $ptr;
   }
 }
 
@@ -196,8 +204,8 @@ div.hidden {
 
 .details {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 10 * $ptr;
+  right: 10 * $ptr;
   z-index: 10;
 
   color: var(--text-color);
@@ -206,7 +214,7 @@ div.hidden {
 
   background: var(--background-color);
 
-  border-radius: 4px;
+  border-radius: 4 * $ptr;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -220,20 +228,20 @@ div.hidden {
 
   justify-content: space-between;
 
-  padding: 5px 10px;
+  padding: 5 * $ptr 10 * $ptr;
 
-  border-bottom: 1px solid var(--background-color);
+  border-bottom: 1 * $ptr solid var(--background-color);
   cursor: move;
 }
 
 .details__header:hover {
-  border-bottom: 1px solid var(--background-color-alt);
+  border-bottom: 1 * $ptr solid var(--background-color-alt);
 
-  box-shadow: 0 0 8px rgb(0 0 0 / 20%);
+  box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
 }
 
 .details__header-title {
-  font-size: 14px;
+  font-size: 14 * $ptr;
   font-weight: bold;
 }
 
@@ -242,14 +250,14 @@ div.hidden {
 }
 
 .details__close {
-  height: 16px;
+  height: 16 * $ptr;
 
   color: var(--text-color);
   cursor: pointer;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 16 * $ptr;
+    height: 16 * $ptr;
   }
 }
 
@@ -258,9 +266,9 @@ div.hidden {
 
   flex-direction: column;
 
-  padding: 10px;
+  padding: 10 * $ptr;
 
-  max-height: 200px;
+  max-height: 200 * $ptr;
   overflow-y: auto;
 }
 
@@ -269,9 +277,9 @@ div.hidden {
 
   flex-direction: row;
 
-  gap: 5px;
+  gap: 5 * $ptr;
 
-  padding: 5px;
+  padding: 5 * $ptr;
 }
 
 .details__item:hover {
