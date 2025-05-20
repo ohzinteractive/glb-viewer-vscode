@@ -2,10 +2,10 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "yarn: dev",
+      "label": "yarn: build",
       "type": "shell",
       "command": "yarn",
-      "args": ["start"],
+      "args": ["build"],
       "isBackground": true,
       "problemMatcher": {
         "pattern": [
