@@ -1,27 +1,44 @@
 import { GLTFLoader } from './lib/three/GLTFLoader.js';
 import { OrbitControls } from './lib/three/OrbitControls.js';
-import * as THREE from './lib/three/three.module.js';
+import { Renderer } from './Renderer.js';
+
+import {
+  Scene,
+  PerspectiveCamera,
+  HemisphereLight,
+  AmbientLight,
+  DirectionalLight,
+  Box3,
+  Vector3,
+  GridHelper,
+  Box3Helper,
+  MathUtils,
+  Color
+} from './lib/three/three.module.js';
 
 class SceneController
 {
   constructor(parent)
   {
     this.parent = parent;
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('.viewer'), antialias: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.scene = new Scene();
+    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera.clear_color = new Color('#eeeeee');
+    this.camera.clear_alpha = 1;
 
-    this.hemisphere_light = new THREE.HemisphereLight(0xffffff, 0x444444);
+    const dom_container = document.querySelector('.viewer');
+    this.renderer = new Renderer(dom_container);
+
+    this.hemisphere_light = new HemisphereLight(0xffffff, 0x444444);
     this.scene.add(this.hemisphere_light);
 
-    this.ambient_light = new THREE.AmbientLight(0xffffff, 0.5);
+    this.ambient_light = new AmbientLight(0xffffff, 0.5);
     this.scene.add(this.ambient_light);
 
-    this.directional_light = new THREE.DirectionalLight(0xffffff, 1);
+    this.directional_light = new DirectionalLight(0xffffff, 1);
     this.scene.add(this.directional_light);
 
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, dom_container);
     this.controls.update();
 
     this.loader = new GLTFLoader();
@@ -29,13 +46,6 @@ class SceneController
 
   init()
   {
-    window.addEventListener('resize', () =>
-    {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
     this.animate();
   }
 
@@ -51,18 +61,27 @@ class SceneController
     {
       console.log('GLB loaded', gltf);
       this.scene.add(gltf.scene);
+      gltf.scene.traverse(child =>
+      {
+        child.frustumCulled = false;
+        if (child.geometry)
+        {
+          child.geometry.computeBoundingBox();
+          console.log(child);
+        }
+      });
 
-      const box = new THREE.Box3().setFromObject(gltf.scene);
-      const size = box.getSize(new THREE.Vector3()).length();
-      const center = box.getCenter(new THREE.Vector3());
-
+      const box = new Box3().setFromObject(gltf.scene, true);
+      const size = box.getSize(new Vector3()).length();
+      const center = box.getCenter(new Vector3());
+      console.log('box', box);
+      console.log('size', size);
+      console.log('center', center);
       this.camera.position.copy(center);
       this.camera.position.z += size * 1.5;
       this.camera.lookAt(center);
 
-      this.renderer.setClearColor(0xeeeeee, 1);
-
-      const grid = new THREE.GridHelper(10, 10);
+      const grid = new GridHelper(10, 10);
       this.scene.add(grid);
 
       this.parent.build_hierarchy_tree(gltf.scene);
@@ -88,28 +107,28 @@ class SceneController
       this.scene.remove(this.selected_outline);
     }
 
-    const box = new THREE.Box3().setFromObject(obj);
-    const helper = new THREE.Box3Helper(box, 0xff0000);
+    const box = new Box3().setFromObject(obj);
+    const helper = new Box3Helper(box, 0xff0000);
     this.selected_outline = helper;
     this.scene.add(helper);
   }
 
   focus_camera_on_object(obj)
   {
-    const box = new THREE.Box3().setFromObject(obj);
-    const center = box.getCenter(new THREE.Vector3());
+    const box = new Box3().setFromObject(obj);
+    const center = box.getCenter(new Vector3());
 
-    const size = box.getSize(new THREE.Vector3());
+    const size = box.getSize(new Vector3());
     const bounding_sphere_radius = size.length() / 2;
 
-    const fov = THREE.MathUtils.degToRad(this.camera.fov);
-    const aspect = this.renderer.domElement.clientWidth / this.renderer.domElement.clientHeight;
+    const fov = MathUtils.degToRad(this.camera.fov);
+    const aspect = this.camera.aspect;
 
     const distance_for_height = bounding_sphere_radius / Math.sin(fov / 2);
     const distance_for_width = bounding_sphere_radius / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
     const fit_distance = Math.max(distance_for_height, distance_for_width) * 1.2;
 
-    const direction = new THREE.Vector3();
+    const direction = new Vector3();
     this.camera.getWorldDirection(direction);
     direction.negate();
 
