@@ -1,7 +1,7 @@
 {
   "name": "ohzi-vscode-glb-viewer",
   "version": "1.0.0",
-  "main": "./extension.js",
+  "main": "extension.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ohzinteractive/vscode-glb-viewer"
@@ -11,8 +11,7 @@
   },
   "author": "Gianni Ballerini <Gianniballerini@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-  },
+  "dependencies": {},
   "activationEvents": [
     "onFileSystem:file",
     "onFileSystem:vsls",
@@ -25,7 +24,9 @@
         "viewType": "glbViewer.customEditor",
         "displayName": "GLB Viewer",
         "selector": [
-          { "filenamePattern": "*.glb" }
+          {
+            "filenamePattern": "*.glb"
+          }
         ],
         "priority": "option"
       }
@@ -44,14 +45,14 @@
     "vite-plugin-pug-transformer": "^1.0.5"
   },
   "scripts": {
-    "dev": "concurrently \"vite build --watch\" \"npm run watch-extension\"",
-    "build": "vite build && cp src/extension/extension.js extension.js",
-    "watch-extension": "chokidar 'src/extension/extension.js' -c 'cp src/extension/extension.js ./extension.js' --initial"
+    "start": "vite build --watch",
+    "build": "vite build"
   },
   "standardx": {
     "ignore": [
       "vite.config.mjs",
       "rollup.config.mjs"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
