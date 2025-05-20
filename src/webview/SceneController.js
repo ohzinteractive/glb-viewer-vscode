@@ -1,30 +1,29 @@
-import { GLTFLoader } from './lib/three/GLTFLoader.js';
-import { OrbitControls } from './lib/three/OrbitControls.js';
 import { Renderer } from './Renderer.js';
 
 import {
-  Scene,
-  PerspectiveCamera,
-  HemisphereLight,
   AmbientLight,
-  DirectionalLight,
   Box3,
-  Vector3,
-  GridHelper,
   Box3Helper,
-  MathUtils,
   Color,
-  Mesh,
-  BoxGeometry,
-  MeshBasicMaterial,
-  REVISION
-} from './lib/three/three.module.js';
+  DirectionalLight,
+  GridHelper,
+  HemisphereLight,
+  MathUtils,
+  PerspectiveCamera,
+  REVISION,
+  Scene,
+  Vector3
+} from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class SceneController
 {
   constructor(parent)
   {
     console.log(REVISION);
+
     this.parent = parent;
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(75, 1, 0.1, 200);
@@ -47,6 +46,10 @@ class SceneController
     this.controls.update();
 
     this.loader = new GLTFLoader();
+
+    this.draco_loader = new DRACOLoader();
+    this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
+    this.loader.setDRACOLoader(this.draco_loader);
   }
 
   init()

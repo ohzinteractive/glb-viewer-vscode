@@ -1,4 +1,4 @@
-import { WebGLRenderer } from './lib/three/three.module.js';
+import { WebGLRenderer } from 'three';
 
 export class Renderer
 {
@@ -46,7 +46,7 @@ export class Renderer
       this.container_size.height = height;
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
-      console.log('RESIZING', width, height, window.devicePixelRatio);
+      // console.log('RESIZING', width, height, window.devicePixelRatio);
     }
   }
 
