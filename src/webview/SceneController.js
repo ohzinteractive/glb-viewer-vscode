@@ -13,16 +13,21 @@ import {
   GridHelper,
   Box3Helper,
   MathUtils,
-  Color
+  Color,
+  Mesh,
+  BoxGeometry,
+  MeshBasicMaterial,
+  REVISION
 } from './lib/three/three.module.js';
 
 class SceneController
 {
   constructor(parent)
   {
+    console.log(REVISION);
     this.parent = parent;
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = new PerspectiveCamera(75, 1, 0.1, 200);
     this.camera.clear_color = new Color('#eeeeee');
     this.camera.clear_alpha = 1;
 
@@ -66,17 +71,17 @@ class SceneController
         child.frustumCulled = false;
         if (child.geometry)
         {
-          child.geometry.computeBoundingBox();
-          console.log(child);
+          if (child.isSkinnedMesh)
+          {
+            child.computeBoundingBox();
+          }
         }
       });
 
       const box = new Box3().setFromObject(gltf.scene, true);
       const size = box.getSize(new Vector3()).length();
       const center = box.getCenter(new Vector3());
-      console.log('box', box);
-      console.log('size', size);
-      console.log('center', center);
+
       this.camera.position.copy(center);
       this.camera.position.z += size * 1.5;
       this.camera.lookAt(center);
@@ -134,9 +139,6 @@ class SceneController
 
     const new_position = center.clone().add(direction.multiplyScalar(fit_distance));
     this.camera.position.copy(new_position);
-
-    this.camera.near = fit_distance / 100;
-    this.camera.far = fit_distance * 100;
     this.camera.updateProjectionMatrix();
 
     if (this.controls)
