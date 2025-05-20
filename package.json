@@ -9,7 +9,10 @@
   "engines": {
     "vscode": "^1.80.0"
   },
-  "author": "Gianni Ballerini <Gianniballerini@gmail.com>",
+  "authors": [
+    "Gianni Ballerini <ballerinidev@gmail.com>",
+    "Ramiro Fages <ramiro.fages@ohzi.io>"
+  ],
   "license": "MIT",
   "dependencies": {
     "three": "^0.176.0"
