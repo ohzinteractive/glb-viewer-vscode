@@ -48,7 +48,8 @@ class SceneController
     this.loader = new GLTFLoader();
 
     this.draco_loader = new DRACOLoader();
-    this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
+    this.draco_loader.setDecoderPath('./lib/draco/');
+    // this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
     this.loader.setDRACOLoader(this.draco_loader);
   }
 

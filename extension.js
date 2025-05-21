@@ -24,6 +24,22 @@ function getHTML(panel)
     return `${quote}${webviewUri.toString()}${quote}`;
   });
 
+  // Replace all relative paths to the draco folder
+  // html = html.replace(/(["'])\.\/lib\/draco\/([^"']+\.(js|css))\1/g, (match, quote, assetFile) =>
+  // {
+  //   const assetFullPath = path.join(distPath, 'lib', 'draco', assetFile);
+  //   const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
+  //   return `${quote}${webviewUri.toString()}${quote}`;
+  // });
+
+  // Replace all draco paths with the webview URI
+  html = html.replace(/(["'])\.\/lib\/draco\/([^"']+\.(js|wasm))\1/g, (match, quote, fileName) =>
+  {
+    const assetFullPath = path.join(distPath, 'lib', 'draco', fileName);
+    const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
+    return `${quote}${webviewUri.toString()}${quote}`;
+  });
+
   return html;
 }
 
@@ -59,7 +75,8 @@ function activate(context)
         enableScripts: true,
         localResourceRoots: [
           vscode.Uri.file(path.join(__dirname, 'dist', 'webview')),
-          vscode.Uri.file(path.dirname(document.uri.fsPath))
+          vscode.Uri.file(path.dirname(document.uri.fsPath)),
+          vscode.Uri.file(path.join(__dirname, 'dist', 'webview', 'lib', 'draco'))
         ],
         enableFindWidget: true,
         retainContextWhenHidden: true
@@ -68,7 +85,10 @@ function activate(context)
       webviewPanel.webview.html = getHTML(webviewPanel);
 
       // Send the data URI to the webview
-      webviewPanel.webview.postMessage({ type: 'loadModel', dataUri });
+      webviewPanel.webview.postMessage({
+        type: 'loadModel',
+        dataUri
+      });
     }
   };
 
