@@ -1,3 +1,4 @@
+import { VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
 import { Renderer } from './Renderer.js';
 
 import {
@@ -6,9 +7,12 @@ import {
   Box3Helper,
   Color,
   DirectionalLight,
+  DoubleSide,
+  FrontSide,
   GridHelper,
   HemisphereLight,
   MathUtils,
+  MeshNormalMaterial,
   PerspectiveCamera,
   REVISION,
   Scene,
@@ -29,6 +33,9 @@ class SceneController
     this.camera = new PerspectiveCamera(75, 1, 0.1, 200);
     this.camera.clear_color = new Color('#eeeeee');
     this.camera.clear_alpha = 1;
+
+    this.normal_helpers = [];
+    this.tangent_helpers = [];
 
     const dom_container = document.querySelector('.viewer');
     this.renderer = new Renderer(dom_container);
@@ -148,6 +155,109 @@ class SceneController
     {
       this.controls.target.copy(center);
       this.controls.update();
+    }
+  }
+
+  handle_action_click(action, active)
+  {
+    switch (action)
+    {
+    case 'wireframe':
+      this.toggle_wireframe(active);
+      break;
+    case 'double-sided':
+      this.toggle_double_sided(active);
+      break;
+    case 'normals':
+      this.toggle_normals(active);
+      break;
+    case 'normals-vectors':
+      this.toggle_normals_vectors(active);
+      break;
+    case 'tangents':
+      this.toggle_tangents(active);
+      break;
+    default:
+      break;
+    }
+  }
+
+  toggle_wireframe(active)
+  {
+    this.scene.traverse(child =>
+    {
+      if (child.isMesh)
+      {
+        child.material.wireframe = active;
+      }
+    });
+  }
+
+  toggle_double_sided(active)
+  {
+    this.scene.traverse(child =>
+    {
+      if (child.isMesh)
+      {
+        child.material.side = active ? DoubleSide : FrontSide;
+      }
+    });
+  }
+
+  toggle_normals(active)
+  {
+    this.scene.overrideMaterial = active ? new MeshNormalMaterial() : null;
+  }
+
+  toggle_normals_vectors(active)
+  {
+    if (active)
+    {
+      this.scene.traverse(child =>
+      {
+        if (child.isMesh)
+        {
+          const normal_helper = new VertexNormalsHelper(child, 1, 0x00ff00);
+          this.normal_helpers.push(normal_helper);
+          this.scene.add(normal_helper);
+        }
+      });
+    }
+    else
+    {
+      for (let i = 0; i < this.normal_helpers.length; i++)
+      {
+        this.scene.remove(this.normal_helpers[i]);
+      }
+      this.normal_helpers = [];
+    }
+  }
+
+  toggle_tangents(active)
+  {
+    if (active)
+    {
+      this.scene.traverse(child =>
+      {
+        if (child.isMesh)
+        {
+          if (!child.geometry.attributes.tangent)
+          {
+            child.geometry.computeTangents();
+          }
+          const tangent_helper = new VertexTangentsHelper(child, 1, 0x00ff00);
+          this.tangent_helpers.push(tangent_helper);
+          this.scene.add(tangent_helper);
+        }
+      });
+    }
+    else
+    {
+      for (let i = 0; i < this.tangent_helpers.length; i++)
+      {
+        this.scene.remove(this.tangent_helpers[i]);
+      }
+      this.tangent_helpers = [];
     }
   }
 }

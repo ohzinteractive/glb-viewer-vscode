@@ -36,6 +36,11 @@ class MainApplication
   {
     this.ui_controller.build_hierarchy_tree(object3d);
   }
+
+  handle_action_click(action, active)
+  {
+    this.scene_controller.handle_action_click(action, active);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () =>

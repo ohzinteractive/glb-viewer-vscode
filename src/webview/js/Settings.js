@@ -1,7 +1,8 @@
 class Settings
 {
-  constructor()
+  constructor(parent)
   {
+    this.parent = parent;
     this.$container = document.querySelector('.settings');
     this.$openButton = document.querySelector('.settings-button__open');
     this.$closeButton = document.querySelector('.settings-button__close');
@@ -46,13 +47,13 @@ class Settings
     {
       clicked_action_icon_on.classList.remove('hidden');
       clicked_action_icon_off.classList.add('hidden');
-      console.warn(`Todo: Turn ${action} on`);
+      this.parent.handle_action_click(action, true);
     }
     else
     {
       clicked_action_icon_on.classList.add('hidden');
       clicked_action_icon_off.classList.remove('hidden');
-      console.warn(`Todo: Turn ${action} off`);
+      this.parent.handle_action_click(action, false);
     }
   }
 }

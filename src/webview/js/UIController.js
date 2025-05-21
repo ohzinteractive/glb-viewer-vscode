@@ -50,6 +50,11 @@ class UIController
   {
     this.hierarchy_tree.build_hierarchy_tree(object3d);
   }
+
+  handle_action_click(action, active)
+  {
+    this.parent.handle_action_click(action, active);
+  }
 }
 
 export { UIController };

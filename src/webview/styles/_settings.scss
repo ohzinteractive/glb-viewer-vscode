@@ -51,6 +51,8 @@
 
   padding: 2.5 * $ptr 5 * $ptr;
 
+  color: var(--text-color);
+
   border-radius: 5 * $ptr;
 
   &:hover {
