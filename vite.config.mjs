@@ -12,8 +12,22 @@ export default defineConfig({
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
+        assetFileNames: 'assets/[name].[ext]',
+        manualChunks: {
+          'three': ['three'],
+          'three-addons': [
+            'three/examples/jsm/Addons.js',
+            'three/examples/jsm/controls/OrbitControls',
+            'three/examples/jsm/loaders/DRACOLoader',
+            'three/examples/jsm/loaders/GLTFLoader'
+          ]
+        }
       }
+    },
+    minify: 'esbuild',
+    esbuild: {
+      drop: ['console', 'debugger'],
+      treeShaking: true
     }
   },
   plugins: [
@@ -28,5 +42,8 @@ export default defineConfig({
       scss: {}
     }
   },
-  base: './'
+  base: './',
+  optimizeDeps: {
+    include: ['three']
+  }
 });

@@ -1,0 +1,22 @@
+# Development files
+.vscode/**
+.git/**
+.gitignore
+.eslintrc.js
+.stylelintrc.js
+jsconfig.json
+vite.config.mjs
+yarn.lock
+
+# Source files
+src/**
+
+# Test files
+**/*.test.js
+**/*.spec.js
+
+# VSIX files
+*.vsix
+
+# Node modules (should be installed by the extension)
+node_modules/**
