@@ -5,10 +5,13 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 ## Features
 
 - Preview GLB files directly in VS Code
+- DRACO support
 - Interactive 3D model viewing
 - Automatic file association with `.glb` files
-- Retains context when switching between files
-- Built-in find widget support
+- Hierarchy tree and details panel
+- Camera focus on object click
+- Copy to properties to clipboard
+- Extension settings to customize the viewer
 
 ## Requirements
 
