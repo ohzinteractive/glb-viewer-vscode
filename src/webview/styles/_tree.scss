@@ -1,0 +1,158 @@
+.tree-container {
+    display: flex;
+
+    flex-direction: column;
+
+    position: absolute;
+    top: 10 * $ptr;
+    left: 10 * $ptr;
+    z-index: 10;
+
+    width: fit-content;
+    max-height: 50%;
+
+    color: var(--text-color);
+
+    background: var(--background-color);
+
+    border-radius: 4 * $ptr;
+    overflow: hidden;
+  }
+
+  .tree-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 5 * $ptr;
+
+    background: var(--background-color);
+    cursor: move;
+  }
+
+  .tree-header:hover {
+    background: var(--background-color-alt);
+
+    box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
+  }
+
+  .tree {
+    padding: 10 * $ptr;
+
+    width: 200 * $ptr;
+    height: 100%;
+
+    color: var(--text-color);
+
+    font-family: monospace;
+
+    background: var(--background-color);
+    box-sizing: border-box;
+    overflow: hidden auto;
+  }
+
+  .tree-node {
+    padding-left: 10 * $ptr;
+
+    font-family: monospace;
+    user-select: none;
+  }
+
+  .tree-node__label-wrapper {
+    display: flex;
+
+    align-items: center;
+    cursor: pointer;
+
+    padding: 2 * $ptr 4 * $ptr;
+
+    border-radius: 4 * $ptr;
+  }
+
+  .tree-node__label-wrapper:hover {
+    background-color: var(--background-color-alt);
+  }
+
+  .tree-node__icon {
+    display: flex;
+
+    flex-shrink: 0;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 4 * $ptr;
+
+    width: 16 * $ptr;
+    height: 16 * $ptr;
+    transition: transform 0.1s ease;
+  }
+
+  .tree-node__label {
+    flex-grow: 1;
+
+    min-width: 0;
+
+    font-size: 13 * $ptr;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .tree-node__action {
+    display: flex;
+
+    flex-shrink: 0;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 16 * $ptr;
+    height: 16 * $ptr;
+  }
+
+  .tree-node__children {
+    margin-left: 0; /* padding handled by depth * 10 * $ptr */
+  }
+
+  .splitter {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 16 * $ptr;
+    height: 100%;
+
+    color: var(--text-color);
+
+    background: var(--background-color);
+
+    border-left: 1 * $ptr solid var(--text-color);
+
+    cursor: col-resize;
+
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    svg {
+      width: 12 * $ptr;
+      height: 12 * $ptr;
+    }
+  }
+
+  .splitter:hover {
+    background: var(--background-color-alt);
+    opacity: 1;
+  }

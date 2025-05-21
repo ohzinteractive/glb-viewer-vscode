@@ -1,0 +1,84 @@
+.details {
+    position: absolute;
+    top: 10 * $ptr;
+    right: 10 * $ptr;
+    z-index: 10;
+
+    color: var(--text-color);
+
+    font-family: monospace;
+
+    background: var(--background-color);
+
+    border-radius: 4 * $ptr;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .details__header {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 5 * $ptr 10 * $ptr;
+
+    border-bottom: 1 * $ptr solid var(--background-color);
+    cursor: move;
+  }
+
+  .details__header:hover {
+    border-bottom: 1 * $ptr solid var(--background-color-alt);
+
+    box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
+  }
+
+  .details__header-title {
+    font-size: 14 * $ptr;
+    font-weight: bold;
+  }
+
+  .details__header-message {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .details__close {
+    height: 16 * $ptr;
+
+    color: var(--text-color);
+    cursor: pointer;
+
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+    }
+  }
+
+  .details__content {
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 10 * $ptr;
+
+    max-height: 200 * $ptr;
+    overflow-y: auto;
+  }
+
+  .details__item {
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 5 * $ptr;
+
+    padding: 5 * $ptr;
+  }
+
+  .details__item:hover {
+    background-color: var(--background-color-alt);
+    cursor: pointer;
+  }

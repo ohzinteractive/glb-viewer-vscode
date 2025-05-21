@@ -1,5 +1,6 @@
 import { Details } from './Details';
 import { HierarchyTree } from './HierarchyTree';
+import { Settings } from './Settings';
 
 class UIController
 {
@@ -9,13 +10,14 @@ class UIController
 
     this.details = new Details(this);
     this.hierarchy_tree = new HierarchyTree(this);
+    this.settings = new Settings(this);
   }
 
   init()
   {
     this.details.init();
     this.hierarchy_tree.init();
-
+    this.settings.init();
     document.addEventListener('mouseup', () =>
     {
       this.hierarchy_tree.handle_mouse_up();
