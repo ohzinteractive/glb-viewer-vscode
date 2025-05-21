@@ -12,6 +12,7 @@ class UIController
     this.is_resizing = false;
     this.initial_x = 0;
     this.selected_outline = null;
+    this.vscode_configuration = null;
   }
 
   init()
@@ -24,6 +25,23 @@ class UIController
     this.$details_content = document.querySelector('.details__content');
     this.$details_header = document.querySelector('.details__header');
     this.$details_close = document.querySelector('.details__close');
+
+    window.addEventListener('message', (event) =>
+    {
+      const message = event.data;
+      if (message.type === 'init')
+      {
+        this.vscode_configuration = message.config;
+      }
+      if (message.type === 'updateConfig')
+      {
+        this.vscode_configuration = message.config;
+        if (this.current_object)
+        {
+          this.show_object_details();
+        }
+      }
+    });
 
     this.$tree_header.addEventListener('mousedown', (e) =>
     {
@@ -216,31 +234,41 @@ class UIController
       });
     }
 
-    $label.addEventListener('click', () => this.show_object_details(object3d));
-    $icon.addEventListener('click', () => this.show_object_details(object3d));
+    $label.addEventListener('click', () => this.handle_object_click(object3d));
+    $icon.addEventListener('click', () => this.handle_object_click(object3d));
   }
 
-  show_object_details(obj3d)
+  handle_object_click(obj3d)
+  {
+    this.current_object = obj3d;
+    this.show_object_details();
+  }
+
+  show_object_details()
   {
     this.$details_content.innerHTML = '';
-    const details = this.create_detail_item(obj3d);
+    const details = this.create_detail_item(this.current_object);
     details.forEach(detail => this.$details_content.appendChild(detail));
     this.$details_container.classList.remove('hidden');
-    if (obj3d.isObject3D || obj3d.isMesh)
+    if (this.current_object.isObject3D || this.current_object.isMesh)
     {
-      this.parent.focus_camera_on_object(obj3d);
+      this.parent.focus_camera_on_object(this.current_object);
     }
   }
 
   create_detail_item(obj)
   {
     const details = [];
-    const relevant_keys = ['name', 'type', 'position', 'rotation', 'scale', 'visible', 'castShadow', 'receiveShadow'];
+    const relevant_keys = this.vscode_configuration.relevant3dObjectKeys;
     for (let i = 0; i < relevant_keys.length; i++)
     {
       const key = relevant_keys[i];
       const $new_details_item = document.createElement('div');
       $new_details_item.classList.add('details__item');
+      if (obj[key] === undefined)
+      {
+        continue;
+      }
       let value = obj[key];
       if (value && typeof value === 'object')
       {

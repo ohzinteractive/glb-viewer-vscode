@@ -65,10 +65,26 @@ function activate(context)
         retainContextWhenHidden: true
       };
 
+      webviewPanel.webview.postMessage({
+        type: 'init',
+        config: vscode.workspace.getConfiguration('glbViewer')
+      });
+
       webviewPanel.webview.html = getHTML(webviewPanel);
 
       // Send the data URI to the webview
       webviewPanel.webview.postMessage({ type: 'loadModel', dataUri });
+
+      vscode.workspace.onDidChangeConfiguration((event) =>
+      {
+        if (event.affectsConfiguration('glbViewer.relevant3dObjectKeys'))
+        {
+          webviewPanel.webview.postMessage({
+            type: 'updateConfig',
+            config: vscode.workspace.getConfiguration('glbViewer')
+          });
+        }
+      });
     }
   };
 

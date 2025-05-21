@@ -34,7 +34,48 @@
         ],
         "priority": "option"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "GLB Viewer Settings",
+      "properties": {
+        "glbViewer.relevant3dObjectKeys": {
+          "type": "array",
+          "description": "Select which properties to show in the details panel",
+          "items": {
+            "type": "string",
+            "enum": [
+              "name",
+              "type",
+              "position",
+              "rotation",
+              "scale",
+              "visible",
+              "castShadow",
+              "receiveShadow",
+              "userData",
+              "layers",
+              "matrix",
+              "matrixWorld",
+              "up",
+              "children",
+              "parent",
+              "frustumCulled"
+            ]
+          },
+          "default": [
+            "name",
+            "type",
+            "position",
+            "rotation",
+            "scale",
+            "visible",
+            "castShadow",
+            "receiveShadow"
+          ],
+          "uniqueItems": true
+        }
+      }
+    }
   },
   "devDependencies": {
     "chokidar-cli": "^3.0.0",
