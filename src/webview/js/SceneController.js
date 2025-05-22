@@ -14,6 +14,7 @@ import {
   MathUtils,
   MeshNormalMaterial,
   PerspectiveCamera,
+  Raycaster,
   REVISION,
   Scene,
   Vector3
@@ -21,6 +22,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { InputController } from 'pit-js';
 
 class SceneController
 {
@@ -39,6 +41,9 @@ class SceneController
     const dom_container = document.querySelector('.viewer');
     this.renderer = new Renderer(dom_container);
 
+    this.input = new InputController();
+    this.input.init(dom_container);
+
     this.hemisphere_light = new HemisphereLight(0xffffff, 0x444444);
     this.scene.add(this.hemisphere_light);
 
@@ -56,6 +61,11 @@ class SceneController
     this.draco_loader = new DRACOLoader();
     this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
     this.loader.setDRACOLoader(this.draco_loader);
+
+    this.elapsed_time_at_button_pressed = 0;
+
+    this.grid = new GridHelper(10, 10);
+    this.scene.add(this.grid);
   }
 
   init(ui_controller)
@@ -96,9 +106,6 @@ class SceneController
       this.camera.position.z += size * 1.5;
       this.camera.lookAt(center);
 
-      const grid = new GridHelper(10, 10);
-      this.scene.add(grid);
-
       this.ui_controller.build_hierarchy_tree(gltf.scene);
       this.focus_camera_on_object(gltf.scene);
     });
@@ -106,13 +113,37 @@ class SceneController
 
   update()
   {
+    this.controls.update();
+
+    if (this.input.left_mouse_button_pressed)
+    {
+      this.elapsed_time_at_button_pressed = Date.now();
+    }
+
+    if (this.input.left_mouse_button_released)
+    {
+      if (Date.now() - this.elapsed_time_at_button_pressed < 200)
+      {
+        this.grid.visible = false;
+        const raycaster = new Raycaster();
+        raycaster.setFromCamera(this.input.NDC, this.camera);
+        const intersections = raycaster.intersectObject(this.scene, true);
+        if (intersections.length > 0)
+        {
+          this.focus_camera_on_object(intersections[0].object);
+        }
+        this.grid.visible = true;
+      }
+    }
+
+    this.renderer.render(this.scene, this.camera);
+    this.input.clear();
   }
 
   animate()
   {
+    this.update();
     requestAnimationFrame(this.animate.bind(this));
-    this.controls.update();
-    this.renderer.render(this.scene, this.camera);
   }
 
   highlight_object(obj)

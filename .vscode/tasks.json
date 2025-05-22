@@ -5,7 +5,7 @@
       "label": "yarn: build",
       "type": "shell",
       "command": "yarn",
-      "args": ["build"],
+      "args": ["start"],
       "isBackground": true,
       "problemMatcher": {
         "pattern": [

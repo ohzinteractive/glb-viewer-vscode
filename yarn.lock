@@ -2522,6 +2522,11 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
+pit-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/pit-js/-/pit-js-4.1.1.tgz#bf264a4745c0dc694616ee7339261cb16e0f8fc0"
+  integrity sha512-iMpwz2vibg5XixsxHEgb34NQnLubhzSdkCArzewt99fTWmfL2CAKFIte6/tElOHYe4YpDnU8HpewjURsO8186A==
+
 pkg-conf@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/pkg-conf/-/pkg-conf-3.1.0.tgz#d9f9c75ea1bae0e77938cde045b276dac7cc69ae"

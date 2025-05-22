@@ -20,7 +20,8 @@ export default defineConfig({
             'three/examples/jsm/controls/OrbitControls',
             'three/examples/jsm/loaders/DRACOLoader',
             'three/examples/jsm/loaders/GLTFLoader'
-          ]
+          ],
+          'pit-js': ['pit-js']
         }
       }
     },
