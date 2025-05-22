@@ -1,6 +1,7 @@
 import { VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
 import { Renderer } from './Renderer.js';
 
+import { InputController } from 'pit-js';
 import {
   AmbientLight,
   Box3,
@@ -22,7 +23,6 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { InputController } from 'pit-js';
 
 class SceneController
 {
@@ -130,7 +130,7 @@ class SceneController
         const intersections = raycaster.intersectObject(this.scene, true);
         if (intersections.length > 0)
         {
-          this.focus_camera_on_object(intersections[0].object);
+          this.handle_object_click(intersections[0].object);
         }
         this.grid.visible = true;
       }
@@ -189,7 +189,6 @@ class SceneController
     }
   }
 
-  // @TODO: handle raycast to call this function
   handle_object_click(object3d)
   {
     this.focus_camera_on_object(object3d);
