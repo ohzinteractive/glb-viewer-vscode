@@ -1,7 +1,10 @@
 {
   "name": "ohzi-vscode-glb-viewer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "extension.js",
+  "icon": "icon.png",
+  "displayName": "GLB Viewer",
+  "description": "View and explore your GLB files",
   "repository": {
     "type": "git",
     "url": "https://github.com/ohzinteractive/vscode-glb-viewer"
