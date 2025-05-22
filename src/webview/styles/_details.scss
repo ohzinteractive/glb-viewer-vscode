@@ -38,7 +38,6 @@
 
   .details__header-title {
     font-size: 14 * $ptr;
-    font-weight: bold;
   }
 
   .details__header-message {
@@ -62,20 +61,30 @@
 
     flex-direction: column;
 
+    row-gap: 5 * $ptr;
+
     padding: 10 * $ptr;
 
-    max-height: 200 * $ptr;
-    overflow-y: auto;
+    width: 250 * $ptr;
+
+    color: white;
+
+    background: #222;
+
+    border-radius: 8px;
   }
 
   .details__item {
-    display: flex;
-
-    flex-direction: row;
-
-    gap: 5 * $ptr;
-
     padding: 5 * $ptr;
+
+    width: 100%;
+    max-height: 200 * $ptr;
+
+    box-sizing: border-box;
+
+    overflow: hidden auto;
+
+    text-overflow: ellipsis;
   }
 
   .details__item:hover {
