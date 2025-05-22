@@ -91,6 +91,14 @@
     transition: transform 0.1s ease;
   }
 
+  .tree-node__icon--object {
+    color: var(--icon-green);
+  }
+
+  .tree-node__icon--empty-object {
+    color: var(--icon-orange);
+  }
+
   .tree-node__label {
     flex-grow: 1;
 
