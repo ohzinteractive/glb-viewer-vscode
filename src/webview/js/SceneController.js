@@ -24,11 +24,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 class SceneController
 {
-  constructor(parent)
+  constructor()
   {
     console.log(REVISION);
 
-    this.parent = parent;
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(75, 1, 0.1, 200);
     this.camera.clear_color = new Color('#eeeeee');
@@ -59,8 +58,9 @@ class SceneController
     this.loader.setDRACOLoader(this.draco_loader);
   }
 
-  init()
+  init(ui_controller)
   {
+    this.ui_controller = ui_controller;
     this.animate();
   }
 
@@ -99,7 +99,7 @@ class SceneController
       const grid = new GridHelper(10, 10);
       this.scene.add(grid);
 
-      this.parent.build_hierarchy_tree(gltf.scene);
+      this.ui_controller.build_hierarchy_tree(gltf.scene);
       this.focus_camera_on_object(gltf.scene);
     });
   }
@@ -156,6 +156,13 @@ class SceneController
       this.controls.target.copy(center);
       this.controls.update();
     }
+  }
+
+  // @TODO: handle raycast to call this function
+  handle_object_click(object3d)
+  {
+    this.focus_camera_on_object(object3d);
+    this.ui_controller.handle_object_click(object3d);
   }
 
   handle_action_click(action, active)

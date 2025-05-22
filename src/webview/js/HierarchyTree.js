@@ -1,9 +1,7 @@
 class HierarchyTree
 {
-  constructor(parent)
+  constructor()
   {
-    this.parent = parent;
-
     this.is_dragging = false;
     this.offset_x = 0;
     this.offset_y = 0;
@@ -16,8 +14,11 @@ class HierarchyTree
     this.$container = document.querySelector('.tree-container');
   }
 
-  init()
+  init(scene_controller, details_panel)
   {
+    this.scene_controller = scene_controller;
+    this.details_panel = details_panel;
+
     this.$header.addEventListener('mousedown', (e) =>
     {
       this.is_dragging = true;
@@ -165,8 +166,14 @@ class HierarchyTree
       });
     }
 
-    $label.addEventListener('click', () => this.parent.handle_object_click(object3d));
-    $icon.addEventListener('click', () => this.parent.handle_object_click(object3d));
+    $label.addEventListener('click', () => this.handle_object_click(object3d));
+    $icon.addEventListener('click', () => this.handle_object_click(object3d));
+  }
+
+  handle_object_click(object3d)
+  {
+    this.details_panel.handle_object_click(object3d);
+    this.scene_controller.focus_camera_on_object(object3d);
   }
 
   handle_mouse_up()

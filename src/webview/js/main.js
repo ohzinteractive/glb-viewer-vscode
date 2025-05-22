@@ -11,8 +11,8 @@ class MainApplication
 
   init()
   {
-    this.ui_controller.init();
-    this.scene_controller.init();
+    this.ui_controller.init(this.scene_controller);
+    this.scene_controller.init(this.ui_controller);
 
     // Listen for messages from the extension
     window.addEventListener('message', event =>
@@ -25,21 +25,6 @@ class MainApplication
         break;
       }
     });
-  }
-
-  focus_camera_on_object(obj)
-  {
-    this.scene_controller.focus_camera_on_object(obj);
-  }
-
-  build_hierarchy_tree(object3d)
-  {
-    this.ui_controller.build_hierarchy_tree(object3d);
-  }
-
-  handle_action_click(action, active)
-  {
-    this.scene_controller.handle_action_click(action, active);
   }
 }
 

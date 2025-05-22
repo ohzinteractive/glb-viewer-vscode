@@ -4,19 +4,19 @@ import { Settings } from './Settings';
 
 class UIController
 {
-  constructor(parent)
+  constructor()
   {
-    this.parent = parent;
-
     this.details = new Details(this);
     this.hierarchy_tree = new HierarchyTree(this);
     this.settings = new Settings(this);
   }
 
-  init()
+  init(scene_controller)
   {
+    this.scene_controller = scene_controller;
+
     this.details.init();
-    this.hierarchy_tree.init();
+    this.hierarchy_tree.init(this.scene_controller, this.details);
     this.settings.init();
     document.addEventListener('mouseup', () =>
     {
@@ -40,10 +40,6 @@ class UIController
   handle_object_click(object3d)
   {
     this.details.handle_object_click(object3d);
-    if (object3d.isObject3D || object3d.isMesh)
-    {
-      this.parent.focus_camera_on_object(object3d);
-    }
   }
 
   build_hierarchy_tree(object3d)
@@ -53,7 +49,7 @@ class UIController
 
   handle_action_click(action, active)
   {
-    this.parent.handle_action_click(action, active);
+    this.scene_controller.handle_action_click(action, active);
   }
 }
 
