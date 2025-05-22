@@ -278,13 +278,25 @@ class SceneController
       {
         if (child.isMesh)
         {
-          if (!child.geometry.attributes.tangent)
+          const geometry = child.geometry;
+          // Check if geometry has all required attributes
+          if (geometry.attributes.position &&
+              geometry.attributes.normal &&
+              geometry.attributes.uv &&
+              geometry.index)
           {
-            child.geometry.computeTangents();
+            if (!geometry.attributes.tangent)
+            {
+              geometry.computeTangents();
+            }
+            const tangent_helper = new VertexTangentsHelper(child, 1, 0x00ff00);
+            this.tangent_helpers.push(tangent_helper);
+            this.scene.add(tangent_helper);
           }
-          const tangent_helper = new VertexTangentsHelper(child, 1, 0x00ff00);
-          this.tangent_helpers.push(tangent_helper);
-          this.scene.add(tangent_helper);
+          else
+          {
+            console.warn('Mesh missing required attributes for tangent computation:', child.name);
+          }
         }
       });
     }
