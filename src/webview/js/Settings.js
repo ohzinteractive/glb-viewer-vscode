@@ -1,3 +1,5 @@
+import { InputSlider } from './InputSlider';
+
 class Settings
 {
   constructor(parent)
@@ -8,10 +10,12 @@ class Settings
     this.$closeButton = document.querySelector('.settings-button__close');
     this.$content = document.querySelector('.settings__content');
     this.$actions = document.querySelectorAll('.settings__action');
+    this.$slider = document.querySelector('.settings__slider');
   }
 
-  init()
+  init(scene_controller)
   {
+    this.scene_controller = scene_controller;
     this.$openButton.addEventListener('click', () =>
     {
       this.$content.classList.remove('hidden');
@@ -35,6 +39,14 @@ class Settings
         this.handle_action_click(action.dataset.action);
       });
     }
+
+    this.input_slider = new InputSlider(this.$slider, 0, 10, 0.1, this.handle_slider_change.bind(this));
+    this.input_slider.init();
+  }
+
+  handle_slider_change(value)
+  {
+    this.scene_controller.set_line_length(value);
   }
 
   handle_action_click(action)

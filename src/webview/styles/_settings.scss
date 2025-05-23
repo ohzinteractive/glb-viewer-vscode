@@ -60,6 +60,21 @@
   }
 }
 
+.settings__extra-action {
+  display: flex;
+
+  flex-direction: column;
+
+  row-gap: 5 * $ptr;
+
+  align-items: flex-start;
+}
+
+  .settings__action-label {
+    font-size: 12 * $ptr;
+
+  }
+
 .settings__icon {
   width: 16 * $ptr;
   height: 16 * $ptr;

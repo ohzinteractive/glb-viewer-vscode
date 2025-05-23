@@ -1,4 +1,3 @@
-
 module.exports = {
   extends: ["stylelint-config-standard-scss"],
   plugins: [
@@ -356,6 +355,46 @@ module.exports = {
         "noEmptyLineBetween": true,
         "properties": [
           "box-shadow"
+        ]
+      }
+    ],
+    "property-no-vendor-prefix": [
+      true,
+      {
+        ignoreProperties: [
+          "mask",
+          "mask-composite",
+          "mask-image",
+          "transform",
+          "backdrop-filter",
+          "mask",
+          "mask-composite",
+          "mask-image",
+          "transition",
+          "user-select",
+          "appearance",
+          "border-radius",
+          "box-sizing",
+          "align-items",
+          "flex-direction",
+          "flex-wrap",
+          "flex-grow",
+          "box-shadow"
+        ]
+      }
+    ],
+    "value-no-vendor-prefix": [
+      true,
+      {
+        "ignoreValues": ["destination-out"]
+      }
+    ],
+    "selector-no-vendor-prefix": [
+      true,
+      {
+        ignoreSelectors: [
+          "/^::?-(webkit|moz|ms|o)-input-placeholder$/",
+          "/^::?-(webkit|moz|ms|o)-mask$/"
         ]
       }
     ]

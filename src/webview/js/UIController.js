@@ -17,7 +17,7 @@ class UIController
 
     this.details.init();
     this.hierarchy_tree.init(this.scene_controller, this.details);
-    this.settings.init();
+    this.settings.init(this.scene_controller);
     document.addEventListener('mouseup', () =>
     {
       this.hierarchy_tree.handle_mouse_up();

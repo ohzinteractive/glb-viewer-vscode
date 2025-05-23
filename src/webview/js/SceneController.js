@@ -37,6 +37,7 @@ class SceneController
 
     this.normal_helpers = [];
     this.tangent_helpers = [];
+    this.line_length = 1;
 
     const dom_container = document.querySelector('.viewer');
     this.renderer = new Renderer(dom_container);
@@ -248,65 +249,95 @@ class SceneController
 
   toggle_normals_vectors(active)
   {
+    this.remove_normal_helpers();
     if (active)
     {
-      this.scene.traverse(child =>
-      {
-        if (child.isMesh)
-        {
-          const normal_helper = new VertexNormalsHelper(child, 1, 0x00ff00);
-          this.normal_helpers.push(normal_helper);
-          this.scene.add(normal_helper);
-        }
-      });
+      this.populate_normal_helpers();
     }
-    else
+  }
+
+  remove_normal_helpers()
+  {
+    for (let i = 0; i < this.normal_helpers.length; i++)
     {
-      for (let i = 0; i < this.normal_helpers.length; i++)
-      {
-        this.scene.remove(this.normal_helpers[i]);
-      }
-      this.normal_helpers = [];
+      this.scene.remove(this.normal_helpers[i]);
     }
+  }
+
+  populate_normal_helpers()
+  {
+    this.scene.traverse(child =>
+    {
+      if (child.isMesh)
+      {
+        const normal_helper = new VertexNormalsHelper(child, this.line_length, 0x00ff00);
+        this.normal_helpers.push(normal_helper);
+        this.scene.add(normal_helper);
+      }
+    });
   }
 
   toggle_tangents(active)
   {
+    this.remove_tangent_helpers();
     if (active)
     {
-      this.scene.traverse(child =>
+      this.populate_tangent_helpers();
+    }
+  }
+
+  remove_tangent_helpers()
+  {
+    for (let i = 0; i < this.tangent_helpers.length; i++)
+    {
+      this.scene.remove(this.tangent_helpers[i]);
+    }
+    this.tangent_helpers = [];
+  }
+
+  populate_tangent_helpers()
+  {
+    this.scene.traverse(child =>
+    {
+      if (child.isMesh)
       {
-        if (child.isMesh)
-        {
-          const geometry = child.geometry;
-          // Check if geometry has all required attributes
-          if (geometry.attributes.position &&
+        const geometry = child.geometry;
+        // Check if geometry has all required attributes
+        if (geometry.attributes.position &&
               geometry.attributes.normal &&
               geometry.attributes.uv &&
               geometry.index)
+        {
+          if (!geometry.attributes.tangent)
           {
-            if (!geometry.attributes.tangent)
-            {
-              geometry.computeTangents();
-            }
-            const tangent_helper = new VertexTangentsHelper(child, 1, 0x00ff00);
-            this.tangent_helpers.push(tangent_helper);
-            this.scene.add(tangent_helper);
+            geometry.computeTangents();
           }
-          else
-          {
-            console.warn('Mesh missing required attributes for tangent computation:', child.name);
-          }
+          const tangent_helper = new VertexTangentsHelper(child, this.line_length, 0x00ff00);
+          this.tangent_helpers.push(tangent_helper);
+          this.scene.add(tangent_helper);
         }
-      });
-    }
-    else
-    {
-      for (let i = 0; i < this.tangent_helpers.length; i++)
-      {
-        this.scene.remove(this.tangent_helpers[i]);
+        else
+        {
+          console.warn('Mesh missing required attributes for tangent computation:', child.name);
+        }
       }
-      this.tangent_helpers = [];
+    });
+  }
+
+  set_line_length(value)
+  {
+    this.line_length = value;
+
+    if (this.tangent_helpers.length > 0)
+    {
+      this.remove_tangent_helpers();
+      this.populate_tangent_helpers();
+    }
+
+    if (this.normal_helpers.length > 0)
+    {
+      this.remove_normal_helpers();
+      this.populate_normal_helpers();
     }
   }
 }
