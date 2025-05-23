@@ -2,6 +2,8 @@
 
 A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binary) files. This extension allows you to preview and interact with 3D models directly within VS Code.
 
+![Preview](/preview.jpg)
+
 ## Features
 
 - Preview GLB files directly in VS Code
