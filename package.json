@@ -1,11 +1,12 @@
 {
-  "name": "ohzi-vscode-glb-viewer",
-  "version": "1.0.0",
+  "name": "glb-viewer",
+  "version": "1.0.1",
   "publisher": "OHZIInteractiveStudio",
   "main": "extension.js",
   "icon": "icon.png",
   "displayName": "GLB Viewer",
   "description": "View and explore your GLB files",
+  "keywords": ["GLB", "glb", "glTF", "gltf", "3d", "model", "viewer", "ohzi", "ohzi-interactive", "ohzi-interactive-studio", "three.js", "threejs", "three", "three-js"],
   "repository": {
     "type": "git",
     "url": "https://github.com/ohzinteractive/vscode-glb-viewer"
