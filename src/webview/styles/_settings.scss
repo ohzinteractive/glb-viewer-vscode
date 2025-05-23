@@ -1,10 +1,4 @@
 .settings {
-    display: flex;
-
-    flex-direction: row-reverse;
-
-    align-items: flex-end;
-
     position: absolute;
     right: 10 * $ptr;
     bottom: 10 * $ptr;
@@ -12,7 +6,7 @@
 
     background-color: var(--background-color);
 
-    border-radius: 10 * $ptr;
+    border-radius: 5 * $ptr;
 }
 
 .settings-button {
@@ -20,7 +14,7 @@
 
   color: var(--text-color);
 
-  border-radius: 10 * $ptr;
+  border-radius: 5 * $ptr;
 
   svg {
     margin-bottom: -2 * $ptr;
@@ -35,11 +29,18 @@
 }
 
 .settings__content {
+  position: absolute;
+  right: 35 * $ptr;
+  bottom: 35 * $ptr;
+  z-index: 10;
+
   padding: 5 * $ptr;
+
+  min-width: 200 * $ptr;
 
   background-color: var(--background-color);
 
-  border-radius: 10 * $ptr;
+  border-radius: 5 * $ptr;
 }
 
 .settings__action {
@@ -68,6 +69,9 @@
   row-gap: 5 * $ptr;
 
   align-items: flex-start;
+
+  padding: 2.5 * $ptr 5 * $ptr;
+
 }
 
   .settings__action-label {
