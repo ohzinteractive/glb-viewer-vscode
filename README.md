@@ -12,6 +12,8 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 - Camera focus on object click
 - Copy to properties to clipboard
 - Extension settings to customize the viewer
+- Look at the normal colors and wireframe
+- Visualize normals and tangents vectors
 
 ## Requirements
 
@@ -28,7 +30,8 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 
 1. Open any `.glb` file in VS Code
 2. The file will automatically open in the GLB Viewer
-3. Interact with the 3D model using your mouse:
+3. You might need to click on the file to 'open with:' GLB Viewer
+4. Interact with the 3D model using your mouse:
    - Left click and drag to rotate
    - Right click and drag to pan
    - Scroll to zoom
@@ -53,9 +56,8 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
    ```
 
 3. Start development mode:
-   ```bash
-   yarn dev
-   ```
+   Inside vscode with the folder open, press F5 to start the extension. This will open a new window with the extension running.
+   Under the hood, it will run the `yarn start` command. That builds and watches for changes in the `src/` folder.
 
 ### Build
 
