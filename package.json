@@ -71,10 +71,7 @@
             "type",
             "position",
             "rotation",
-            "scale",
-            "visible",
-            "castShadow",
-            "receiveShadow"
+            "scale"
           ],
           "uniqueItems": true
         }
