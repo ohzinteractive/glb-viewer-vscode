@@ -1,5 +1,5 @@
 {
-  "name": "glb-viewer",
+  "name": "ohzi-vscode-glb-viewer",
   "version": "1.0.1",
   "publisher": "OHZIInteractiveStudio",
   "main": "extension.js",
