@@ -20,3 +20,6 @@ src/**
 
 # Node modules (should be installed by the extension)
 node_modules/**
+
+# Preview files
+previews/**
