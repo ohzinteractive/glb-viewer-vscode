@@ -2,31 +2,34 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [1.0.3] - 2024-03-21
+## [1.0.4] - 2025-05-26
 
 ### Improved
  - Camera near plane computation
-## [1.0.3] - 2024-03-21
+
+ ## [1.0.3] - 2025-05-26
 
 ### Added
 - Support for KTX2 textures
 - Added global scale to the model
-- Compute camera far plane distance
 - Add changelog file
 - Studio light as default scene lighting, enabling reflections on metallic materials
 
-## [1.0.2] - 2024-03-21
+### Improved
+- Compute camera far plane distance
+
+## [1.0.2] - 2025-05-23
 
 ### Fixed
 - Set the extension as default for .glb files
 - Bug fixes and stability improvements
 
-## [1.0.1]
+## [1.0.1] - 2025-05-23
 
 ### Fixed
 - Initial bug fixes and improvements
 
-## [1.0.0]
+## [1.0.0] - 2025-05-23
 
 ### Added
 - Initial release of the GLB Viewer extension
