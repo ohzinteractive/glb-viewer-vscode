@@ -10,6 +10,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 - Added global scale to the model
 - Compute camera far plane distance
 - Add changelog file
+- Studio light as default scene lighting, enabling reflections on metallic materials
 
 ## [1.0.2] - 2024-03-21
 
