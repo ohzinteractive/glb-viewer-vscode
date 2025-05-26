@@ -34,7 +34,7 @@ class SceneController
     console.log(REVISION);
 
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, 1, 0.5, 1000);
+    this.camera = new PerspectiveCamera(75, 1, 0.1, 1000);
     this.camera.clear_color = new Color('#3F3F3F');
     this.camera.clear_alpha = 1;
 
@@ -118,6 +118,10 @@ class SceneController
       this.camera.position.z += size * 1.5;
       this.camera.lookAt(center);
 
+      if (size < 10)
+      {
+        this.camera.near = 0.01;
+      }
       this.ui_controller.build_hierarchy_tree(gltf.scene);
       this.focus_camera_on_object(gltf.scene);
     });

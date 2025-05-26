@@ -2,7 +2,10 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [1.0.3] - 2024-03-21
 
+### Improved
+ - Camera near plane computation
 ## [1.0.3] - 2024-03-21
 
 ### Added
