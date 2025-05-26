@@ -18,6 +18,10 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 - Look at the normal colors and wireframe
 - Visualize normals and tangents vectors
 
+## 📜 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for details about each release.
+
 ## Requirements
 
 - Visual Studio Code version 1.80.0 or higher
