@@ -15,6 +15,7 @@ import {
   MathUtils,
   MeshNormalMaterial,
   PerspectiveCamera,
+  PMREMGenerator,
   Raycaster,
   REVISION,
   Scene,
@@ -24,6 +25,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { StudioLightScene } from './StudioLightScene.js';
 
 class SceneController
 {
@@ -33,7 +35,7 @@ class SceneController
 
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(75, 1, 0.5, 1000);
-    this.camera.clear_color = new Color('#eeeeee');
+    this.camera.clear_color = new Color('#3F3F3F');
     this.camera.clear_alpha = 1;
 
     this.normal_helpers = [];
@@ -47,13 +49,13 @@ class SceneController
     this.input.init(dom_container);
 
     this.hemisphere_light = new HemisphereLight(0xffffff, 0x444444);
-    this.scene.add(this.hemisphere_light);
+    // this.scene.add(this.hemisphere_light);
 
     this.ambient_light = new AmbientLight(0xffffff, 0.5);
-    this.scene.add(this.ambient_light);
+    // this.scene.add(this.ambient_light);
 
     this.directional_light = new DirectionalLight(0xffffff, 1);
-    this.scene.add(this.directional_light);
+    // this.scene.add(this.directional_light);
 
     this.controls = new OrbitControls(this.camera, dom_container);
     this.controls.update();
@@ -71,7 +73,7 @@ class SceneController
 
     this.elapsed_time_at_button_pressed = 0;
 
-    this.grid = new GridHelper(10, 10);
+    this.grid = new GridHelper(10, 10, '#4B4B4B', '#4B4B4B');
     this.scene.add(this.grid);
   }
 
@@ -119,6 +121,18 @@ class SceneController
       this.ui_controller.build_hierarchy_tree(gltf.scene);
       this.focus_camera_on_object(gltf.scene);
     });
+
+    const pmrem = new PMREMGenerator(this.renderer.renderer);
+
+    this.renderer.renderer.setClearColor(0x000000);
+    this.scene.environment = pmrem.fromScene(new StudioLightScene()).texture;
+    // this.scene.background = this.scene.environment;
+
+    // this.scene.add(new Mesh(new SphereGeometry(), new MeshStandardMaterial({
+    //   color: 0xffffff,
+    //   roughness: 0.1,
+    //   metalness: 1
+    // })));
   }
 
   update()
