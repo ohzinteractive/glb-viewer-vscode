@@ -23,6 +23,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 
 class SceneController
 {
@@ -59,9 +60,14 @@ class SceneController
 
     this.loader = new GLTFLoader();
 
+    const ktx2_loader = new KTX2Loader();
+    ktx2_loader.setTranscoderPath('https://www.gstatic.com/basis-universal/2020_09_17/');
+    ktx2_loader.detectSupport(this.renderer.renderer);
+
     this.draco_loader = new DRACOLoader();
     this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
     this.loader.setDRACOLoader(this.draco_loader);
+    this.loader.setKTX2Loader(ktx2_loader);
 
     this.elapsed_time_at_button_pressed = 0;
 
