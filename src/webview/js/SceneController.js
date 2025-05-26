@@ -31,7 +31,7 @@ class SceneController
     console.log(REVISION);
 
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, 1, 0.1, 200);
+    this.camera = new PerspectiveCamera(75, 1, 0.5, 1000);
     this.camera.clear_color = new Color('#eeeeee');
     this.camera.clear_alpha = 1;
 
@@ -183,6 +183,8 @@ class SceneController
     const new_position = center.clone().add(direction.multiplyScalar(fit_distance));
     this.camera.position.copy(new_position);
     this.camera.updateProjectionMatrix();
+
+    this.camera.far = Math.max(this.camera.far, fit_distance + size.length());
 
     if (this.controls)
     {
