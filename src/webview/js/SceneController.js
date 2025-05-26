@@ -97,6 +97,9 @@ class SceneController
             child.computeBoundingBox();
           }
         }
+
+        child.globalScale = new Vector3();
+        new Box3().setFromObject(child).getSize(child.globalScale);
       });
 
       const box = new Box3().setFromObject(gltf.scene, true);
@@ -125,7 +128,6 @@ class SceneController
     {
       if (Date.now() - this.elapsed_time_at_button_pressed < 200)
       {
-        this.grid.visible = false;
         const raycaster = new Raycaster();
         raycaster.setFromCamera(this.input.NDC, this.camera);
         const intersections = raycaster.intersectObject(this.scene, true);
@@ -133,7 +135,6 @@ class SceneController
         {
           this.handle_object_click(intersections[0].object);
         }
-        this.grid.visible = true;
       }
     }
 

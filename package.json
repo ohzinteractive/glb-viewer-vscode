@@ -65,7 +65,8 @@
               "up",
               "children",
               "parent",
-              "frustumCulled"
+              "frustumCulled",
+              "globalScale"
             ]
           },
           "default": [
@@ -73,7 +74,9 @@
             "type",
             "position",
             "rotation",
-            "scale"
+            "scale",
+            "globalScale"
+
           ],
           "uniqueItems": true
         }
