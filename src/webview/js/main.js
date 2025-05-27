@@ -1,6 +1,19 @@
 import { SceneController } from './SceneController';
 import { UIController } from './UiController';
 
+// Unregister any existing service workers to speedup plugin initialization
+if ('serviceWorker' in navigator)
+{
+  navigator.serviceWorker.getRegistrations().then(function(registrations)
+  {
+    for (const registration of registrations)
+    {
+      registration.unregister(); // WARNING: this affects cache, so test carefully
+      // console.log('Unregistered service worker:', registration);
+    }
+  });
+}
+
 class MainApplication
 {
   constructor()
@@ -28,10 +41,14 @@ class MainApplication
   }
 }
 
+/* global acquireVsCodeApi */
 document.addEventListener('DOMContentLoaded', () =>
 {
   console.log('WebView loaded!');
 
   const main_application = new MainApplication();
   main_application.init();
+
+  const vscode = acquireVsCodeApi();
+  vscode.postMessage({ type: 'ready' });
 });

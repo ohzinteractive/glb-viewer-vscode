@@ -2,7 +2,9 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-function getHTML(panel)
+// const _disposables = [];
+
+function getHTML(panel, dataUri)
 {
   const distPath = path.join(__dirname, 'dist', 'webview');
   const htmlPath = path.join(distPath, 'index.html');
@@ -40,6 +42,16 @@ class GLBDocument
   }
 }
 
+// function disposePanel(panel)
+// {
+//   console.log('Disposing panel:', panel.title);
+//   // Clean up our resources
+//   panel.dispose();
+
+//   _disposables.forEach(d => d.dispose());
+//   _disposables.length = 0; // Clear the disposables array
+// }
+
 function activate(context)
 {
   const provider =
@@ -65,15 +77,47 @@ function activate(context)
         retainContextWhenHidden: true
       };
 
-      webviewPanel.webview.postMessage({
-        type: 'init',
-        config: vscode.workspace.getConfiguration('glbViewer')
+      webviewPanel.webview.html = getHTML(webviewPanel, dataUri);
+
+      // Listen for messages from the WebView
+      webviewPanel.webview.onDidReceiveMessage(message =>
+      {
+        if (message.type === 'ready')
+        {
+          // console.log('WebView is ready');
+          webviewPanel.webview.postMessage({
+            type: 'updateConfig',
+            config: vscode.workspace.getConfiguration('glbViewer')
+          });
+
+          webviewPanel.webview.postMessage({
+            type: 'loadModel',
+            dataUri
+          });
+        }
       });
 
-      webviewPanel.webview.html = getHTML(webviewPanel);
+      // webviewPanel.onDidChangeViewState(e =>
+      // {
+      //   console.log('onDidChangeViewState', e.webviewPanel.title);
 
-      // Send the data URI to the webview
-      webviewPanel.webview.postMessage({ type: 'loadModel', dataUri });
+      //   if (e.webviewPanel.visible)
+      //   {
+      //     console.log('WebView is now visible');
+
+      //     webviewPanel.webview.postMessage({
+      //       type: 'startRenderLoop'
+      //     });
+      //   }
+      //   else
+      //   {
+      //     webviewPanel.webview.postMessage({
+      //       type: 'stopRenderLoop'
+      //     });
+      //   }
+      // });
+
+      // webviewPanel.onDidDispose(() => disposePanel(webviewPanel), null, _disposables);
 
       vscode.workspace.onDidChangeConfiguration((event) =>
       {

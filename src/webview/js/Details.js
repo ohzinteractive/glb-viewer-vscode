@@ -23,17 +23,16 @@ class Details
     window.addEventListener('message', (event) =>
     {
       const message = event.data;
-      if (message.type === 'init')
-      {
-        this.vscode_configuration = message.config;
-      }
+
       if (message.type === 'updateConfig')
       {
+        // console.log('Updating configuration', message.config);
         this.vscode_configuration = message.config;
-        if (this.current_object)
-        {
-          this.show_object_details();
-        }
+
+        // if (this.current_object)
+        // {
+        //   this.show_object_details();
+        // }
       }
     });
 
