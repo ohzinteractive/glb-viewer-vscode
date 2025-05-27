@@ -17,7 +17,6 @@ import {
   PerspectiveCamera,
   PMREMGenerator,
   Raycaster,
-  REVISION,
   Scene,
   Vector3
 } from 'three';
@@ -31,7 +30,7 @@ class SceneController
 {
   constructor()
   {
-    console.log(REVISION);
+    // console.log(REVISION);
 
     this.scene = new Scene();
     this.camera = new PerspectiveCamera(75, 1, 0.1, 1000);
@@ -93,8 +92,10 @@ class SceneController
 
     this.loader.load(dataUri, (gltf) =>
     {
-      console.log('GLB loaded', gltf);
+      // console.log('GLB loaded', gltf);
       this.scene.add(gltf.scene);
+      this.model = gltf.scene;
+
       gltf.scene.traverse(child =>
       {
         child.frustumCulled = false;
@@ -154,7 +155,7 @@ class SceneController
       {
         const raycaster = new Raycaster();
         raycaster.setFromCamera(this.input.NDC, this.camera);
-        const intersections = raycaster.intersectObject(this.scene, true);
+        const intersections = raycaster.intersectObject(this.model, true);
         if (intersections.length > 0)
         {
           this.handle_object_click(intersections[0].object);
