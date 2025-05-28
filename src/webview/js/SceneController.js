@@ -3,9 +3,11 @@ import { Renderer } from './Renderer.js';
 
 import { InputController } from 'pit-js';
 import {
+  AlwaysDepth,
   AmbientLight,
   Box3,
   Box3Helper,
+  BufferGeometry,
   Color,
   DirectionalLight,
   DoubleSide,
@@ -13,6 +15,8 @@ import {
   GridHelper,
   HemisphereLight,
   MathUtils,
+  Mesh,
+  MeshBasicMaterial,
   MeshNormalMaterial,
   PerspectiveCamera,
   PMREMGenerator,
@@ -74,6 +78,10 @@ class SceneController
 
     this.grid = new GridHelper(10, 10, '#4B4B4B', '#4B4B4B');
     this.scene.add(this.grid);
+
+    this.selected_mesh = new Mesh(new BufferGeometry(), new MeshBasicMaterial({ color: '#50AF8E', wireframe: true, depthTest: false, depthFunc: AlwaysDepth, depthWrite: false, transparent: true, opacity: 0.5 }));
+    this.selected_mesh.renderOrder = 500;
+    this.scene.add(this.selected_mesh);
   }
 
   init(ui_controller)
@@ -164,6 +172,10 @@ class SceneController
         {
           this.handle_object_click(intersections[0].object);
         }
+        else
+        {
+          this.selected_mesh.visible = false;
+        }
       }
     }
 
@@ -179,19 +191,32 @@ class SceneController
 
   highlight_object(obj)
   {
-    if (this.selected_outline)
+    if (obj.geometry)
     {
-      this.scene.remove(this.selected_outline);
+      this.selected_mesh.visible = true;
+      this.selected_mesh.geometry = obj.geometry;
+      obj.getWorldPosition(this.selected_mesh.position);
+      obj.getWorldScale(this.selected_mesh.scale);
+      obj.getWorldQuaternion(this.selected_mesh.quaternion);
     }
+    else
+    {
+      this.selected_mesh.visible = false;
+    }
+    // if (this.selected_outline)
+    // {
+    //   this.scene.remove(this.selected_outline);
+    // }
 
-    const box = new Box3().setFromObject(obj);
-    const helper = new Box3Helper(box, 0xff0000);
-    this.selected_outline = helper;
-    this.scene.add(helper);
+    // const box = new Box3().setFromObject(obj);
+    // const helper = new Box3Helper(box, 0xff0000);
+    // this.selected_outline = helper;
+    // this.scene.add(helper);
   }
 
   focus_camera_on_object(obj)
   {
+    this.highlight_object(obj);
     const box = new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
 
@@ -254,7 +279,7 @@ class SceneController
 
   toggle_wireframe(active)
   {
-    this.scene.traverse(child =>
+    this.model.traverse(child =>
     {
       if (child.isMesh)
       {
@@ -265,7 +290,7 @@ class SceneController
 
   toggle_double_sided(active)
   {
-    this.scene.traverse(child =>
+    this.model.traverse(child =>
     {
       if (child.isMesh)
       {
@@ -298,7 +323,7 @@ class SceneController
 
   populate_normal_helpers()
   {
-    this.scene.traverse(child =>
+    this.model.traverse(child =>
     {
       if (child.isMesh)
       {
@@ -329,7 +354,7 @@ class SceneController
 
   populate_tangent_helpers()
   {
-    this.scene.traverse(child =>
+    this.model.traverse(child =>
     {
       if (child.isMesh)
       {
