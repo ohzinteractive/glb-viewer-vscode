@@ -101,8 +101,7 @@ class Details
     for (let i = 0; i < relevant_keys.length; i++)
     {
       const key = relevant_keys[i];
-      const $new_details_item = document.createElement('div');
-      $new_details_item.classList.add('details__item');
+
       if (obj[key] === undefined)
       {
         continue;
@@ -122,7 +121,22 @@ class Details
           value = JSON.stringify(value);
         }
       }
-      $new_details_item.textContent = key + ': ' + value;
+
+      const $new_details_item = document.createElement('div');
+      $new_details_item.classList.add('details__item');
+
+      const $item_label = document.createElement('div');
+      const $item_content = document.createElement('div');
+
+      $item_label.classList.add('details__item_label');
+      $item_content.classList.add('details__item_content');
+
+      $new_details_item.appendChild($item_label);
+      $new_details_item.appendChild($item_content);
+
+      $item_label.textContent   = this.prettify_name(key) + ': ';
+      $item_content.textContent = value;
+
       $new_details_item.onclick = () => this.copy_to_clipboard(value);
       details.push($new_details_item);
     }
@@ -142,6 +156,19 @@ class Details
       this.$header_message.classList.add('faded');
       this.$header_title.classList.remove('hidden');
     }, 1000);
+  }
+
+  prettify_name(name)
+  {
+    if (this.vscode_configuration.prettifyPropertyLabels)
+    {
+      const spaced = name.replace(/([A-Z])/g, ' $1').toLowerCase();
+      return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+    }
+    else
+    {
+      return name;
+    }
   }
 }
 

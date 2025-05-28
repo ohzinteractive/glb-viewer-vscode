@@ -128,6 +128,13 @@ function activate(context)
             config: vscode.workspace.getConfiguration('glbViewer')
           });
         }
+        if (event.affectsConfiguration('glbViewer.prettifyPropertyLabels'))
+        {
+          webviewPanel.webview.postMessage({
+            type: 'updateConfig',
+            config: vscode.workspace.getConfiguration('glbViewer')
+          });
+        }
       });
     }
   };

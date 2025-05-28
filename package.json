@@ -45,6 +45,11 @@
     "configuration": {
       "title": "GLB Viewer Settings",
       "properties": {
+        "glbViewer.prettifyPropertyLabels" : {
+          "type": "boolean",
+          "default": true,
+          "description": "Prettyfies the labels of the object properties in the details panel"
+        },
         "glbViewer.relevant3dObjectKeys": {
           "type": "array",
           "description": "Select which properties to show in the details panel",
