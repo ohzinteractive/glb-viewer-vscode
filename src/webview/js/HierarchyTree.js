@@ -178,7 +178,7 @@ class HierarchyTree
     }
 
     $label.addEventListener('click', () => this.handle_object_click(object3d));
-    $icon.addEventListener('click', () => this.handle_object_click(object3d));
+    // $icon.addEventListener('click', () => this.handle_object_click(object3d));
   }
 
   handle_object_click(object3d)
