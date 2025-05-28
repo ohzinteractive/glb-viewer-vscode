@@ -107,8 +107,12 @@ class SceneController
           }
         }
 
-        child.globalScale = new Vector3();
-        new Box3().setFromObject(child).getSize(child.globalScale);
+        child.globalPosition = new Vector3();
+        child.globalScale    = new Vector3();
+        const child_box            = new Box3();
+        child_box.setFromObject(child);
+        child_box.getCenter(child.globalPosition);
+        child_box.getSize(child.globalScale);
       });
 
       const box = new Box3().setFromObject(gltf.scene, true);

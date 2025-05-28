@@ -67,7 +67,8 @@
               "children",
               "parent",
               "frustumCulled",
-              "globalScale"
+              "globalScale",
+              "globalPosition"
             ]
           },
           "default": [
