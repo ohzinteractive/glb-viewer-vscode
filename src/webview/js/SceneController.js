@@ -6,7 +6,6 @@ import {
   AlwaysDepth,
   AmbientLight,
   Box3,
-  Box3Helper,
   BufferGeometry,
   Color,
   DirectionalLight,
@@ -272,6 +271,9 @@ class SceneController
     case 'tangents':
       this.toggle_tangents(active);
       break;
+    case 'selection-wireframe':
+      this.toggle_selection_wireframe(active);
+      break;
     default:
       break;
     }
@@ -379,6 +381,11 @@ class SceneController
         }
       }
     });
+  }
+
+  toggle_selection_wireframe(active)
+  {
+    this.selected_mesh.material.visible = active;
   }
 
   set_line_length(value)
