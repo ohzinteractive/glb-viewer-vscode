@@ -16,7 +16,8 @@
   },
   "authors": [
     "Gianni Ballerini <ballerinidev@gmail.com>",
-    "Ramiro Fages <ramiro.fages@ohzi.io>"
+    "Ramiro Fages <ramiro.fages@ohzi.io>",
+    "Federico Gratti <federico.gratti@ohzi.io>"
   ],
   "license": "MIT",
   "dependencies": {
