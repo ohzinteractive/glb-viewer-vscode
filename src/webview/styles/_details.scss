@@ -58,7 +58,6 @@
 
   .details__content {
     display: flex;
-    font-size: 11 * $ptr;
 
     flex-direction: column;
 
@@ -68,12 +67,16 @@
 
     width: 250 * $ptr;
 
+    font-size: 11 * $ptr;
+
     background: #222;
 
     border-radius: 8px;
   }
 
   .details__item {
+    position: relative;
+
     // display: flex;
     // justify-content: space-between;
     padding: 5 * $ptr;
@@ -88,15 +91,26 @@
     text-overflow: ellipsis;
   }
 
-  .details__item_label {
+  .details__item-label {
     color: #767676;
   }
 
-  .details__item_content {
-    
+  .details__item-content {
+
   }
 
   .details__item:hover {
     background-color: var(--background-color-alt);
     cursor: pointer;
+  }
+
+  .details__item-copy-icon {
+    position: absolute;
+    top: 10 * $ptr;
+    right: 10 * $ptr;
+
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+    }
   }

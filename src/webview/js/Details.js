@@ -128,14 +128,30 @@ class Details
       const $item_label = document.createElement('div');
       const $item_content = document.createElement('div');
 
-      $item_label.classList.add('details__item_label');
-      $item_content.classList.add('details__item_content');
+      $item_label.classList.add('details__item-label');
+      $item_content.classList.add('details__item-content');
 
       $new_details_item.appendChild($item_label);
       $new_details_item.appendChild($item_content);
 
       $item_label.textContent   = this.prettify_name(key) + ': ';
       $item_content.textContent = value;
+
+      const $item_copy_icon = document.createElement('div');
+      $item_copy_icon.classList.add('details__item-copy-icon');
+      $item_copy_icon.classList.add('hidden');
+      $item_copy_icon.innerHTML = `
+        <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor"/> </svg>
+      `;
+      $new_details_item.addEventListener('mouseenter', () =>
+      {
+        $item_copy_icon.classList.remove('hidden');
+      });
+      $new_details_item.addEventListener('mouseleave', () =>
+      {
+        $item_copy_icon.classList.add('hidden');
+      });
+      $new_details_item.appendChild($item_copy_icon);
 
       $new_details_item.onclick = () => this.copy_to_clipboard(value);
       details.push($new_details_item);
