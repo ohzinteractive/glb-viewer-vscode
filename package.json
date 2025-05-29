@@ -94,7 +94,7 @@
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.1.2",
     "pug": "^3.0.3",
-    "sass": "^1.77.6",
+    "sass": "1.77.5",
     "standardx": "^7.0.0",
     "stylelint": "^15.3.0",
     "stylelint-config-standard-scss": "^7.0.1",

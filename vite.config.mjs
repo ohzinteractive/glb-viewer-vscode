@@ -25,6 +25,7 @@ export default defineConfig({
         }
       }
     },
+    chunkSizeWarningLimit: 700,
     minify: 'esbuild',
     esbuild: {
       drop: ['console', 'debugger'],
