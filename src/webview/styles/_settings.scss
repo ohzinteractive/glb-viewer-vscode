@@ -25,6 +25,8 @@
 
   &:hover {
     background-color: var(--background-color-alt);
+
+    box-shadow: 0 0 10 * $ptr rgb(0 0 0 / 50%);
   }
 }
 
