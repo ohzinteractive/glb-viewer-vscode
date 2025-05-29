@@ -42,4 +42,3 @@ coverage/
 
 # Debug
 .debug/
-src/webview/index.html
