@@ -11,7 +11,6 @@ const renderPug = () =>
     transformIndexHtml(html)
     {
       return pug.renderFile(templatePath, {
-        pretty: true,
         package: packagejson
       });
     },
