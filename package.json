@@ -99,8 +99,7 @@
     "stylelint": "^15.3.0",
     "stylelint-config-standard-scss": "^7.0.1",
     "stylelint-order": "^6.0.3",
-    "vite": "^6.3.5",
-    "vite-plugin-pug-transformer": "^1.0.5"
+    "vite": "^6.3.5"
   },
   "scripts": {
     "start": "vite build --watch",
