@@ -75,8 +75,9 @@
 }
 
   .settings__action-label {
-    font-size: 12 * $ptr;
+    color: var(--text-color);
 
+    font-size: 12 * $ptr;
   }
 
 .settings__icon {
