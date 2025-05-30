@@ -3,6 +3,19 @@ class Textures
   constructor()
   {
     this.$container = document.querySelector('.textures');
+
+    this.canvas = document.createElement('canvas');
+    this.canvas_ctx = this.canvas.getContext('2d');
+
+    this.image_preview_elem = document.createElement('img');
+    this.image_preview_elem.style.visibility = 'hidden';
+    this.image_preview_elem.style.position = 'absolute';
+    document.body.appendChild(this.image_preview_elem);
+
+    this.$container.addEventListener('mouseleave', () =>
+    {
+      this.image_preview_elem.style.visibility = 'hidden';
+    });
   }
 
   init(scene_controller, details_panel)
@@ -46,16 +59,16 @@ class Textures
       'coatNormalScaleMap'
     ];
 
-    object3d.traverse((node) =>
+    object3d.traverse((child) =>
     {
-      if (node.isMesh && node.material)
+      if (child.material)
       {
         for (let i = 0; i < material_types.length; i++)
         {
           const material_type = material_types[i];
-          if (node.material[material_type])
+          if (child.material[material_type])
           {
-            textures.add(node.material[material_type]);
+            textures.add(child.material[material_type]);
           }
         }
       }
@@ -78,6 +91,10 @@ class Textures
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
       node.appendChild(label);
       node.appendChild(resolution);
+      node.dataset.bitmap_data_url = this.image_bitmap_to_data_url(texture.image);
+      node.dataset.width = texture.image.width;
+      node.dataset.height = texture.image.height;
+      node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
       texture_nodes.push(node);
     }
 
@@ -106,6 +123,30 @@ class Textures
     {
       this.$container.innerHTML = '<div class="texture-node">No textures found</div>';
     }
+  }
+
+  image_bitmap_to_data_url(image_bitmap)
+  {
+    this.canvas.width = image_bitmap.width;
+    this.canvas.height = image_bitmap.height;
+    this.canvas_ctx.drawImage(image_bitmap, 0, 0);
+    return this.canvas.toDataURL();
+  }
+
+  on_texture_node_mouse_enter(evt)
+  {
+    const dataset = evt.srcElement.dataset;
+    this.preview_image(dataset.bitmap_data_url, dataset.width, dataset.height);
+  }
+
+  preview_image(bitmap_data_url, width, height)
+  {
+    this.image_preview_elem.src = bitmap_data_url;
+    const aspect = width / height;
+    this.image_preview_elem.style.width = '256px';
+    this.image_preview_elem.style.height = `${256 / aspect}px`;
+
+    this.image_preview_elem.style.visibility = 'visible';
   }
 }
 
