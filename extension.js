@@ -26,6 +26,11 @@ function getHTML(panel, dataUri)
     return `${quote}${webviewUri.toString()}${quote}`;
   });
 
+  html = html.replace(
+    'content="content-security-policy-replaced-on-extension-js"',
+    `default-src 'none'; img-src ${panel.webview.cspSource} blob:; script-src ${panel.webview.cspSource}; style-src ${panel.webview.cspSource}`
+  );
+
   return html;
 }
 
