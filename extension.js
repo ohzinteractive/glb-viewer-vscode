@@ -57,24 +57,15 @@ class GLBDocument
 //   _disposables.length = 0; // Clear the disposables array
 // }
 
-function getLibURIs(webviewPanel, lib_names)
+function getRootPath(webviewPanel)
 {
-  // console.log('getLibURIs', lib_names);
+  // console.log('getRootPath');
 
-  const lib_uris = {};
+  // Handle requests for library URIs
+  const rootPath = path.join(__dirname);
+  const rootUri = webviewPanel.webview.asWebviewUri(vscode.Uri.file(rootPath));
 
-  for (let i = 0; i < lib_names.length; i++)
-  {
-    const lib_name = lib_names[i];
-
-    // Handle requests for library URIs
-    const libPath = path.join(__dirname, 'dist', 'webview', 'lib', lib_name);
-    const libUri = webviewPanel.webview.asWebviewUri(vscode.Uri.file(libPath));
-
-    lib_uris[lib_name] = `${libUri.toString()}/`;
-  }
-
-  return lib_uris;
+  return rootUri.toString();
 }
 
 function activate(context)
@@ -116,8 +107,8 @@ function activate(context)
           });
 
           webviewPanel.webview.postMessage({
-            type: 'setLibURIs',
-            libs_urls: getLibURIs(webviewPanel, message.lib_names)
+            type: 'setRootPath',
+            root_path: getRootPath(webviewPanel)
           });
 
           webviewPanel.webview.postMessage({

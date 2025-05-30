@@ -39,16 +39,13 @@ class MainApplication
       case 'loadModel':
         this.scene_controller.loadModel(message.dataUri);
         break;
-      case 'setLibURIs':
-        this.scene_controller.setLibURIs(message.libs_urls);
+      case 'setRootPath':
+        this.scene_controller.setLibURIs(message.root_path);
         break;
       }
     });
 
-    // TODO: Improve this?
-    const lib_names = ['draco', 'basis'];
-
-    this.vscode.postMessage({ type: 'ready', lib_names: lib_names });
+    this.vscode.postMessage({ type: 'ready' });
   }
 }
 
