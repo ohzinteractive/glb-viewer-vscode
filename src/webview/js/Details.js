@@ -122,7 +122,10 @@ class Details
           value = JSON.stringify(value);
         }
       }
-
+      if (key === 'type' && (value === 'Mesh' || value === 'SkinnedMesh'))
+      {
+        value += ` (${obj.geometry.attributes.position.count} vertices)`;
+      }
       const $new_details_item = document.createElement('div');
       $new_details_item.classList.add('details__item');
 
