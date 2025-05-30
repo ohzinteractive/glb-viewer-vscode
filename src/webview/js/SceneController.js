@@ -87,7 +87,7 @@ class SceneController
 
   setLibURIs(root_path)
   {
-    console.log('Setting library URIs:', root_path);
+    console.log('Setting Root URI:', root_path);
 
     this.draco_loader.setDecoderPath(`${root_path}/dist/webview/lib/draco/`);
     this.ktx2_loader.setTranscoderPath(`${root_path}/dist/webview/lib/basis/`);
@@ -107,6 +107,7 @@ class SceneController
       console.error('No data URI provided for model loading');
       return;
     }
+    console.log('Loading model from data URI:', dataUri);
 
     this.loader.load(dataUri, (gltf) =>
     {

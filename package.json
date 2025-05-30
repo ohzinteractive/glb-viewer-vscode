@@ -37,6 +37,9 @@
         "selector": [
           {
             "filenamePattern": "*.glb"
+          },
+          {
+            "filenamePattern": "*.gltf"
           }
         ],
         "priority": "default"

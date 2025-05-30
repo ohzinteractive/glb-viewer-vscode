@@ -4,7 +4,7 @@ const path = require('path');
 
 // const _disposables = [];
 
-function getHTML(panel, dataUri)
+function getHTML(panel)
 {
   const distPath = path.join(__dirname, 'dist', 'webview');
   const htmlPath = path.join(distPath, 'index.html');
@@ -28,7 +28,12 @@ function getHTML(panel, dataUri)
 
   html = html.replace(
     'content="content-security-policy-replaced-on-extension-js"',
-    `default-src 'none'; img-src ${panel.webview.cspSource} blob:; script-src ${panel.webview.cspSource}; style-src ${panel.webview.cspSource}`
+    `default-src 'none'; 
+     img-src ${panel.webview.cspSource} https: data: blob:;
+     script-src ${panel.webview.cspSource}; 
+     style-src ${panel.webview.cspSource} 'unsafe-inline'; 
+     connect-src ${panel.webview.cspSource} https:;"
+    `
   );
 
   return html;
@@ -79,9 +84,10 @@ function activate(context)
 
     async resolveCustomEditor(document, webviewPanel, _token)
     {
-      const fileData = await vscode.workspace.fs.readFile(document.uri);
-      const base64Data = Buffer.from(fileData).toString('base64');
-      const dataUri = `data:application/octet-stream;base64,${base64Data}`;
+      console.log('Resolving custom editor for:', document.uri.toString());
+
+      const rootUri = webviewPanel.webview.asWebviewUri(document.uri);
+      const dataUri = rootUri.toString();
 
       webviewPanel.webview.options = {
         enableScripts: true,
