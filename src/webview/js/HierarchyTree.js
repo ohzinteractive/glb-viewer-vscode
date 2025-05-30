@@ -2,63 +2,26 @@ class HierarchyTree
 {
   constructor()
   {
-    this.is_dragging = false;
-    this.offset_x = 0;
-    this.offset_y = 0;
-    this.is_resizing = false;
-    this.initial_x = 0;
-
-    this.$content = document.querySelector('.tree');
-    this.$splitter = document.querySelector('.splitter');
-    this.$header = document.querySelector('.tree-header');
-    this.$container = document.querySelector('.tree-container');
+    this.$container = document.querySelector('.tree');
   }
 
   init(scene_controller, details_panel)
   {
     this.scene_controller = scene_controller;
     this.details_panel = details_panel;
-
-    this.$header.addEventListener('mousedown', (e) =>
-    {
-      this.is_dragging = true;
-      document.body.style.cursor = 'move';
-      this.offset_x = e.clientX - this.$container.offsetLeft;
-      this.offset_y = e.clientY - this.$container.offsetTop;
-    });
-
-    this.$splitter.addEventListener('mousedown', (e) =>
-    {
-      this.is_resizing = true;
-      document.body.style.cursor = 'col-resize';
-      this.initial_x = e.clientX;
-    });
   }
 
-  handle_mouse_move(e)
+  show()
   {
-    if (this.is_resizing)
-    {
-      const new_width = e.clientX;
-      if (new_width > 200 && new_width < window.innerWidth - 200)
-      {
-        this.$content.style.width = new_width + 'px';
-      }
-    }
-    if (this.is_dragging)
-    {
-      const new_x = e.clientX - this.offset_x;
-      const new_y = e.clientY - this.offset_y;
-
-      const max_x = window.innerWidth - this.$container.offsetWidth;
-      const max_y = window.innerHeight - this.$container.offsetHeight;
-
-      this.$container.style.left = Math.min(Math.max(0, new_x), max_x) + 'px';
-      this.$container.style.top = Math.min(Math.max(0, new_y), max_y) + 'px';
-    }
+    this.$container.classList.remove('hidden');
   }
 
-  build_hierarchy_tree(object3d, $container = this.$content, depth = 0)
+  hide()
+  {
+    this.$container.classList.add('hidden');
+  }
+
+  build_hierarchy_tree(object3d, $container = this.$container, depth = 0)
   {
     const ICON_ARROW_RIGHT = '<svg fill="none" viewBox="0 0 24 24" width="16" height="16"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const ICON_ARROW_DOWN = '<svg fill="none" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -141,7 +104,15 @@ class HierarchyTree
         this.build_hierarchy_tree(child, $children, depth + 1);
       }
 
-      $label_wrapper.addEventListener('click', () =>
+      $label.addEventListener('click', () =>
+      {
+        const is_collapsed = $children.style.display === 'none';
+        $children.style.display = is_collapsed ? 'block' : 'none';
+        $icon.innerHTML = is_collapsed ? ICON_ARROW_DOWN : ICON_ARROW_RIGHT;
+        this.handle_object_click(object3d);
+      });
+
+      $icon.addEventListener('click', () =>
       {
         const is_collapsed = $children.style.display === 'none';
         $children.style.display = is_collapsed ? 'block' : 'none';
@@ -175,22 +146,14 @@ class HierarchyTree
         object3d.visible = !object3d.visible;
         $action.innerHTML = object3d.visible ? ICON_CLOSED_EYE : ICON_OPEN_EYE;
       });
+      $label_wrapper.addEventListener('click', () => this.handle_object_click(object3d));
     }
-
-    $label.addEventListener('click', () => this.handle_object_click(object3d));
-    // $icon.addEventListener('click', () => this.handle_object_click(object3d));
   }
 
   handle_object_click(object3d)
   {
     this.details_panel.handle_object_click(object3d);
     this.scene_controller.focus_camera_on_object(object3d);
-  }
-
-  handle_mouse_up()
-  {
-    this.is_resizing = false;
-    this.is_dragging = false;
   }
 }
 

@@ -79,7 +79,6 @@
 
     // display: flex;
     // justify-content: space-between;
-    padding: 5 * $ptr;
 
     width: 100%;
     max-height: 200 * $ptr;
@@ -92,6 +91,8 @@
   }
 
   .details__item-label {
+    padding: 5 * $ptr;
+
     color: var(--text-color-alt);
   }
 

@@ -2,8 +2,10 @@
 @import 'common';
 @import 'settings';
 @import 'tree';
+@import 'panel';
 @import 'details';
 @import 'slider';
+@import 'textures';
 
 .viewer {
   display: flex;

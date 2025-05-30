@@ -97,6 +97,7 @@ class Details
   create_detail_item(obj)
   {
     const details = [];
+    const ICON_SVG = '<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor"/> </svg>';
     const relevant_keys = this.vscode_configuration.relevant3dObjectKeys;
     for (let i = 0; i < relevant_keys.length; i++)
     {
@@ -140,9 +141,7 @@ class Details
       const $item_copy_icon = document.createElement('div');
       $item_copy_icon.classList.add('details__item-copy-icon');
       $item_copy_icon.classList.add('hidden');
-      $item_copy_icon.innerHTML = `
-        <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M4 2h11v2H6v13H4V2zm4 4h12v16H8V6zm2 2v12h8V8h-8z" fill="currentColor"/> </svg>
-      `;
+      $item_copy_icon.innerHTML = ICON_SVG;
       $new_details_item.addEventListener('mouseenter', () =>
       {
         $item_copy_icon.classList.remove('hidden');
