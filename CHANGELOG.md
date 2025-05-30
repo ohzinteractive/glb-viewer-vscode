@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to the GLB Viewer extension will be documented in this file.
+## [1.0.4] - 2025-05-28
+
+### Improved
+ - Unified styling across panels
+
+### Added
+ - Selection wireframe
+ - Global position property (needs to be enabled from settings)
 
 ## [1.0.4] - 2025-05-26
 
