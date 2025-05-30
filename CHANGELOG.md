@@ -1,7 +1,19 @@
 # Changelog
 
 All notable changes to the GLB Viewer extension will be documented in this file.
-## [1.0.4] - 2025-05-28
+
+## [1.0.6] - 2025-05-30
+
+### Added
+ - Draco and ktx2 compression support
+ - Texture list in new tab along hierarchy
+ 
+### Improved
+ - Show vertex count along object type (if it's a mesh)
+ - Now clicking in the expand hierarchy arrow doesn't move the camera
+
+
+## [1.0.5] - 2025-05-28
 
 ### Improved
  - Unified styling across panels
