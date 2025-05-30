@@ -31,8 +31,9 @@ import { StudioLightScene } from './StudioLightScene.js';
 
 class SceneController
 {
-  constructor()
+  constructor(mainapp)
   {
+    this.mainapp = mainapp;
     // console.log(REVISION);
 
     this.scene = new Scene();
@@ -64,14 +65,8 @@ class SceneController
 
     this.loader = new GLTFLoader();
 
-    const ktx2_loader = new KTX2Loader();
-    ktx2_loader.setTranscoderPath('https://www.gstatic.com/basis-universal/2020_09_17/');
-    ktx2_loader.detectSupport(this.renderer.renderer);
-
+    this.ktx2_loader = new KTX2Loader();
     this.draco_loader = new DRACOLoader();
-    this.draco_loader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.0/');
-    this.loader.setDRACOLoader(this.draco_loader);
-    this.loader.setKTX2Loader(ktx2_loader);
 
     this.elapsed_time_at_button_pressed = 0;
 
@@ -87,6 +82,19 @@ class SceneController
   {
     this.ui_controller = ui_controller;
     this.animate();
+  }
+
+  setLibURIs(lib_uris)
+  {
+    // console.log('Setting library URIs:', lib_uris);
+
+    this.draco_loader.setDecoderPath(lib_uris.draco);
+    this.ktx2_loader.setTranscoderPath(lib_uris.basis);
+
+    this.ktx2_loader.detectSupport(this.renderer.renderer);
+
+    this.loader.setDRACOLoader(this.draco_loader);
+    this.loader.setKTX2Loader(this.ktx2_loader);
   }
 
   loadModel(dataUri)

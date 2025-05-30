@@ -52,6 +52,26 @@ class GLBDocument
 //   _disposables.length = 0; // Clear the disposables array
 // }
 
+function getLibURIs(webviewPanel, lib_names)
+{
+  // console.log('getLibURIs', lib_names);
+
+  const lib_uris = {};
+
+  for (let i = 0; i < lib_names.length; i++)
+  {
+    const lib_name = lib_names[i];
+
+    // Handle requests for library URIs
+    const libPath = path.join(__dirname, 'dist', 'webview', 'lib', lib_name);
+    const libUri = webviewPanel.webview.asWebviewUri(vscode.Uri.file(libPath));
+
+    lib_uris[lib_name] = `${libUri.toString()}/`;
+  }
+
+  return lib_uris;
+}
+
 function activate(context)
 {
   const provider =
@@ -88,6 +108,11 @@ function activate(context)
           webviewPanel.webview.postMessage({
             type: 'updateConfig',
             config: vscode.workspace.getConfiguration('glbViewer')
+          });
+
+          webviewPanel.webview.postMessage({
+            type: 'setLibURIs',
+            libs_urls: getLibURIs(webviewPanel, message.lib_names)
           });
 
           webviewPanel.webview.postMessage({

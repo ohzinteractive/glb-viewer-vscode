@@ -14,12 +14,15 @@ if ('serviceWorker' in navigator)
   });
 }
 
+/* global acquireVsCodeApi */
 class MainApplication
 {
   constructor()
   {
     this.ui_controller = new UIController(this);
     this.scene_controller = new SceneController(this);
+
+    this.vscode = acquireVsCodeApi();
   }
 
   init()
@@ -36,19 +39,23 @@ class MainApplication
       case 'loadModel':
         this.scene_controller.loadModel(message.dataUri);
         break;
+      case 'setLibURIs':
+        this.scene_controller.setLibURIs(message.libs_urls);
+        break;
       }
     });
+
+    // TODO: Improve this?
+    const lib_names = ['draco', 'basis'];
+
+    this.vscode.postMessage({ type: 'ready', lib_names: lib_names });
   }
 }
 
-/* global acquireVsCodeApi */
 document.addEventListener('DOMContentLoaded', () =>
 {
   console.log('WebView loaded!');
 
   const main_application = new MainApplication();
   main_application.init();
-
-  const vscode = acquireVsCodeApi();
-  vscode.postMessage({ type: 'ready' });
 });

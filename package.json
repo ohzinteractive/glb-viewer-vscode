@@ -102,8 +102,9 @@
     "vite": "^6.3.5"
   },
   "scripts": {
-    "start": "vite build --watch",
-    "build": "vite build"
+    "start": "vite build --watch & yarn copy-public",
+    "build": "vite build && yarn copy-public",
+    "copy-public": "node tasks/copy_folder.mjs public dist/webview"
   },
   "standardx": {
     "ignore": [
