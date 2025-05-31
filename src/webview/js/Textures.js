@@ -16,6 +16,8 @@ class Textures
     {
       this.image_preview_elem.style.visibility = 'hidden';
     });
+
+    this.bitmap_container = {};
   }
 
   init(scene_controller, details_panel)
@@ -91,9 +93,9 @@ class Textures
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
       node.appendChild(label);
       node.appendChild(resolution);
-      node.dataset.bitmap_data_url = this.image_bitmap_to_data_url(texture.image);
-      node.dataset.width = texture.image.width;
-      node.dataset.height = texture.image.height;
+      this.bitmap_container[texture.uuid] = texture.image;
+      node.dataset.bitmap_uuid = texture.uuid;
+
       node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
       texture_nodes.push(node);
     }
@@ -136,7 +138,12 @@ class Textures
   on_texture_node_mouse_enter(evt)
   {
     const dataset = evt.srcElement.dataset;
-    this.preview_image(dataset.bitmap_data_url, dataset.width, dataset.height);
+    const bitmap = this.bitmap_container[dataset.bitmap_uuid];
+    if(dataset.bitmap_data_url === undefined)
+    {
+      dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
+    }
+    this.preview_image(dataset.bitmap_data_url, bitmap.width, bitmap.height);
   }
 
   preview_image(bitmap_data_url, width, height)
@@ -146,6 +153,8 @@ class Textures
     this.image_preview_elem.style.width = '256px';
     this.image_preview_elem.style.height = `${256 / aspect}px`;
 
+    this.image_preview_elem.style.left = ((window.innerWidth/2)-128)+ "px";
+    this.image_preview_elem.style.top = ((window.innerHeight/2)-(128 * (1/aspect)))+ "px";
     this.image_preview_elem.style.visibility = 'visible';
   }
 }
