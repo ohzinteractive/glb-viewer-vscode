@@ -24,6 +24,7 @@ import {
   Vector3
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
@@ -68,6 +69,7 @@ class SceneController
 
     this.ktx2_loader = new KTX2Loader();
     this.draco_loader = new DRACOLoader();
+    this.meshopt_decoder = MeshoptDecoder;
 
     this.elapsed_time_at_button_pressed = 0;
 
@@ -96,6 +98,7 @@ class SceneController
 
     this.loader.setDRACOLoader(this.draco_loader);
     this.loader.setKTX2Loader(this.ktx2_loader);
+    this.loader.setMeshoptDecoder(this.meshopt_decoder);
 
     this.root_path = root_path;
   }
