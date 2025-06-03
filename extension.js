@@ -73,6 +73,54 @@ function getRootPath(webviewPanel)
   return rootUri.toString();
 }
 
+function checkFileExtensionDefaults(context)
+{
+  const gltfPromptedKey = 'gltfEditorPromptShown';
+
+  // Reset question for testing
+  // context.globalState.update('gltfEditorPromptShown', false);
+
+  const alreadyPrompted = context.globalState.get(gltfPromptedKey);
+
+  const disposable = vscode.workspace.onDidOpenTextDocument((document) =>
+  {
+    if (!alreadyPrompted && document.uri.fsPath.endsWith('.gltf'))
+    {
+      vscode.window.showInformationMessage(
+        'Would you like to use the GLTF Visual Viewer for .gltf files?',
+        'Yes', 'No'
+      ).then(selection =>
+      {
+        if (selection === 'Yes')
+        {
+          const config = vscode.workspace.getConfiguration('workbench');
+          const associations = config.get('editorAssociations') || {};
+          associations['*.gltf'] = 'glbViewer.customEditor';
+          config.update('editorAssociations', associations, vscode.ConfigurationTarget.Global).then(async() =>
+          {
+            // Reopen the file with your custom editor
+            const activeEditor = vscode.window.activeTextEditor;
+            if (activeEditor && activeEditor.document.uri.fsPath.endsWith('.gltf'))
+            {
+              const uri = activeEditor.document.uri;
+              await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+              await vscode.commands.executeCommand('vscode.openWith', uri, 'glbViewer.customEditor');
+            }
+          });
+
+          context.globalState.update(gltfPromptedKey, true);
+        }
+        else
+        {
+          context.globalState.update(gltfPromptedKey, true);
+        }
+      });
+    }
+  });
+
+  context.subscriptions.push(disposable);
+}
+
 function activate(context)
 {
   const provider =
@@ -177,6 +225,8 @@ function activate(context)
       }
     )
   );
+
+  checkFileExtensionDefaults(context);
 }
 
 function deactivate()
