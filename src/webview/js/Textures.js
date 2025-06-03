@@ -39,7 +39,7 @@ class Textures
 
   async build_textures_list(object3d)
   {
-    const textures = new Set();
+    const textures = [];
     const material_types = [
       'map',
       'emissiveMap',
@@ -70,13 +70,22 @@ class Textures
         for (let i = 0; i < material_types.length; i++)
         {
           const material_type = material_types[i];
+
           if (child.material[material_type])
           {
-            const texture = child.material[material_type];
-            texture.material_name = child.material.name;
-            texture.material_type = material_type;
+            const texture = {
+              name: child.material[material_type].name || 'Unknown Texture',
+              uuid: child.material[material_type].uuid,
+              image: child.material[material_type].image || child.material[material_type].source || undefined,
+              material_type: material_type,
+              material_name: child.material.name || 'Unknown Material',
+              instance: child.material[material_type]
+            };
 
-            textures.add(texture);
+            if (!textures.find(t => t.uuid === texture.uuid))
+            {
+              textures.push(texture);
+            }
           }
         }
       }
@@ -111,7 +120,7 @@ class Textures
       node.appendChild(type);
       node.appendChild(resolution);
 
-      this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture);
+      this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
 
       node.dataset.bitmap_uuid = texture.uuid;
 
