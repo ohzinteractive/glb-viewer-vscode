@@ -2,6 +2,14 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [1.1.0] - 2025-06-03
+
+### Added
+- Meshoptimizer compression support
+
+### Improved
+- Show question to open GLTF files with this extension if it is opened as a text file
+
 ## [1.0.6] - 2025-05-30
 
 ### Added
