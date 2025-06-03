@@ -72,7 +72,11 @@ class Textures
           const material_type = material_types[i];
           if (child.material[material_type])
           {
-            textures.add(child.material[material_type]);
+            const texture = child.material[material_type];
+            texture.material_name = child.material.name;
+            texture.material_type = material_type;
+
+            textures.add(texture);
           }
         }
       }
@@ -85,15 +89,26 @@ class Textures
     {
       const texture = textures_list[i];
       const label = document.createElement('div');
+      const material_name = document.createElement('div');
+      const type = document.createElement('div');
       const resolution = document.createElement('div');
       const node = document.createElement('div');
+
       node.classList.add('texture-node');
       label.classList.add('texture-node__label');
+      material_name.classList.add('texture-node__material-name');
+      type.classList.add('texture-node__type');
       resolution.classList.add('texture-node__resolution');
       label.textContent = texture.name;
+      material_name.textContent = texture.material_name || 'Unknown Material';
+      type.textContent = texture.material_type || 'Unknown';
+      // console.log(texture);
 
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
+
       node.appendChild(label);
+      node.appendChild(material_name);
+      node.appendChild(type);
       node.appendChild(resolution);
 
       this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture);
