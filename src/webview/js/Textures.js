@@ -1,3 +1,5 @@
+import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
+
 class Textures
 {
   constructor()
@@ -35,7 +37,7 @@ class Textures
     this.$container.classList.add('hidden');
   }
 
-  build_textures_list(object3d)
+  async build_textures_list(object3d)
   {
     const textures = new Set();
     const material_types = [
@@ -93,7 +95,9 @@ class Textures
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
       node.appendChild(label);
       node.appendChild(resolution);
-      this.bitmap_container[texture.uuid] = texture.image;
+
+      this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture);
+
       node.dataset.bitmap_uuid = texture.uuid;
 
       node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
@@ -127,6 +131,50 @@ class Textures
     }
   }
 
+  async get_image_bitmap(texture)
+  {
+    // if (texture.image instanceof HTMLImageElement ||
+    //     texture.image instanceof HTMLCanvasElement ||
+    //     texture.image instanceof ImageBitmap)
+    // {
+    //   return texture.image;
+    // }
+    // else if (texture.image instanceof Object)
+    // {
+    const width = Math.min(texture.image.width || 512, 512);
+    const height = Math.min(texture.image.height || 512, 512);
+
+    const rt = new WebGLRenderTarget(width, height);
+    const quadScene = new Scene();
+    const quadCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const material = new MeshBasicMaterial({ map: texture });
+    const quad = new Mesh(new PlaneGeometry(2, 2), material);
+    quadScene.add(quad);
+
+    this.scene_controller.renderer.renderer.setRenderTarget(rt);
+    this.scene_controller.renderer.renderer.render(quadScene, quadCamera);
+    this.scene_controller.renderer.renderer.setRenderTarget(null);
+
+    // Read pixels
+    const buffer = new Uint8Array(width * height * 4);
+    this.scene_controller.renderer.renderer.readRenderTargetPixels(rt, 0, 0, width, height, buffer);
+
+    // Create ImageData
+    const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);
+
+    // Create ImageBitmap
+    const imageBitmap = await createImageBitmap(imageData);
+
+    return imageBitmap;
+    // }
+    // else
+    // {
+    //   console.warn('Unsupported texture image type:', texture.image);
+    //   return null;
+    // }
+  }
+
   image_bitmap_to_data_url(image_bitmap)
   {
     this.canvas.width = image_bitmap.width;
@@ -139,7 +187,8 @@ class Textures
   {
     const dataset = evt.srcElement.dataset;
     const bitmap = this.bitmap_container[dataset.bitmap_uuid];
-    if(dataset.bitmap_data_url === undefined)
+
+    if (dataset.bitmap_data_url === undefined)
     {
       dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
     }
@@ -153,8 +202,10 @@ class Textures
     this.image_preview_elem.style.width = '256px';
     this.image_preview_elem.style.height = `${256 / aspect}px`;
 
-    this.image_preview_elem.style.left = ((window.innerWidth/2)-128)+ "px";
-    this.image_preview_elem.style.top = ((window.innerHeight/2)-(128 * (1/aspect)))+ "px";
+    // this.image_preview_elem.style.left = ((window.innerWidth / 2) - 128) + 'px';
+    this.image_preview_elem.style.left = '20px';
+    // this.image_preview_elem.style.top = ((window.innerHeight / 2) - (128 * (1 / aspect))) + 'px';
+    this.image_preview_elem.style.top = ((window.innerHeight) - (256 * (1 / aspect))) - 20 + 'px';
     this.image_preview_elem.style.visibility = 'visible';
   }
 }
