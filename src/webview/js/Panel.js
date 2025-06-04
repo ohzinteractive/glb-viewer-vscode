@@ -1,4 +1,5 @@
 import { HierarchyTree } from './HierarchyTree';
+import { Info } from './Info';
 import { Textures } from './Textures';
 
 class Panel
@@ -18,12 +19,14 @@ class Panel
 
     this.contents = {
       hierarchy: new HierarchyTree(),
-      textures: new Textures()
+      textures: new Textures(),
+      info: new Info()
     };
 
     this.tabs = {
       hierarchy: this.$headers.querySelector('.panel-header__item[data-name="hierarchy"]'),
-      textures: this.$headers.querySelector('.panel-header__item[data-name="textures"]')
+      textures: this.$headers.querySelector('.panel-header__item[data-name="textures"]'),
+      info: this.$headers.querySelector('.panel-header__item[data-name="info"]')
     };
   }
 
@@ -38,6 +41,8 @@ class Panel
     this.scene_controller = scene_controller;
     this.contents.hierarchy.init(scene_controller, details_panel);
     this.contents.textures.init(scene_controller, details_panel);
+
+    this.contents.info.init(scene_controller);
 
     this.set_active_tab('hierarchy');
     this.contents.hierarchy.show();
@@ -94,7 +99,7 @@ class Panel
 
   handle_tab_click(e)
   {
-    console.log('handle_tab_click', e.target);
+    // console.log('handle_tab_click', e.target);
     const $tab = e.target;
     const tab_name = $tab.dataset.name;
 
