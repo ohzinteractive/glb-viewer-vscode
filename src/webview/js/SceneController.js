@@ -28,6 +28,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { AnimatedScene } from './AnimatedScene.js';
 import { StudioLightScene } from './StudioLightScene.js';
 
 class SceneController
@@ -115,10 +116,11 @@ class SceneController
     this.loader.load(dataUri, (gltf) =>
     {
       // console.log('GLB loaded', gltf);
-      this.scene.add(gltf.scene);
-      this.model = gltf.scene;
+      this.model = new AnimatedScene(gltf);
 
-      gltf.scene.traverse(child =>
+      this.scene.add(this.model);
+
+      this.model.traverse(child =>
       {
         child.frustumCulled = false;
         if (child.geometry)
@@ -137,7 +139,7 @@ class SceneController
         child_box.getSize(child.globalScale);
       });
 
-      const box = new Box3().setFromObject(gltf.scene, true);
+      const box = new Box3().setFromObject(this.model, true);
       const size = box.getSize(new Vector3()).length();
       const center = box.getCenter(new Vector3());
 
@@ -149,8 +151,8 @@ class SceneController
       {
         this.camera.near = 0.01;
       }
-      this.ui_controller.build_hierarchy_tree(gltf.scene);
-      this.focus_camera_on_object(gltf.scene);
+      this.ui_controller.build_hierarchy_tree(this.model);
+      this.focus_camera_on_object(this.model);
     });
 
     const pmrem = new PMREMGenerator(this.renderer.renderer);
@@ -168,6 +170,7 @@ class SceneController
 
   update()
   {
+    this.model?.update();
     this.controls.update();
 
     if (this.input.left_mouse_button_pressed)
