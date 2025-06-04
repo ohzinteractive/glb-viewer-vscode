@@ -125,6 +125,7 @@ class Textures
       node.dataset.bitmap_uuid = texture.uuid;
 
       node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
+      node.addEventListener('click', this.download_image.bind(this, this.bitmap_container[texture.uuid], texture.name));
       texture_nodes.push(node);
     }
 
@@ -231,6 +232,15 @@ class Textures
     // this.image_preview_elem.style.top = ((window.innerHeight / 2) - (128 * (1 / aspect))) + 'px';
     this.image_preview_elem.style.top = ((window.innerHeight) - (256 * (1 / aspect))) - 20 + 'px';
     this.image_preview_elem.style.visibility = 'visible';
+  }
+
+  download_image(bitmap_data, name)
+  {
+    const data_url = this.image_bitmap_to_data_url(bitmap_data);
+    const a = document.createElement('a');
+    a.href = data_url;
+    a.download = name;
+    a.click();
   }
 }
 
