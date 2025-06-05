@@ -2,7 +2,7 @@ import { AnimationMixer, Object3D } from 'three';
 // import { SkeletonHelper } from 'three';
 // import { LoopOnce } from 'three';
 
-import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
+// import * as SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils.js';
 
 export class AnimatedScene extends Object3D
 {
@@ -10,7 +10,8 @@ export class AnimatedScene extends Object3D
   {
     super();
 
-    const scene = SkeletonUtils.clone(animated_gltf.scene);
+    // const scene = SkeletonUtils.clone(animated_gltf.scene);
+    const scene = animated_gltf.scene;
 
     this.animations = animated_gltf.animations;
     // console.log(this.animations);
