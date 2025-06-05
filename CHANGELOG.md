@@ -2,6 +2,17 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [1.2.0] - 2025-06-05
+
+### Added
+- Added ability to preview gpu compressed textures (like ktx2)
+- Added Info tab
+- Added support for animations
+- Added download button for textures
+### Improved
+- Texture list now displays more information about material relationship.
+- Improved texture preview loading time for 4k textures
+
 ## [1.1.0] - 2025-06-03
 
 ### Added
