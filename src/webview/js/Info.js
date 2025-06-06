@@ -1,4 +1,3 @@
-
 class Info
 {
   constructor()
@@ -22,16 +21,40 @@ class Info
     this.$container.classList.add('hidden');
   }
 
+  rendered_vertex_count(scene)
+  {
+    let total = 0;
+    scene.traverse((child) =>
+    {
+      if (child.isMesh && child.geometry?.isBufferGeometry)
+      {
+        const pos = child.geometry.getAttribute('position');
+        if (pos) total += pos.count;
+      }
+    });
+    return total;
+  }
+
   fill_info()
   {
     const info = this.scene_controller.renderer.renderer.info;
+    const gltf = this.scene_controller.model?.original_gltf;
+    const vertices = this.rendered_vertex_count(this.scene_controller.scene);
+
+    // console.log(this.scene_controller.model);
 
     this.$container.innerHTML = '';
 
+    this.create_node('Generator', gltf?.asset?.generator || 'Unknown');
     this.create_node('Geometries', info.memory.geometries);
     this.create_node('Textures', info.memory.textures);
     this.create_node('Calls', info.render.calls);
+    this.create_node('Animations', gltf?.animations?.length || 0);
+    this.create_node('Materials', gltf?.parser?.json?.materials?.length || 0);
+    this.create_node('Images', gltf?.parser?.json?.images?.length || 0);
+    this.create_node('Vertices', vertices || 0);
     this.create_node('Triangles', info.render.triangles);
+    this.create_node('Extensions', gltf?.parser?.json?.extensionsUsed?.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
   }
 
   create_node(label, value)
