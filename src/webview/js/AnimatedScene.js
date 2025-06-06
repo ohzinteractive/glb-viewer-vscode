@@ -52,7 +52,7 @@ export class AnimatedScene extends Object3D
 
     this.frustumCulled = false;
 
-    this.play_animation();
+    this.play_animations();
   }
 
   clone()
@@ -60,7 +60,7 @@ export class AnimatedScene extends Object3D
     return new AnimatedScene(this.original_gltf);
   }
 
-  play_animation(clamp = false)
+  play_animations(clamp = false)
   {
     this.animations.forEach(clip =>
     {
@@ -75,6 +75,13 @@ export class AnimatedScene extends Object3D
     });
 
     this.elapsed_time = 0;
+  }
+
+  play_animation(animation)
+  {
+    const action = this.mixer.clipAction(animation);
+    // console.log(animation, action);
+    action.play();
   }
 
   update()

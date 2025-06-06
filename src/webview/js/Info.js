@@ -57,6 +57,16 @@ class Info
     this.create_node('Extensions', gltf?.parser?.json?.extensionsUsed?.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
   }
 
+  get_texture_count()
+  {
+    return this.scene_controller.model?.original_gltf?.parser?.json?.textures?.length || 0;
+  }
+
+  get_animation_count()
+  {
+    return this.scene_controller.model?.original_gltf?.animations?.length || 0;
+  }
+
   create_node(label, value)
   {
     const $node = document.createElement('div');

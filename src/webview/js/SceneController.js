@@ -80,6 +80,8 @@ class SceneController
     this.selected_mesh = new Mesh(new BufferGeometry(), new MeshBasicMaterial({ color: '#50AF8E', wireframe: true, depthTest: false, depthFunc: AlwaysDepth, depthWrite: false, transparent: true, opacity: 0.5 }));
     this.selected_mesh.renderOrder = 500;
     this.scene.add(this.selected_mesh);
+
+    this.subscribers = [];
   }
 
   init(ui_controller)
@@ -153,6 +155,12 @@ class SceneController
       }
       this.ui_controller.build_hierarchy_tree(this.model);
       this.focus_camera_on_object(this.model);
+
+      for (let i = 0; i < this.subscribers.length; i++)
+      {
+        const subscriber = this.subscribers[i];
+        subscriber.on_model_loaded(this.model);
+      }
     });
 
     const pmrem = new PMREMGenerator(this.renderer.renderer);
@@ -204,6 +212,11 @@ class SceneController
   {
     this.update();
     requestAnimationFrame(this.animate.bind(this));
+  }
+
+  subscribe(object)
+  {
+    this.subscribers.push(object);
   }
 
   highlight_object(obj)

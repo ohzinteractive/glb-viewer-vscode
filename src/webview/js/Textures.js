@@ -22,7 +22,7 @@ class Textures
     this.bitmap_container = {};
   }
 
-  init(scene_controller, details_panel)
+  init(scene_controller)
   {
     this.scene_controller = scene_controller;
   }

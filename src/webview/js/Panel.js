@@ -1,3 +1,4 @@
+import { Animations } from './Animations';
 import { HierarchyTree } from './HierarchyTree';
 import { Info } from './Info';
 import { Textures } from './Textures';
@@ -20,13 +21,15 @@ class Panel
     this.contents = {
       hierarchy: new HierarchyTree(),
       textures: new Textures(),
-      info: new Info()
+      info: new Info(),
+      animations: new Animations()
     };
 
     this.tabs = {
       hierarchy: this.$headers.querySelector('.panel-header__item[data-name="hierarchy"]'),
       textures: this.$headers.querySelector('.panel-header__item[data-name="textures"]'),
-      info: this.$headers.querySelector('.panel-header__item[data-name="info"]')
+      info: this.$headers.querySelector('.panel-header__item[data-name="info"]'),
+      animations: this.$headers.querySelector('.panel-header__item[data-name="animations"]')
     };
   }
 
@@ -39,10 +42,13 @@ class Panel
   init(scene_controller, details_panel)
   {
     this.scene_controller = scene_controller;
-    this.contents.hierarchy.init(scene_controller, details_panel);
-    this.contents.textures.init(scene_controller, details_panel);
+    scene_controller.subscribe(this);
 
     this.contents.info.init(scene_controller);
+
+    this.contents.textures.init(scene_controller);
+
+    this.contents.hierarchy.init(scene_controller, details_panel);
 
     this.set_active_tab('hierarchy');
     this.contents.hierarchy.show();
@@ -66,6 +72,20 @@ class Panel
       document.body.style.cursor = 'col-resize';
       this.initial_x = e.clientX;
     });
+  }
+
+  on_model_loaded(model)
+  {
+    if (this.contents.info.get_texture_count() > 0)
+    {
+      this.tabs.textures.classList.remove('hidden');
+    }
+
+    if (this.contents.info.get_animation_count() > 0)
+    {
+      this.tabs.animations.classList.remove('hidden');
+      this.contents.animations.init(this.scene_controller);
+    }
   }
 
   handle_mouse_move(e)
