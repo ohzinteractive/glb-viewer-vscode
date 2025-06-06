@@ -125,7 +125,7 @@ class Textures
       node.dataset.bitmap_uuid = texture.uuid;
 
       node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
-      node.addEventListener('click', this.download_image.bind(this, this.bitmap_container[texture.uuid], texture.name));
+      node.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
       texture_nodes.push(node);
     }
 
@@ -156,7 +156,7 @@ class Textures
     }
   }
 
-  async get_image_bitmap(texture)
+  async get_image_bitmap(texture, full_size = false)
   {
     // if (texture.image instanceof HTMLImageElement ||
     //     texture.image instanceof HTMLCanvasElement ||
@@ -166,8 +166,8 @@ class Textures
     // }
     // else if (texture.image instanceof Object)
     // {
-    const width = Math.min(texture.image.width || 512, 512);
-    const height = Math.min(texture.image.height || 512, 512);
+    const width = full_size ? texture.image.width : Math.min(texture.image.width || 512, 512);
+    const height = full_size ? texture.image.height : Math.min(texture.image.height || 512, 512);
 
     const rt = new WebGLRenderTarget(width, height);
     const quadScene = new Scene();
@@ -234,12 +234,13 @@ class Textures
     this.image_preview_elem.style.visibility = 'visible';
   }
 
-  download_image(bitmap_data, name)
+  async download_image(texture, name)
   {
-    const data_url = this.image_bitmap_to_data_url(bitmap_data);
+    const bitmap = await this.get_image_bitmap(texture, true);
+    const data_url = this.image_bitmap_to_data_url(bitmap);
     const a = document.createElement('a');
     a.href = data_url;
-    a.download = name;
+    a.download = `${name} (${bitmap.width}x${bitmap.height})`;
     a.click();
   }
 }
