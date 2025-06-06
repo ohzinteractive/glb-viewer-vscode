@@ -2,7 +2,20 @@ import { defineConfig } from 'vite';
 import { renderPug } from './src/vite_plugins/render_pug.mjs';
 import { watchPugFiles } from './src/vite_plugins/watch_pug_files.mjs';
 
+import fs from 'fs';
 import path from 'path';
+
+function copyPublic() {
+  return {
+    name: 'copy-public',
+    apply: 'build',
+    writeBundle: () => {
+      fs.cpSync('public', 'dist/webview', { recursive: true });
+      console.log('Copied public to dist');
+      return true;
+    },
+  };
+}
 
 export default defineConfig({
   root: 'src/webview',
@@ -41,6 +54,7 @@ export default defineConfig({
   plugins: [
     watchPugFiles(),
     renderPug(),
+    copyPublic()
   ],
   css: {
     preprocessorOptions: {
