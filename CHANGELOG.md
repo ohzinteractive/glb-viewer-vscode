@@ -2,6 +2,16 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [1.3.0] - 2025-06-09
+
+### Added
+- Added Animations tab
+
+### Improved
+- Allow full size texture download
+- Better information in the Info tab
+
+
 ## [1.2.0] - 2025-06-05
 
 ### Added
@@ -31,7 +41,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ### Improved
  - Show vertex count along object type (if it's a mesh)
  - Now clicking in the expand hierarchy arrow doesn't move the camera
- 
+
 
 ## [1.0.5] - 2025-05-28
 
