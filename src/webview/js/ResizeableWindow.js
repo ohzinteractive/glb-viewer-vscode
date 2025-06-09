@@ -90,6 +90,7 @@ class ResizableWindow
 
       this.$container.style.left = `${new_left}px`;
       this.$container.style.top = `${new_top}px`;
+      this.$container.style.right = 'initial';
     }
 
     if (this.is_resizing)
@@ -111,7 +112,8 @@ class ResizableWindow
       if (this.resize_direction.includes('left'))
       {
         const new_width = Math.max(this.start_width - dx, this.min_width);
-        const new_left = this.start_left + dx;
+        const max_left = this.start_left + (this.start_width - this.min_width);
+        const new_left = Math.min(this.start_left + dx, max_left);
 
         if (new_left >= 0)
         {
@@ -123,7 +125,8 @@ class ResizableWindow
       if (this.resize_direction.includes('top'))
       {
         const new_height = Math.max(this.start_height - dy, this.min_height);
-        const new_top = this.start_top + dy;
+        const max_top = this.start_top + (this.start_height - this.min_height);
+        const new_top = Math.min(this.start_top + dy, max_top);
 
         if (new_top >= 0)
         {

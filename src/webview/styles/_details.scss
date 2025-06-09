@@ -2,7 +2,8 @@
     position: absolute;
     top: 10 * $ptr;
     right: 10 * $ptr;
-    z-index: 10;
+    left: initial;
+    z-index: 2;
 
     color: var(--text-color);
 
@@ -12,7 +13,6 @@
 
     border-radius: 4 * $ptr;
     box-sizing: border-box;
-    overflow: hidden;
   }
 
   .details__header {
@@ -31,8 +31,6 @@
   }
 
   .details__header:hover {
-    border-bottom: 1 * $ptr solid var(--background-color-alt);
-
     box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
   }
 
@@ -64,8 +62,6 @@
     // row-gap: 5 * $ptr;
 
     padding: 10 * $ptr;
-
-    width: 250 * $ptr;
 
     font-size: 11 * $ptr;
 

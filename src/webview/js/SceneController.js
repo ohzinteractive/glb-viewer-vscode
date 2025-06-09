@@ -233,15 +233,6 @@ class SceneController
     {
       this.selected_mesh.visible = false;
     }
-    // if (this.selected_outline)
-    // {
-    //   this.scene.remove(this.selected_outline);
-    // }
-
-    // const box = new Box3().setFromObject(obj);
-    // const helper = new Box3Helper(box, 0xff0000);
-    // this.selected_outline = helper;
-    // this.scene.add(helper);
   }
 
   focus_camera_on_object(obj)

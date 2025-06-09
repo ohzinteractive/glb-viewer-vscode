@@ -14,7 +14,6 @@ class Panel extends ResizableWindow
 
     super($container, $headers, $content);
 
-    this.$container = $container;
     this.$headers = $headers;
     this.$content = $content;
 

@@ -1,18 +1,21 @@
-class Details
+import { ResizableWindow } from './ResizeableWindow';
+
+class Details extends ResizableWindow
 {
   constructor()
   {
-    this.is_dragging = false;
-    this.offset_x = 0;
-    this.offset_y = 0;
-    this.initial_x = 0;
-    this.selected_outline = null;
+    const $container = document.querySelector('.details');
+    const $content = document.querySelector('.details__content');
+    const $headers = document.querySelector('.details__header');
+
+    super($container, $headers, $content);
+
+    this.$content = $content;
+    this.$header = $headers;
+
     this.vscode_configuration = null;
     this.current_object = null;
 
-    this.$container = document.querySelector('.details');
-    this.$content = document.querySelector('.details__content');
-    this.$header = document.querySelector('.details__header');
     this.$header_message = document.querySelector('.details__header-message');
     this.$header_title = document.querySelector('.details__header-title');
     this.$close = document.querySelector('.details__close');
@@ -26,48 +29,14 @@ class Details
 
       if (message.type === 'updateConfig')
       {
-        // console.log('Updating configuration', message.config);
         this.vscode_configuration = message.config;
-
-        // if (this.current_object)
-        // {
-        //   this.show_object_details();
-        // }
       }
-    });
-
-    this.$header.addEventListener('mousedown', (e) =>
-    {
-      this.is_dragging = true;
-      document.body.style.cursor = 'move';
-      this.offset_x = e.clientX - this.$container.offsetLeft;
-      this.offset_y = e.clientY - this.$container.offsetTop;
     });
 
     this.$close.addEventListener('click', () =>
     {
       this.reset_details();
     });
-  }
-
-  handle_mouse_move(e)
-  {
-    if (this.is_dragging)
-    {
-      const new_x = e.clientX - this.offset_x;
-      const new_y = e.clientY - this.offset_y;
-
-      const max_x = window.innerWidth - this.$container.offsetWidth;
-      const max_y = window.innerHeight - this.$container.offsetHeight;
-
-      this.$container.style.right = (window.innerWidth - Math.min(Math.max(0, new_x), max_x) - this.$container.offsetWidth) + 'px';
-      this.$container.style.top = Math.min(Math.max(0, new_y), max_y) + 'px';
-    }
-  }
-
-  handle_mouse_up()
-  {
-    this.is_dragging = false;
   }
 
   reset_details()
@@ -92,6 +61,8 @@ class Details
     }
 
     this.$container.classList.remove('hidden');
+
+    this.update_min_dimensions();
   }
 
   create_detail_item(obj)

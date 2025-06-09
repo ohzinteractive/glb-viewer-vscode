@@ -18,18 +18,6 @@ class UIController
     this.details.init();
     this.panel.init(this.scene_controller, this.details);
     this.settings.init(this.scene_controller);
-    // document.addEventListener('mouseup', () =>
-    // {
-    //   this.panel.handle_mouse_up();
-    //   this.details.handle_mouse_up();
-    //   document.body.style.cursor = 'default';
-    // });
-
-    // document.addEventListener('mousemove', (e) =>
-    // {
-    //   this.panel.handle_mouse_move(e);
-    //   this.details.handle_mouse_move(e);
-    // });
   }
 
   update()
