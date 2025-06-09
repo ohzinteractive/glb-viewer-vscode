@@ -1,22 +1,22 @@
 import { Animations } from './Animations';
 import { HierarchyTree } from './HierarchyTree';
 import { Info } from './Info';
+import { ResizableWindow } from './ResizeableWindow';
 import { Textures } from './Textures';
 
-class Panel
+class Panel extends ResizableWindow
 {
   constructor()
   {
-    this.is_dragging = false;
-    this.offset_x = 0;
-    this.offset_y = 0;
-    this.is_resizing = false;
-    this.initial_x = 0;
+    const $container = document.querySelector('.panel');
+    const $headers = document.querySelector('.panel-headers');
+    const $content = document.querySelector('.panel-content');
 
-    this.$container = document.querySelector('.panel');
-    this.$headers = document.querySelector('.panel-headers');
-    this.$content = document.querySelector('.panel-content');
-    this.$splitter = document.querySelector('.splitter');
+    super($container, $headers, $content);
+
+    this.$container = $container;
+    this.$headers = $headers;
+    this.$content = $content;
 
     this.contents = {
       hierarchy: new HierarchyTree(),
@@ -57,21 +57,6 @@ class Panel
     {
       tab.addEventListener('click', (e) => this.handle_tab_click(e));
     }
-
-    // this.$header.addEventListener('mousedown', (e) =>
-    // {
-    //   this.is_dragging = true;
-    //   document.body.style.cursor = 'move';
-    //   this.offset_x = e.clientX - this.$container.offsetLeft;
-    //   this.offset_y = e.clientY - this.$container.offsetTop;
-    // });
-
-    this.$splitter.addEventListener('mousedown', (e) =>
-    {
-      this.is_resizing = true;
-      document.body.style.cursor = 'col-resize';
-      this.initial_x = e.clientX;
-    });
   }
 
   on_model_loaded(model)
@@ -86,35 +71,8 @@ class Panel
       this.tabs.animations.classList.remove('hidden');
       this.contents.animations.init(this.scene_controller);
     }
-  }
 
-  handle_mouse_move(e)
-  {
-    if (this.is_resizing)
-    {
-      const new_width = e.clientX;
-      if (new_width > 200 && new_width < window.innerWidth - 200)
-      {
-        this.$container.style.width = new_width + 'px';
-      }
-    }
-    if (this.is_dragging)
-    {
-      const new_x = e.clientX - this.offset_x;
-      const new_y = e.clientY - this.offset_y;
-
-      const max_x = window.innerWidth - this.$container.offsetWidth;
-      const max_y = window.innerHeight - this.$container.offsetHeight;
-
-      this.$container.style.left = Math.min(Math.max(0, new_x), max_x) + 'px';
-      this.$container.style.top = Math.min(Math.max(0, new_y), max_y) + 'px';
-    }
-  }
-
-  handle_mouse_up()
-  {
-    this.is_resizing = false;
-    this.is_dragging = false;
+    this.update_min_dimensions();
   }
 
   handle_tab_click(e)

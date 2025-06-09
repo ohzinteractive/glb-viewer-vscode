@@ -1,0 +1,104 @@
+
+.resize-handle {
+    position: absolute;
+    z-index: 10;
+
+    width: 5 * $ptr;
+    height: 5 * $ptr;
+
+    // background: rgb(0 0 0 / 30%);
+  }
+
+  .resize-handle--top {
+    top: -5 * $ptr;
+    left: 50%;
+
+    width: 100%;
+
+    transform: translateX(-50%);
+    cursor: n-resize;
+
+    &:hover {
+      border-bottom: 1 * $ptr solid var(--text-color);
+    }
+  }
+
+  .resize-handle--right  {
+    top: 50%;
+    right: -5 * $ptr;
+
+    height: 100%;
+    transform: translateY(-50%);
+    cursor: e-resize;
+
+    &:hover {
+      border-left: 1 * $ptr solid var(--text-color);
+    }
+  }
+
+  .resize-handle--bottom {
+    bottom: -5 * $ptr;
+    left: 50%;
+
+    width: 100%;
+
+    transform: translateX(-50%);
+    cursor: s-resize;
+
+    &:hover {
+      border-top: 1 * $ptr solid var(--text-color);
+    }
+  }
+
+  .resize-handle--left {
+    top: 50%;
+    left: -5 * $ptr;
+
+    height: 100%;
+    transform: translateY(-50%);
+    cursor: w-resize;
+
+    &:hover {
+      border-right: 1 * $ptr solid var(--text-color);
+    }
+  }
+
+  .resize-handle--top-left     {
+    top: -5 * $ptr;
+    left: -5 * $ptr;
+    cursor: nwse-resize;
+
+    &:hover {
+      background-color: var(--background-color-alt);
+    }
+  }
+
+  .resize-handle--top-right  {
+    top: -5 * $ptr;
+    right: -5 * $ptr;
+    cursor: nesw-resize;
+
+    &:hover {
+      background-color: var(--background-color-alt);
+    }
+  }
+
+  .resize-handle--bottom-left  {
+    bottom: -5 * $ptr;
+    left: -5 * $ptr;
+    cursor: nesw-resize;
+
+    &:hover {
+      background-color: var(--background-color-alt);
+    }
+  }
+
+  .resize-handle--bottom-right {
+    right: -5 * $ptr;
+    bottom: -5 * $ptr;
+    cursor: nwse-resize;
+
+    &:hover {
+      background-color: var(--background-color-alt);
+    }
+  }

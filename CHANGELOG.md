@@ -5,7 +5,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ## [1.4.0]
 
 ### Added
-
+- Added a new class for making any window resizable and draggable
 
 ### Improved
 - Better animations controls
