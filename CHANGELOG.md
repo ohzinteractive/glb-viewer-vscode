@@ -2,6 +2,15 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [1.4.0]
+
+### Added
+
+
+### Improved
+- Better animations controls
+- Extract Animation Item to a separate class
+
 ## [1.3.0] - 2025-06-09
 
 ### Added

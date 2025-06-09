@@ -84,6 +84,12 @@ export class AnimatedScene extends Object3D
     action.play();
   }
 
+  stop_animation(animation)
+  {
+    const action = this.mixer.clipAction(animation);
+    action.stop();
+  }
+
   update()
   {
     this.mixer.update(0.016);

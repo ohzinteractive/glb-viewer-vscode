@@ -45,6 +45,16 @@
     }
 }
 
+.animations__item-icon {
+    width: 16 * $ptr;
+    height: 16 * $ptr;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
 .animations__controls {
     display: flex;
 
@@ -73,7 +83,7 @@
     }
 
     svg {
-        width: 24 * $ptr;
-        height: 24 * $ptr;
+        width: 16 * $ptr;
+        height: 16 * $ptr;
     }
 }
