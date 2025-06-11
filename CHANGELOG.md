@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.0.0]
+
+### Improved
+- Redesigned UI
+- Now SkinnedMesh objects properly display wireframe
+
 ## [1.4.0]
 
 ### Added
