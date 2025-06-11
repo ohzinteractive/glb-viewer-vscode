@@ -9,7 +9,7 @@ class AnimationItem
 
     this.is_playing = true;
     this.play_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>';
-    this.stop_icon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>';
+    this.stop_icon = '<svg class="animations__stop-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>';
 
     this.$container = document.createElement('div');
     this.$container.classList.add('animations__item');
@@ -30,12 +30,14 @@ class AnimationItem
   init()
   {
     this.$container.addEventListener('click', this.handle_click.bind(this));
+    this.$container.classList.add('animations__item--playing');
   }
 
   play()
   {
     this.is_playing = true;
     this.$icon.innerHTML = this.stop_icon;
+    this.$container.classList.add('animations__item--playing');
     this.parent.play(this.animation);
   }
 
@@ -43,6 +45,7 @@ class AnimationItem
   {
     this.is_playing = false;
     this.$icon.innerHTML = this.play_icon;
+    this.$container.classList.remove('animations__item--playing');
     this.parent.stop(this.animation);
   }
 

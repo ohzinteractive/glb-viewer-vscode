@@ -37,6 +37,10 @@
     user-select: none;
 
     &:hover {
+        background-color: var(--background-color-hover);
+    }
+
+    &--playing {
         background-color: var(--background-color-alt);
     }
 }
@@ -53,12 +57,20 @@
 }
 
 .animations__item-icon {
+    display: flex;
+
     flex-shrink: 0;
+
+    align-items: center;
 
     svg {
         width: 16 * $ptr;
         height: 16 * $ptr;
     }
+}
+
+.animations__stop-icon {
+    color: var(--icon-red);
 }
 
 .animations__controls {
