@@ -5,6 +5,7 @@
 }
 
 $ptr: 0.0625rem;
+$border-radius: calc(8 * $ptr);
 
 *, *::after, *::before {
     box-sizing: border-box;

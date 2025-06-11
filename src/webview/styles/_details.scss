@@ -11,7 +11,7 @@
 
     background: var(--background-color);
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
     box-sizing: border-box;
   }
 
@@ -30,7 +30,7 @@
 
     border-bottom: 1 * $ptr solid var(--background-color);
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
     cursor: move;
 
     &:hover {
@@ -73,7 +73,7 @@
 
     background: #222;
 
-    border-radius: 8px;
+    border-radius: $border-radius;
   }
 
   .details__item {
@@ -92,7 +92,7 @@
 
     text-overflow: ellipsis;
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
 
     box-sizing: border-box;
 

@@ -19,7 +19,7 @@
 
   background-color: var(--background-color);
 
-  border-radius: 5 * $ptr;
+  border-radius: $border-radius;
 
   svg {
     margin-bottom: -2 * $ptr;
@@ -47,7 +47,7 @@
 
   background-color: var(--background-color);
 
-  border-radius: 5 * $ptr;
+  border-radius: $border-radius;
 
   box-shadow: 0 0 8 * $ptr #fff3;
 }
@@ -63,7 +63,7 @@
 
   color: var(--text-color);
 
-  border-radius: 5 * $ptr;
+  border-radius: $border-radius;
 
   &:hover {
     background-color: var(--background-color-alt);

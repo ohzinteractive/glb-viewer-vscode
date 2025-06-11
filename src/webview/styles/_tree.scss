@@ -14,7 +14,7 @@
     align-items: center;
     cursor: pointer;
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
   }
 
   .tree-node__label-wrapper:hover {

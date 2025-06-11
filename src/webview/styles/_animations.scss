@@ -11,7 +11,7 @@
 
     padding: 10 * $ptr;
 
-    border-radius: 0 0 4 * $ptr 4 * $ptr;
+    border-radius: 0 0 8 * $ptr 8 * $ptr;
 }
 
 .animations__item {
@@ -33,7 +33,7 @@
 
     font-family: monospace;
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
     user-select: none;
 
     &:hover {
@@ -96,7 +96,7 @@
 
     padding: 10 * $ptr;
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
 
     &:hover {
         background-color: var(--background-color-alt);

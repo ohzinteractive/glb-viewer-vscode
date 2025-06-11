@@ -48,7 +48,7 @@
 
         background-color: var(--background-color);
 
-        border-radius: 5 * $ptr;
+        border-radius: $border-radius;
 
         &:hover {
           background-color: var(--background-color-alt);
@@ -77,7 +77,7 @@
       left: 0;
       z-index: 10;
 
-      border-radius: 4 * $ptr;
+      border-radius: $border-radius;
       pointer-events: none;
 
       & > * {

@@ -6,7 +6,7 @@
 
     background-color: var(--slider-background-color);
 
-    border-radius: 5 * $ptr;
+    border-radius: $border-radius;
 
     overflow: hidden;
   }

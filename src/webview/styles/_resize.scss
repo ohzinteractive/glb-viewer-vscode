@@ -17,7 +17,7 @@
 
   background: var(--background-color);
 
-  border-radius: 4 * $ptr;
+  border-radius: $border-radius;
 
   box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
   box-sizing: border-box;
@@ -25,7 +25,7 @@
   &--focused {
     z-index: 11;
 
-    box-shadow: 0 0 8 * $ptr #fff3;
+    box-shadow: 0 0 2rem 6px #00000080;
   }
 }
 
@@ -44,7 +44,7 @@
 
   background: var(--background-color-dark);
 
-  border-radius: 4 * $ptr;
+  border-radius: $border-radius;
   cursor: move;
 
   &:hover {
@@ -59,7 +59,7 @@
 
   overflow: hidden auto;
 
-  border-radius: 4 * $ptr;
+  border-radius: $border-radius;
 }
 
 .resize-content {
@@ -67,7 +67,7 @@
 
   background: var(--background-color);
 
-  border-radius: 4 * $ptr;
+  border-radius: $border-radius;
 
 }
 
@@ -78,7 +78,7 @@
     width: 7 * $ptr;
     height: 7 * $ptr;
 
-    border-radius: 4 * $ptr;
+    border-radius: $border-radius;
 
     pointer-events: auto;
 
