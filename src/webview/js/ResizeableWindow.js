@@ -8,8 +8,7 @@ class ResizableWindow
     this.is_dragging = false;
     this.is_resizing = false;
 
-    this.min_width = Math.max(200, this.$container.offsetWidth);
-    this.min_height = Math.max(200, this.$container.offsetHeight);
+    this.update_min_dimensions();
 
     this._create_resize_handles();
     this._add_event_listeners();
@@ -35,6 +34,7 @@ class ResizableWindow
 
   _add_event_listeners()
   {
+    this.$container.addEventListener('pointerdown', this.bring_forward.bind(this));
     this.$drag_handle.addEventListener('pointerdown', this._start_drag.bind(this));
 
     this.$resize_handles.forEach($handle =>
@@ -140,8 +140,20 @@ class ResizableWindow
 
   update_min_dimensions()
   {
-    this.min_width = Math.max(200, this.$container.offsetWidth);
-    this.min_height = Math.max(200, this.$container.offsetHeight);
+    this.min_width = this.$container.offsetWidth;
+    this.min_height = this.$container.offsetHeight;
+  }
+
+  bring_forward()
+  {
+    const all_windows = document.querySelectorAll('.resize-window');
+
+    for (let i = 0; i < all_windows.length; i++)
+    {
+      all_windows[i].classList.remove('resize-window--focused');
+    }
+
+    this.$container.classList.add('resize-window--focused');
   }
 }
 

@@ -1,10 +1,20 @@
 import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
+import { ResizableWindow } from './ResizeableWindow';
 
-class Textures
+class Textures extends ResizableWindow
 {
-  constructor()
+  constructor(panel, name)
   {
-    this.$container = document.querySelector('.textures');
+    const container = document.querySelector('.textures');
+    const drag_handle = container.querySelector('.textures-header');
+    const content_container = container.querySelector('.textures-content');
+
+    super(container, drag_handle, content_container);
+
+    this.name = name;
+    this.panel = panel;
+    this.$header = drag_handle;
+    this.$content = content_container;
 
     this.canvas = document.createElement('canvas');
     this.canvas_ctx = this.canvas.getContext('2d');
@@ -20,6 +30,9 @@ class Textures
     });
 
     this.bitmap_container = {};
+
+    this.$close_button = container.querySelector('.textures-header__close');
+    this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
   }
 
   init(scene_controller)
@@ -147,12 +160,12 @@ class Textures
     {
       for (let i = 0; i < texture_nodes.length; i++)
       {
-        this.$container.appendChild(texture_nodes[i]);
+        this.$content.appendChild(texture_nodes[i]);
       }
     }
     else
     {
-      this.$container.innerHTML = '<div class="texture-node">No textures found</div>';
+      this.$content.innerHTML = '<div class="texture-node">No textures found</div>';
     }
   }
 
@@ -242,6 +255,12 @@ class Textures
     a.href = data_url;
     a.download = `${name} (${bitmap.width}x${bitmap.height})`;
     a.click();
+  }
+
+  handle_close_button_click()
+  {
+    this.hide();
+    this.panel.deactivate_button(this.name);
   }
 }
 

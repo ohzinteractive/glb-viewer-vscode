@@ -1,16 +1,4 @@
 .textures {
-    width: 100%;
-    height: 100%;
-    max-height: 300 * $ptr;
-
-    color: var(--text-color);
-
-    font-family: monospace;
-
-    background: var(--background-color);
-    box-sizing: border-box;
-
-    overflow: hidden auto;
 }
 
   .texture-node {
@@ -66,74 +54,13 @@
     font-size: 12 * $ptr;
   }
 
-//   .texture-node__label-wrapper {
-//     display: flex;
+  .textures-header__close {
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
 
-//     align-items: center;
-//     cursor: pointer;
-
-//     border-radius: 4 * $ptr;
-//   }
-
-//   .texture-node__label-wrapper:hover {
-//     background-color: var(--background-color-alt);
-//   }
-
-//   .texture-node__icon {
-//     display: flex;
-
-//     flex-shrink: 0;
-
-//     align-items: center;
-
-//     justify-content: center;
-
-//     margin-right: 4 * $ptr;
-
-//     width: 16 * $ptr;
-//     height: 16 * $ptr;
-
-//     transition: transform 0.1s ease;
-//   }
-
-//   .texture-node__icon--object {
-//     color: var(--icon-green);
-//   }
-
-//   .texture-node__icon--empty-object {
-//     color: var(--icon-orange);
-//   }
-
-//     .texture-node__label {
-//     flex-grow: 1;
-
-//     padding: 2 * $ptr 4 * $ptr;
-
-//     min-width: 0;
-
-//     font-size: 11 * $ptr;
-
-//     text-overflow: ellipsis;
-
-//     white-space: nowrap;
-//     overflow: hidden;
-//   }
-
-//   .texture-node__action {
-//     display: flex;
-
-//     flex-shrink: 0;
-
-//     align-items: center;
-
-//     justify-content: center;
-
-//     padding-right: 4 * $ptr;
-
-//     width: 16 * $ptr;
-//     height: 16 * $ptr;
-//   }
-
-//   .texture-node__children {
-//     margin-left: 0; /* padding handled by depth * 10 * $ptr */
-//   }
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }

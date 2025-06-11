@@ -1,35 +1,34 @@
 import { Animations } from './Animations';
 import { HierarchyTree } from './HierarchyTree';
 import { Info } from './Info';
-import { ResizableWindow } from './ResizeableWindow';
 import { Textures } from './Textures';
 
-class Panel extends ResizableWindow
+class Panel
 {
   constructor()
   {
-    const $container = document.querySelector('.panel');
-    const $headers = document.querySelector('.panel-headers');
-    const $content = document.querySelector('.panel-content');
-
-    super($container, $headers, $content);
-
-    this.$headers = $headers;
-    this.$content = $content;
+    this.$container = document.querySelector('.panel');
+    this.$buttons_container = document.querySelector('.panel-buttons');
+    this.$content = document.querySelector('.panel-content');
 
     this.contents = {
-      hierarchy: new HierarchyTree(),
-      textures: new Textures(),
-      info: new Info(),
-      animations: new Animations()
+      hierarchy: new HierarchyTree(this, 'hierarchy'),
+      textures: new Textures(this, 'textures'),
+      info: new Info(this, 'info'),
+      animations: new Animations(this, 'animations')
     };
 
-    this.tabs = {
-      hierarchy: this.$headers.querySelector('.panel-header__item[data-name="hierarchy"]'),
-      textures: this.$headers.querySelector('.panel-header__item[data-name="textures"]'),
-      info: this.$headers.querySelector('.panel-header__item[data-name="info"]'),
-      animations: this.$headers.querySelector('.panel-header__item[data-name="animations"]')
+    this.buttons = {
+      hierarchy: this.$buttons_container.querySelector('.panel-button[data-name="hierarchy"]'),
+      textures: this.$buttons_container.querySelector('.panel-button[data-name="textures"]'),
+      info: this.$buttons_container.querySelector('.panel-button[data-name="info"]'),
+      animations: this.$buttons_container.querySelector('.panel-button[data-name="animations"]')
     };
+
+    for (const button of Object.values(this.buttons))
+    {
+      button.addEventListener('click', this.handle_button_click.bind(this, button));
+    }
   }
 
   build_hierarchy_tree(object3d)
@@ -49,54 +48,76 @@ class Panel extends ResizableWindow
 
     this.contents.hierarchy.init(scene_controller, details_panel);
 
-    this.set_active_tab('hierarchy');
-    this.contents.hierarchy.show();
-
-    for (const tab of Object.values(this.tabs))
-    {
-      tab.addEventListener('click', (e) => this.handle_tab_click(e));
-    }
+    this.open_panel();
   }
 
   on_model_loaded(model)
   {
     if (this.contents.info.get_texture_count() > 0)
     {
-      this.tabs.textures.classList.remove('hidden');
+      this.buttons.textures.classList.remove('hidden');
     }
 
     if (this.contents.info.get_animation_count() > 0)
     {
-      this.tabs.animations.classList.remove('hidden');
+      this.buttons.animations.classList.remove('hidden');
       this.contents.animations.init(this.scene_controller);
     }
-
-    this.update_min_dimensions();
   }
 
-  handle_tab_click(e)
+  handle_button_click(button)
   {
-    // console.log('handle_tab_click', e.target);
-    const $tab = e.target;
-    const tab_name = $tab.dataset.name;
+    const button_name = button.dataset.name;
 
-    for (const content of Object.values(this.contents))
+    // for (const content of Object.values(this.contents))
+    // {
+    //   content.hide();
+    // }
+
+    if (button.classList.contains('panel-button--active'))
     {
-      content.hide();
+      this.contents[button_name].hide();
+      this.deactivate_button(button_name);
     }
-
-    this.contents[tab_name]?.show();
-    this.set_active_tab(tab_name);
+    else
+    {
+      this.contents[button_name].show();
+      this.contents[button_name].update_min_dimensions();
+      this.contents[button_name].bring_forward();
+      this.set_active_button(button_name);
+    }
   }
 
-  set_active_tab(tab_name)
+  set_active_button(button_name)
   {
-    for (const tab of Object.values(this.tabs))
-    {
-      tab.classList.remove('panel-header__item--active');
-    }
+    // for (const button of Object.values(this.buttons))
+    // {
+    //   button.classList.remove('panel-button--active');
+    // }
 
-    this.tabs[tab_name].classList.add('panel-header__item--active');
+    this.close_panel();
+
+    this.buttons[button_name].classList.add('panel-button--active');
+  }
+
+  deactivate_button(button_name)
+  {
+    this.buttons[button_name].classList.remove('panel-button--active');
+
+    if (this.$buttons_container.querySelector('.panel-button--active') === null)
+    {
+      this.open_panel();
+    }
+  }
+
+  open_panel()
+  {
+    this.$buttons_container.classList.add('panel-buttons--open');
+  }
+
+  close_panel()
+  {
+    this.$buttons_container.classList.remove('panel-buttons--open');
   }
 }
 

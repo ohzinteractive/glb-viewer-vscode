@@ -1,8 +1,23 @@
-class Info
+import { ResizableWindow } from './ResizeableWindow';
+
+class Info extends ResizableWindow
 {
-  constructor()
+  constructor(panel, name)
   {
-    this.$container = document.querySelector('.info');
+    const container = document.querySelector('.info');
+    const drag_handle = container.querySelector('.info-header');
+    const content_container = container.querySelector('.info-content');
+
+    super(container, drag_handle, content_container);
+
+    this.name = name;
+    this.panel = panel;
+
+    this.$header = drag_handle;
+    this.$content = content_container;
+
+    this.$close_button = container.querySelector('.info-header__close');
+    this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
   }
 
   init(scene_controller)
@@ -43,7 +58,7 @@ class Info
 
     // console.log(this.scene_controller.model);
 
-    this.$container.innerHTML = '';
+    this.$content.innerHTML = '';
 
     this.create_node('Generator', gltf?.asset?.generator || 'Unknown');
     this.create_node('Geometries', info.memory.geometries);
@@ -84,7 +99,13 @@ class Info
     $node.appendChild($label);
     $node.appendChild($value);
 
-    this.$container.appendChild($node);
+    this.$content.appendChild($node);
+  }
+
+  handle_close_button_click()
+  {
+    this.hide();
+    this.panel.deactivate_button(this.name);
   }
 }
 

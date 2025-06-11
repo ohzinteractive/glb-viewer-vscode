@@ -1,11 +1,21 @@
 import { AnimationItem } from './AnimationItem';
+import { ResizableWindow } from './ResizeableWindow';
 
-class Animations
+class Animations extends ResizableWindow
 {
-  constructor()
+  constructor(panel, name)
   {
-    this.$container = document.querySelector('.animations');
-    this.$list = this.$container.querySelector('.animations__list');
+    const container = document.querySelector('.animations');
+    const drag_handle = container.querySelector('.animations-header');
+    const content_container = container.querySelector('.animations__list');
+
+    super(container, drag_handle, content_container);
+
+    this.name = name;
+    this.panel = panel;
+
+    this.$list = content_container;
+    this.$header = drag_handle;
     this.$controls = this.$container.querySelector('.animations__controls');
     this.$play = this.$controls.querySelector('.animations__controls-item[data-name="play"]');
     this.$stop_all = this.$controls.querySelector('.animations__controls-item[data-name="stop-all"]');
@@ -15,6 +25,9 @@ class Animations
       play: '<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H8V4h2v2h2v3h2v2h2v2h-2v2h-2v3h-2v2z" fill="currentColor"/></svg>',
       stop: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="1" fill="currentColor"/></svg>'
     };
+
+    this.$close_button = container.querySelector('.animations-header__close');
+    this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
 
     this.animation_items = [];
   }
@@ -83,6 +96,12 @@ class Animations
       animations.push(animation);
     }
     return animations;
+  }
+
+  handle_close_button_click()
+  {
+    this.hide();
+    this.panel.deactivate_button(this.name);
   }
 }
 

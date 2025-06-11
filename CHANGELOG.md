@@ -6,6 +6,9 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 
 ### Added
 - Added a new class for making any window resizable and draggable
+- Change UI from tabs to buttons
+- Added close button to each panel
+- Make each panel focusable and bring it to front when clicked
 
 ### Improved
 - Better animations controls

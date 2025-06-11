@@ -1,8 +1,22 @@
-class HierarchyTree
+import { ResizableWindow } from './ResizeableWindow';
+
+class HierarchyTree extends ResizableWindow
 {
-  constructor()
+  constructor(panel, name)
   {
-    this.$container = document.querySelector('.tree');
+    const container = document.querySelector('.tree');
+    const drag_handle = container.querySelector('.tree-header');
+    const content_container = container.querySelector('.tree-content');
+
+    super(container, drag_handle, content_container);
+
+    this.name = name;
+    this.panel = panel;
+    this.$header = drag_handle;
+    this.$content = content_container;
+    this.$close_button = container.querySelector('.tree-header__close');
+
+    this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
   }
 
   init(scene_controller, details_panel)
@@ -21,7 +35,7 @@ class HierarchyTree
     this.$container.classList.add('hidden');
   }
 
-  build_hierarchy_tree(object3d, $container = this.$container, depth = 0)
+  build_hierarchy_tree(object3d, $container = this.$content, depth = 0)
   {
     const ICON_ARROW_RIGHT = '<svg fill="none" viewBox="0 0 24 24" width="16" height="16"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const ICON_ARROW_DOWN = '<svg fill="none" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -154,6 +168,12 @@ class HierarchyTree
   {
     this.details_panel.handle_object_click(object3d);
     this.scene_controller.focus_camera_on_object(object3d);
+  }
+
+  handle_close_button_click()
+  {
+    this.hide();
+    this.panel.deactivate_button(this.name);
   }
 }
 
