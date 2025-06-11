@@ -49,6 +49,7 @@ export class AnimatedScene extends Object3D
     this.add(scene);
 
     this.elapsed_time = 0;
+    this.last_update_time = document.timeline.currentTime;
 
     this.frustumCulled = false;
 
@@ -92,8 +93,12 @@ export class AnimatedScene extends Object3D
 
   update()
   {
-    this.mixer.update(0.016);
-    this.elapsed_time += 0.016;
+    const current_time = document.timeline.currentTime;
+    const delta_time = (current_time - this.last_update_time) / 1000;
+    this.last_update_time = current_time;
+
+    this.mixer.update(delta_time);
+    this.elapsed_time += delta_time;
   }
 
   get animation_finished()
