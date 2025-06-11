@@ -1,4 +1,8 @@
 .resize-window {
+  display: flex;
+
+  flex-direction: column;
+
   position: absolute;
   top: 10 * $ptr;
   left: 60 * $ptr;
@@ -14,9 +18,9 @@
   background: var(--background-color);
 
   border-radius: 4 * $ptr;
-  box-sizing: border-box;
 
   box-shadow: 0 0 8 * $ptr rgb(0 0 0 / 20%);
+  box-sizing: border-box;
 
   &--focused {
     z-index: 11;

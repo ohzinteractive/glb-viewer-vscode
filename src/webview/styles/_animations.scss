@@ -1,4 +1,5 @@
 .animations {
+    min-width: 250 * $ptr;
 }
 
 .animations__list {
@@ -9,6 +10,8 @@
     gap: 10 * $ptr;
 
     padding: 10 * $ptr;
+
+    border-radius: 0 0 4 * $ptr 4 * $ptr;
 }
 
 .animations__item {
@@ -64,6 +67,8 @@
     flex-direction: row;
 
     gap: 10 * $ptr;
+
+    border-bottom: 1px solid var(--border-color);
 }
 
 .animations__controls-item {

@@ -21,11 +21,6 @@ class Animations extends ResizableWindow
     this.$stop_all = this.$controls.querySelector('.animations__controls-item[data-name="stop-all"]');
     this.$play_all = this.$controls.querySelector('.animations__controls-item[data-name="play-all"]');
 
-    this.icon_images = {
-      play: '<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H8V4h2v2h2v3h2v2h2v2h-2v2h-2v3h-2v2z" fill="currentColor"/></svg>',
-      stop: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="1" fill="currentColor"/></svg>'
-    };
-
     this.$close_button = container.querySelector('.animations-header__close');
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
 

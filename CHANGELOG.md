@@ -11,8 +11,9 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 - Make each panel focusable and bring it to front when clicked
 
 ### Improved
-- Better animations controls
+- Better animation control panel and icons
 - Extract Animation Item to a separate class
+- Fix animation playback speed
 
 ## [1.3.0] - 2025-06-09
 
