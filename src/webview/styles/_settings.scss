@@ -1,18 +1,23 @@
 .settings {
     position: absolute;
+    top: 10 * $ptr;
     right: 10 * $ptr;
-    bottom: 10 * $ptr;
-    z-index: 10;
-
-    background-color: var(--background-color);
+    z-index: 100;
 
     border-radius: 5 * $ptr;
 }
 
 .settings-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
   padding: 5 * $ptr;
 
   color: var(--text-color);
+
+  background-color: var(--background-color);
 
   border-radius: 5 * $ptr;
 
@@ -32,9 +37,9 @@
 
 .settings__content {
   position: absolute;
-  right: 35 * $ptr;
-  bottom: 35 * $ptr;
-  z-index: 10;
+  top: 0;
+  right: 0;
+  z-index: 1;
 
   padding: 5 * $ptr;
 
@@ -43,6 +48,8 @@
   background-color: var(--background-color);
 
   border-radius: 5 * $ptr;
+
+  box-shadow: 0 0 8 * $ptr #fff3;
 }
 
 .settings__action {

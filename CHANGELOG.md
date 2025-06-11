@@ -14,6 +14,8 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 - Better animation control panel and icons
 - Extract Animation Item to a separate class
 - Fix animation playback speed
+- Improve details style
+- Move settings to the top right corner
 
 ## [1.3.0] - 2025-06-09
 

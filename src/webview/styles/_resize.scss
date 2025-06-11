@@ -58,6 +58,8 @@
   height: calc(100% - 30 * $ptr);
 
   overflow: hidden auto;
+
+  border-radius: 4 * $ptr;
 }
 
 .resize-content {
