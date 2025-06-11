@@ -21,6 +21,7 @@ import {
   PMREMGenerator,
   Raycaster,
   Scene,
+  SkinnedMesh,
   Vector3
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -77,9 +78,11 @@ class SceneController
     this.grid = new GridHelper(10, 10, '#4B4B4B', '#4B4B4B');
     this.scene.add(this.grid);
 
-    this.selected_mesh = new Mesh(new BufferGeometry(), new MeshBasicMaterial({ color: '#50AF8E', wireframe: true, depthTest: false, depthFunc: AlwaysDepth, depthWrite: false, transparent: true, opacity: 0.5 }));
+    const wireframe_material = new MeshBasicMaterial({ color: '#50AF8E', wireframe: true, depthTest: false, depthFunc: AlwaysDepth, depthWrite: false, transparent: true, opacity: 0.5 });
+    this.selected_mesh = new Mesh(new BufferGeometry(), wireframe_material);
     this.selected_mesh.renderOrder = 500;
-    this.scene.add(this.selected_mesh);
+    this.selected_skinned_mesh = new SkinnedMesh(new BufferGeometry(), wireframe_material.clone());
+    this.selected_skinned_mesh.renderOrder = 500;
 
     this.subscribers = [];
   }
@@ -200,6 +203,7 @@ class SceneController
         else
         {
           this.selected_mesh.visible = false;
+          this.selected_skinned_mesh.visible = false;
         }
       }
     }
@@ -223,8 +227,22 @@ class SceneController
   {
     if (obj.geometry)
     {
-      this.selected_mesh.visible = true;
-      this.selected_mesh.geometry = obj.geometry;
+      this.selected_skinned_mesh.removeFromParent();
+      this.selected_mesh.removeFromParent();
+
+      if (obj.isSkinnedMesh)
+      {
+        this.selected_skinned_mesh.visible = true;
+        this.selected_skinned_mesh.geometry = obj.geometry;
+        this.selected_skinned_mesh.skeleton = obj.skeleton;
+        this.scene.add(this.selected_skinned_mesh);
+      }
+      else
+      {
+        this.selected_mesh.visible = true;
+        this.selected_mesh.geometry = obj.geometry;
+        this.scene.add(this.selected_mesh);
+      }
       obj.getWorldPosition(this.selected_mesh.position);
       obj.getWorldScale(this.selected_mesh.scale);
       obj.getWorldQuaternion(this.selected_mesh.quaternion);
@@ -408,6 +426,7 @@ class SceneController
   toggle_selection_wireframe(active)
   {
     this.selected_mesh.material.visible = active;
+    this.selected_skinned_mesh.material.visible = active;
   }
 
   set_line_length(value)
