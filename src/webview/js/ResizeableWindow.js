@@ -7,8 +7,9 @@ class ResizableWindow
     this.$content_container = content_container;
     this.is_dragging = false;
     this.is_resizing = false;
-
-    this.update_min_dimensions();
+    this.has_changed = false;
+    this.min_width = 300;
+    this.min_height = 200;
 
     this._create_resize_handles();
     this._add_event_listeners();
@@ -91,6 +92,7 @@ class ResizableWindow
       this.$container.style.left = `${new_left}px`;
       this.$container.style.top = `${new_top}px`;
       this.$container.style.right = 'initial';
+      this.has_changed = true;
     }
 
     if (this.is_resizing)
@@ -135,13 +137,9 @@ class ResizableWindow
           this.$container.style.top = `${new_top}px`;
         }
       }
-    }
-  }
 
-  update_min_dimensions()
-  {
-    this.min_width = this.$container.offsetWidth;
-    this.min_height = this.$container.offsetHeight;
+      this.has_changed = true;
+    }
   }
 
   bring_forward()

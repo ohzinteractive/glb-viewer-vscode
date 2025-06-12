@@ -11,7 +11,7 @@
 
     padding: 10 * $ptr;
 
-    border-radius: 0 0 8 * $ptr 8 * $ptr;
+    border-radius: $border-radius;
 }
 
 .animations__item {

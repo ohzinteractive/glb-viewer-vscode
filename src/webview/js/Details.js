@@ -61,8 +61,6 @@ class Details extends ResizableWindow
     }
 
     this.$container.classList.remove('hidden');
-
-    this.update_min_dimensions();
   }
 
   create_detail_item(obj)

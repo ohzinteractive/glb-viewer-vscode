@@ -68,11 +68,7 @@ class Panel
   handle_button_click(button)
   {
     const button_name = button.dataset.name;
-
-    // for (const content of Object.values(this.contents))
-    // {
-    //   content.hide();
-    // }
+    const content = this.contents[button_name];
 
     if (button.classList.contains('panel-button--active'))
     {
@@ -81,20 +77,21 @@ class Panel
     }
     else
     {
-      this.contents[button_name].show();
-      this.contents[button_name].update_min_dimensions();
-      this.contents[button_name].bring_forward();
+      if (!content.has_changed)
+      {
+        const position = this.calculate_initial_position();
+        content.$container.style.top = `${position.top}px`;
+        content.$container.style.left = `${position.left}px`;
+      }
+
+      content.show();
+      content.bring_forward();
       this.set_active_button(button_name);
     }
   }
 
   set_active_button(button_name)
   {
-    // for (const button of Object.values(this.buttons))
-    // {
-    //   button.classList.remove('panel-button--active');
-    // }
-
     this.close_panel();
 
     this.buttons[button_name].classList.add('panel-button--active');
@@ -118,6 +115,40 @@ class Panel
   close_panel()
   {
     this.$buttons_container.classList.remove('panel-buttons--open');
+  }
+
+  calculate_initial_position()
+  {
+    const positions = [];
+    const startTop = 10;
+    const startLeft = 60;
+    const step = 25;
+
+    for (const [name, content] of Object.entries(this.contents))
+    {
+      if (this.buttons[name].classList.contains('panel-button--active'))
+      {
+        const rect = content.$container.getBoundingClientRect();
+        positions.push({
+          top: rect.top,
+          left: rect.left
+        });
+      }
+    }
+
+    const find_available_position = (top, left) =>
+    {
+      for (const pos of positions)
+      {
+        if (Math.abs(pos.top - top) < step && Math.abs(pos.left - left) < step)
+        {
+          return find_available_position(top + step, left + step);
+        }
+      }
+      return { top, left };
+    };
+
+    return find_available_position(startTop, startLeft);
   }
 }
 
