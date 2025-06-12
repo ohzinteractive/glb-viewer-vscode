@@ -2,13 +2,19 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.0.0]
+## [2.0.1] - 2025-06-11
+
+### Improved
+ - Opening multiple windows now overlap nicer
+ - Improved window style
+
+## [2.0.0] - 2025-06-11
 
 ### Improved
 - Redesigned UI
 - Now SkinnedMesh objects properly display wireframe
 
-## [1.4.0]
+## [1.4.0] - 2025-06-11
 
 ### Added
 - Added a new class for making any window resizable and draggable
