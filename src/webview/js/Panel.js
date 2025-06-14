@@ -35,6 +35,7 @@ class Panel
   {
     this.contents.hierarchy.build_hierarchy_tree(object3d);
     this.contents.textures.build_textures_list(object3d);
+    this.contents.hierarchy.expand_all();
   }
 
   init(scene_controller, details_panel)
