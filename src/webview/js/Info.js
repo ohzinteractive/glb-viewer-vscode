@@ -41,10 +41,9 @@ class Info extends ResizableWindow
     let total = 0;
     scene.traverse((child) =>
     {
-      if (child.isMesh && child.geometry?.isBufferGeometry)
+      if (child.geometry)
       {
-        const pos = child.geometry.getAttribute('position');
-        if (pos) total += pos.count;
+        total += child.geometry.getAttribute('position').count;
       }
     });
     return total;
@@ -55,21 +54,19 @@ class Info extends ResizableWindow
     const info = this.scene_controller.renderer.renderer.info;
     const gltf = this.scene_controller.model?.original_gltf;
     const vertices = this.rendered_vertex_count(this.scene_controller.scene);
-
-    // console.log(this.scene_controller.model);
+    // console.log(gltf);
 
     this.$content.innerHTML = '';
 
-    this.create_node('Generator', gltf?.asset?.generator || 'Unknown');
-    this.create_node('Geometries', info.memory.geometries);
-    this.create_node('Textures', info.memory.textures);
-    this.create_node('Calls', info.render.calls);
-    this.create_node('Animations', gltf?.animations?.length || 0);
-    this.create_node('Materials', gltf?.parser?.json?.materials?.length || 0);
-    this.create_node('Images', gltf?.parser?.json?.images?.length || 0);
-    this.create_node('Vertices', vertices || 0);
-    this.create_node('Triangles', info.render.triangles);
-    this.create_node('Extensions', gltf?.parser?.json?.extensionsUsed?.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
+    this.create_node('Calls',      info.render.calls);
+    this.create_node('Geometries', gltf.parser.json.meshes.length);
+    this.create_node('Textures',   gltf.parser.json.textures.length);
+    this.create_node('Animations', gltf.animations.length);
+    this.create_node('Materials',  gltf.parser.json.materials.length);
+    this.create_node('Images',     gltf.parser.json.images.length);
+    this.create_node('Vertices',   vertices);
+    this.create_node('Generator',  gltf.asset.generator || 'Unknown');
+    this.create_node('Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
   }
 
   get_texture_count()

@@ -195,7 +195,7 @@ class HierarchyTree extends ResizableWindow
 
     if (node.dataset.is_geometry === 'false' && node.dataset.is_empty_object === 'false')
     {
-      console.log('no es geometry');
+      // console.log('no es geometry');
       wrapper.querySelector('.tree-node__icon').innerHTML = ICON_ARROW_DOWN;
     }
 
