@@ -2,6 +2,16 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.1] - 2025-06-14
+
+### Fixed
+ - Hierarchy icons on empty objects
+
+## [2.1.0] - 2025-06-14
+
+### Improved
+ - On startup hierarchy will commence expanded
+
 ## [2.0.1] - 2025-06-11
 
 ### Improved
