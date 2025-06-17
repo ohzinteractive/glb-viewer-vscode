@@ -60,10 +60,10 @@ class Info extends ResizableWindow
 
     this.create_node('Calls',      info.render.calls);
     this.create_node('Geometries', gltf.parser.json.meshes.length);
-    this.create_node('Textures',   gltf.parser.json.textures.length);
+    this.create_node('Textures',   gltf.parser.json.textures?.length || 0);
     this.create_node('Animations', gltf.animations.length);
     this.create_node('Materials',  gltf.parser.json.materials.length);
-    this.create_node('Images',     gltf.parser.json.images.length);
+    this.create_node('Images',     gltf.parser.json.images?.length || 0);
     this.create_node('Vertices',   vertices);
     this.create_node('Generator',  gltf.asset.generator || 'Unknown');
     this.create_node('Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
