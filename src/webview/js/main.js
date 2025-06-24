@@ -1,19 +1,6 @@
 import { SceneController } from './SceneController';
 import { UIController } from './UiController';
 
-// Unregister any existing service workers to speedup plugin initialization
-if ('serviceWorker' in navigator)
-{
-  navigator.serviceWorker.getRegistrations().then(function(registrations)
-  {
-    for (const registration of registrations)
-    {
-      registration.unregister(); // WARNING: this affects cache, so test carefully
-      // console.log('Unregistered service worker:', registration);
-    }
-  });
-}
-
 /* global acquireVsCodeApi */
 class MainApplication
 {
