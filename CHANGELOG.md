@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.2] - 2025-06-14
+
+### Fixed
+ - Second instance of the plugin not loading the 3D model
+ - Plugin loading slow no start
+
 ## [2.1.1] - 2025-06-14
 
 ### Fixed
