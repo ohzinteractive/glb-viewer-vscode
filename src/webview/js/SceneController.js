@@ -235,7 +235,10 @@ class SceneController
         this.selected_skinned_mesh.visible = true;
         this.selected_skinned_mesh.geometry = obj.geometry;
         this.selected_skinned_mesh.skeleton = obj.skeleton;
+        this.selected_skinned_mesh.morphTargetDictionary = obj.morphTargetDictionary;
+        this.selected_skinned_mesh.morphTargetInfluences = obj.morphTargetInfluences;
         this.scene.add(this.selected_skinned_mesh);
+        console.log('SKINNED MESH SELECTED', obj, this.selected_skinned_mesh);
       }
       else
       {
