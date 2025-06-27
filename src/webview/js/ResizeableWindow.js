@@ -144,14 +144,31 @@ class ResizableWindow
 
   bring_forward()
   {
-    const all_windows = document.querySelectorAll('.resize-window');
-
-    for (let i = 0; i < all_windows.length; i++)
+    if (!this.$container.classList.contains('resize-window--focused'))
     {
-      all_windows[i].classList.remove('resize-window--focused');
-    }
+      const all_windows = document.querySelectorAll('.resize-window');
 
-    this.$container.classList.add('resize-window--focused');
+      for (let i = 0; i < all_windows.length; i++)
+      {
+        all_windows[i].classList.remove('resize-window--focused');
+      }
+
+      this.$container.classList.add('resize-window--focused');
+    }
+  }
+
+  is_focused()
+  {
+    return this.$container.classList.contains('resize-window--focused');
+  }
+
+  shake()
+  {
+    this.$container.classList.add('shake');
+    setTimeout(() =>
+    {
+      this.$container.classList.remove('shake');
+    }, 500);
   }
 }
 

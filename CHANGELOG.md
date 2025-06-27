@@ -8,6 +8,9 @@ All notable changes to the GLB Viewer extension will be documented in this file.
  - Fixed issue on models not containing extensions
  - Fixed issue when selecting skinned meshes
 
+### Improved
+ - When clicking on a panel button, if the panel is already open, it will shake
+
 ## [2.1.2] - 2025-06-14
 
 ### Fixed

@@ -73,8 +73,11 @@ class Panel
 
     if (button.classList.contains('panel-button--active'))
     {
-      this.contents[button_name].hide();
-      this.deactivate_button(button_name);
+      if (content.is_focused())
+      {
+        content.shake();
+      }
+      content.bring_forward();
     }
     else
     {
