@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.3] - 2025-06-27
+
+### Fixed
+ - Fixed issue on models not containing extensions
+ - Fixed issue when selecting skinned meshes
+
 ## [2.1.2] - 2025-06-14
 
 ### Fixed
