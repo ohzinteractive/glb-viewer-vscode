@@ -196,9 +196,11 @@ class SceneController
         const raycaster = new Raycaster();
         raycaster.setFromCamera(this.input.NDC, this.camera);
         const intersections = raycaster.intersectObject(this.model, true);
-        if (intersections.length > 0)
+
+        const visible_intersection = intersections.find(inter => inter.object.visible);
+        if (visible_intersection)
         {
-          this.handle_object_click(intersections[0].object);
+          this.handle_object_click(visible_intersection.object);
         }
         else
         {
