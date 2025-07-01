@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.7] - 2025-07-01
+
+### Fixed
+ - Fixed textures downloading in linear color space instead of srgb 
+
+
 ## [2.1.6] - 2025-07-01
 
 ### Fixed
