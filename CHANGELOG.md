@@ -2,10 +2,20 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.1.5] - ?
+## [2.1.6] - 2025-07-01
 
+### Fixed
+ - Fixed issue when selecting meshes with morph targets only, no skinning 
+ 
 ### Updated
  - Updated README.md with latest features
+
+
+## [2.1.5] - 2025-06-29
+
+### Improved
+ - Play window animation when trying to open a window already opened
+
 
 ## [2.1.4] - 2025-06-29
 
