@@ -198,8 +198,9 @@ class Textures extends ResizableWindow
     const buffer = new Uint8Array(width * height * 4);
     this.scene_controller.renderer.renderer.readRenderTargetPixels(rt, 0, 0, width, height, buffer);
 
-    // Create ImageData
-    const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);
+    const pixel_buffer = new Uint8ClampedArray(buffer);
+    this.convert_pixel_buffer_to_srgb(pixel_buffer);
+    const imageData = new ImageData(pixel_buffer, width, height);
 
     // Create ImageBitmap
     const imageBitmap = await createImageBitmap(imageData);
@@ -211,6 +212,33 @@ class Textures extends ResizableWindow
     //   console.warn('Unsupported texture image type:', texture.image);
     //   return null;
     // }
+  }
+
+  linearToSrgb(value)
+  {
+  // value in [0, 1]
+    if (value <= 0.0031308)
+    {
+      return 12.92 * value;
+    }
+    else
+    {
+      return 1.055 * Math.pow(value, 1.0 / 2.4) - 0.055;
+    }
+  }
+
+  convert_pixel_buffer_to_srgb(buffer)
+  {
+    for (let i = 0; i < buffer.length; i += 4)
+    {
+      const r = buffer[i + 0] / 255;
+      const g = buffer[i + 1] / 255;
+      const b = buffer[i + 2] / 255;
+
+      buffer[i]     = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(r) * 255)));
+      buffer[i + 1] = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(g) * 255)));
+      buffer[i + 2] = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(b) * 255)));
+    }
   }
 
   image_bitmap_to_data_url(image_bitmap)
