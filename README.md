@@ -8,15 +8,18 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 ## Features
 
 - Preview GLB files directly in VS Code
-- DRACO support
-- Interactive 3D model viewing
 - Automatic file association with `.glb` files
-- Hierarchy tree and details panel
-- Camera focus on object click
-- Copy to properties to clipboard
-- Extension settings to customize the viewer
-- Look at the normal colors and wireframe
-- Visualize normals and tangents vectors
+- Interactive 3D model viewing
+- DRACO support
+- KTX2 support
+- Hierarchy, Animations, Textures and Info panels
+- Play and stop animations
+- Visualize textures and their name and resolution at a glance
+- Download textures if needed
+- Get a general understanding of the number of geometries, vertices, materials, textures, animations, etc. with the info panel
+- Camera will focus on the object you click on
+- Copy to properties to clipboard with a single click
+- Extension settings to customize the viewer (double side, normal lines, vectors, etc.)
 
 ## 📜 Changelog
 

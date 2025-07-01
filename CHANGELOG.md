@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.5] - ?
+
+### Updated
+ - Updated README.md with latest features
+
 ## [2.1.4] - 2025-06-29
 
 ### Fixed
