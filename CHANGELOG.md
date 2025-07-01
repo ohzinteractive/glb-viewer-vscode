@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.8] - 2025-07-01
+
+### Improved
+ - Increased default height of panels for better visibility
+
+
 ## [2.1.7] - 2025-07-01
 
 ### Fixed
