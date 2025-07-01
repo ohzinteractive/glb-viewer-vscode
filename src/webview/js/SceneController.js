@@ -240,13 +240,16 @@ class SceneController
         this.selected_skinned_mesh.morphTargetDictionary = obj.morphTargetDictionary;
         this.selected_skinned_mesh.morphTargetInfluences = obj.morphTargetInfluences;
         this.scene.add(this.selected_skinned_mesh);
-        console.log('SKINNED MESH SELECTED', obj, this.selected_skinned_mesh);
+        // console.log('SKINNED MESH SELECTED', obj, this.selected_skinned_mesh);
       }
       else
       {
         this.selected_mesh.visible = true;
         this.selected_mesh.geometry = obj.geometry;
+        this.selected_mesh.morphTargetDictionary = obj.morphTargetDictionary;
+        this.selected_mesh.morphTargetInfluences = obj.morphTargetInfluences;
         this.scene.add(this.selected_mesh);
+        // console.log('NORMAL OBJECT SELECTED', obj, this.selected_mesh);
       }
       obj.getWorldPosition(this.selected_mesh.position);
       obj.getWorldScale(this.selected_mesh.scale);
@@ -255,6 +258,7 @@ class SceneController
     else
     {
       this.selected_mesh.visible = false;
+      this.selected_skinned_mesh.visible = false;
     }
   }
 
