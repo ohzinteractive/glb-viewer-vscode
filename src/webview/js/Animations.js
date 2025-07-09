@@ -57,12 +57,12 @@ class Animations extends ResizableWindow
 
   play(animation)
   {
-    this.scene_controller.model.play_animation(animation);
+    this.scene_controller.animation_controller.play_animation(animation);
   }
 
   stop(animation)
   {
-    this.scene_controller.model.stop_animation(animation);
+    this.scene_controller.animation_controller.stop_animation(animation);
   }
 
   stop_all()
@@ -86,7 +86,7 @@ class Animations extends ResizableWindow
   list_animations()
   {
     const animations = [];
-    for (const animation of this.scene_controller.model.animations)
+    for (const animation of this.scene_controller.animation_controller.animations)
     {
       animations.push(animation);
     }

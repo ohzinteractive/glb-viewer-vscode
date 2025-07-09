@@ -29,8 +29,9 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
-import { AnimatedScene } from './AnimatedScene.js';
 import { StudioLightScene } from './StudioLightScene.js';
+import { Time } from './Time.js';
+import { AnimationController } from './AnimationController.js';
 
 class SceneController
 {
@@ -55,6 +56,7 @@ class SceneController
     this.input = new InputController();
     this.input.init(dom_container);
 
+    this.animation_controller = new AnimationController();
     this.hemisphere_light = new HemisphereLight(0xffffff, 0x444444);
     // this.scene.add(this.hemisphere_light);
 
@@ -121,7 +123,9 @@ class SceneController
     this.loader.load(dataUri, (gltf) =>
     {
       // console.log('GLB loaded', gltf);
-      this.model = new AnimatedScene(gltf);
+      this.model = gltf.scene;
+      this.gltf = gltf;
+      this.animation_controller.init_gltf(gltf);
 
       this.scene.add(this.model);
 
@@ -181,9 +185,8 @@ class SceneController
 
   update()
   {
-    this.model?.update();
     this.controls.update();
-
+    this.animation_controller.update();
     if (this.input.left_mouse_button_pressed)
     {
       this.elapsed_time_at_button_pressed = Date.now();
@@ -214,8 +217,9 @@ class SceneController
     this.input.clear();
   }
 
-  animate()
+  animate(elapsed_time)
   {
+    Time.update(elapsed_time);
     this.update();
     requestAnimationFrame(this.animate.bind(this));
   }

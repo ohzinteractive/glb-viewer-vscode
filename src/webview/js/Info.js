@@ -52,7 +52,7 @@ class Info extends ResizableWindow
   fill_info()
   {
     const info = this.scene_controller.renderer.renderer.info;
-    const gltf = this.scene_controller.model?.original_gltf;
+    const gltf = this.scene_controller.gltf;
     const vertices = this.rendered_vertex_count(this.scene_controller.scene);
     // console.log(gltf);
 
@@ -79,12 +79,12 @@ class Info extends ResizableWindow
 
   get_texture_count()
   {
-    return this.scene_controller.model?.original_gltf?.parser?.json?.textures?.length || 0;
+    return this.scene_controller.gltf.parser.json.textures?.length || 0;
   }
 
   get_animation_count()
   {
-    return this.scene_controller.model?.original_gltf?.animations?.length || 0;
+    return this.scene_controller.animation_controller.animations.length;
   }
 
   create_node(label, value)
