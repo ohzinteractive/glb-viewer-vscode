@@ -5,11 +5,13 @@ import { Textures } from './Textures';
 
 class Panel
 {
-  constructor()
+  constructor(ui_controller)
   {
     this.$container = document.querySelector('.panel');
     this.$buttons_container = document.querySelector('.panel-buttons');
     this.$content = document.querySelector('.panel-content');
+
+    this.ui_controller = ui_controller;
 
     this.contents = {
       hierarchy: new HierarchyTree(this, 'hierarchy'),
@@ -35,7 +37,12 @@ class Panel
   {
     this.contents.hierarchy.build_hierarchy_tree(object3d);
     this.contents.textures.build_textures_list(object3d);
-    this.contents.hierarchy.expand_all();
+    // this.contents.hierarchy.expand_all();
+  }
+
+  handle_object_click(object3d)
+  {
+    this.ui_controller.handle_object_click(object3d);
   }
 
   init(scene_controller, details_panel)

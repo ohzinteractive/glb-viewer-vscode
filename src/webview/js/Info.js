@@ -66,7 +66,7 @@ class Info extends ResizableWindow
     this.create_node('Images',     gltf.parser.json.images?.length || 0);
     this.create_node('Vertices',   vertices);
     this.create_node('Generator',  gltf.asset.generator || 'Unknown');
-    console.log(gltf.parser.json);
+    // console.log(gltf.parser.json);
     if (gltf.parser.json.extensionsUsed)
     {
       this.create_node('Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');

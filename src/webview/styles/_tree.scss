@@ -8,6 +8,10 @@
     user-select: none;
   }
 
+  .tree-node--root {
+    padding-left: 0;
+  }
+
   .tree-node__label-wrapper {
     display: flex;
 
@@ -18,6 +22,10 @@
   }
 
   .tree-node__label-wrapper:hover {
+    background-color: var(--background-color-alt);
+  }
+
+  .tree-node__label-wrapper--selected {
     background-color: var(--background-color-alt);
   }
 
