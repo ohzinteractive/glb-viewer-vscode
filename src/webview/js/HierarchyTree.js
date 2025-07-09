@@ -46,6 +46,8 @@ class HierarchyTree extends ResizableWindow
     this.first_node = new HierarchyNode(object3d, this.panel, this);
     const $node = this.first_node.get_element();
     this.$content.appendChild($node);
+
+    this.first_node.expand_down_until_depth(3);
   }
 
   find_node_by_object3d(object3d)

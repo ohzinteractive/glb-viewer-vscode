@@ -130,6 +130,18 @@ class HierarchyNode
     }
   }
 
+  expand_down_until_depth(target_depth, current_depth = 0)
+  {
+    if (current_depth < target_depth)
+    {
+      this.expand();
+      for (let i = 0; i < this.children.length; i++)
+      {
+        this.children[i].expand_down_until_depth(target_depth, current_depth + 1);
+      }
+    }
+  }
+
   expand_up()
   {
     this.expand();
