@@ -6,6 +6,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 
 ### Added
  - Added search functionality to hierarchy
+ - Added smooth scrolling to hierarchy when highlighting a node
 
 
 ## [2.1.8] - 2025-07-01

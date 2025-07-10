@@ -195,6 +195,7 @@ class HierarchyNode
   highlight()
   {
     this.$label_wrapper.classList.add('tree-node__label-wrapper--selected');
+    this.$element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   unhighlight()
