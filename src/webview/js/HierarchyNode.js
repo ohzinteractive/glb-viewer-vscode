@@ -183,8 +183,6 @@ class HierarchyNode
   {
     e.stopPropagation();
     this.toggle_expand();
-    this.tree.unhighlight_all();
-    this.highlight();
     this.panel.handle_object_click(this.object3d);
   }
 

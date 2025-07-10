@@ -61,6 +61,7 @@ class HierarchyTree extends ResizableWindow
     if (node)
     {
       node.expand_up();
+      this.unhighlight_all();
       node.highlight();
     }
   }
@@ -74,29 +75,6 @@ class HierarchyTree extends ResizableWindow
   expand_all()
   {
     this.first_node.expand_down();
-  }
-
-  expand_up(node)
-  {
-    const parent = node.parentElement;
-    if (parent)
-    {
-      const wrapper = parent.querySelector('.tree-node__label-wrapper');
-      const children_node = node.querySelector('.tree-node__children');
-      children_node.style.display = 'block';
-
-      if (node.dataset.is_geometry === 'false' && node.dataset.is_empty_object === 'false')
-      {
-        wrapper.querySelector('.tree-node__icon').innerHTML = this.icons.ICON_ARROW_DOWN;
-      }
-      this.expand_up(parent);
-    }
-  }
-
-  highlight_selected_node(node)
-  {
-    const wrapper = node.querySelector('.tree-node__label-wrapper');
-    wrapper.classList.add('tree-node__label-wrapper--selected');
   }
 }
 

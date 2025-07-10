@@ -28,7 +28,8 @@ class UIController
   handle_object_click(object3d)
   {
     this.details.handle_object_click(object3d);
-    // this.panel.contents.hierarchy.handle_object_click(object3d);
+    this.panel.contents.hierarchy.handle_object_click(object3d);
+    this.scene_controller.focus_camera_on_object(object3d);
   }
 
   build_hierarchy_tree(object3d)

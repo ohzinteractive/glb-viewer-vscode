@@ -29,9 +29,9 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { AnimationController } from './AnimationController.js';
 import { StudioLightScene } from './StudioLightScene.js';
 import { Time } from './Time.js';
-import { AnimationController } from './AnimationController.js';
 
 class SceneController
 {
@@ -301,7 +301,6 @@ class SceneController
 
   handle_object_click(object3d)
   {
-    this.focus_camera_on_object(object3d);
     this.ui_controller.handle_object_click(object3d);
   }
 
