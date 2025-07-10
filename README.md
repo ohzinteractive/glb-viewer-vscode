@@ -20,6 +20,7 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 - Camera will focus on the object you click on
 - Copy to properties to clipboard with a single click
 - Extension settings to customize the viewer (double side, normal lines, vectors, etc.)
+- Quick search through the hierarchy tree
 
 ## 📜 Changelog
 

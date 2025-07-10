@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.1.9] - 2025-07-10
+
+### Added
+ - Added search functionality to hierarchy
+
+
 ## [2.1.8] - 2025-07-01
 
 ### Improved
@@ -11,14 +17,14 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ## [2.1.7] - 2025-07-01
 
 ### Fixed
- - Fixed textures downloading in linear color space instead of srgb 
+ - Fixed textures downloading in linear color space instead of srgb
 
 
 ## [2.1.6] - 2025-07-01
 
 ### Fixed
- - Fixed issue when selecting meshes with morph targets only, no skinning 
- 
+ - Fixed issue when selecting meshes with morph targets only, no skinning
+
 ### Updated
  - Updated README.md with latest features
 

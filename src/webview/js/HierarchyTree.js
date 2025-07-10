@@ -1,4 +1,5 @@
 import { HierarchyNode } from './HierarchyNode';
+import { HierarchySearchController } from './HierarchySearchController';
 import { ResizableWindow } from './ResizeableWindow';
 
 class HierarchyTree extends ResizableWindow
@@ -13,11 +14,11 @@ class HierarchyTree extends ResizableWindow
 
     this.name = name;
     this.panel = panel;
-    this.$header = drag_handle;
-    this.$content = content_container;
-    this.$close_button = container.querySelector('.tree-header__close');
+    this.$close_button = this.$container.querySelector('.tree-header__close');
 
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
+
+    this.search_controller = new HierarchySearchController(this);
   }
 
   init(scene_controller, details_panel)
@@ -45,7 +46,7 @@ class HierarchyTree extends ResizableWindow
   {
     this.first_node = new HierarchyNode(object3d, this.panel, this);
     const $node = this.first_node.get_element();
-    this.$content.appendChild($node);
+    this.$content_container.appendChild($node);
 
     this.first_node.expand_down_until_depth(3);
   }

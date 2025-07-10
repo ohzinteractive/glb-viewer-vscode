@@ -222,6 +222,21 @@ class HierarchyNode
     }
     return null;
   }
+
+  find_nodes_by_name_regex(regex, results = [])
+  {
+    if (regex.test(this.object3d.name))
+    {
+      results.push(this);
+    }
+
+    for (const child of this.children)
+    {
+      child.find_nodes_by_name_regex(regex, results);
+    }
+
+    return results;
+  }
 }
 
 export { HierarchyNode };
