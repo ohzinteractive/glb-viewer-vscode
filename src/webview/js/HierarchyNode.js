@@ -224,6 +224,23 @@ class HierarchyNode
     return null;
   }
 
+  find_object3d_by_name(name)
+  {
+    if (this.object3d.name === name)
+    {
+      return this.object3d;
+    }
+    for (let i = 0; i < this.children.length; i++)
+    {
+      const node = this.children[i].find_object3d_by_name(name);
+      if (node)
+      {
+        return node;
+      }
+    }
+    return null;
+  }
+
   find_nodes_by_name_regex(regex, results = [])
   {
     if (regex.test(this.object3d.name))

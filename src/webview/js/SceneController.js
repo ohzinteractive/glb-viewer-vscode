@@ -160,7 +160,7 @@ class SceneController
       {
         this.camera.near = 0.01;
       }
-      this.ui_controller.build_hierarchy_tree(this.model);
+      this.ui_controller.update_panel_contents(this.model);
       this.focus_camera_on_object(this.model);
 
       for (let i = 0; i < this.subscribers.length; i++)

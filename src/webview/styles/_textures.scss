@@ -1,5 +1,80 @@
 .textures {
+  min-width: 600 * $ptr;
+
+  color: var(--text-color);
+
 }
+
+  .textures-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+
+      background-color: var(--background-color);
+
+    }
+
+    th, td {
+      padding: 10 * $ptr;
+
+      max-width: 150 * $ptr;
+
+      font-size: 12 * $ptr;
+
+      text-align: left;
+      text-overflow: ellipsis;
+
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    tr {
+      &:nth-child(even) {
+        background-color: var(--background-color-alt);
+      }
+
+      &.selected {
+        td {
+          overflow: hidden;
+
+          border-top: 1px solid var(--border-color-alt);
+          border-bottom: 1px solid var(--border-color-alt);
+        }
+
+        td:first-child {
+          border-left: 1px solid var(--border-color-alt);
+
+          border-radius: 0 $border-radius $border-radius 0;
+        }
+
+        td:last-child {
+          border-right: 1px solid var(--border-color-alt);
+
+          border-radius: 0 $border-radius $border-radius 0;
+        }
+      }
+    }
+
+  }
+
+  .textures__icon {
+
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+    }
+  }
 
   .texture-node {
     display: flex;
@@ -24,34 +99,20 @@
     background-color: var(--background-color-alt);
   }
 
-  .texture-node__label {
-    flex: 1;
-
-    font-size: 12 * $ptr;
-
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  .texture-node__material-name {
-    flex: 1;
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-  }
-
-  .texture-node__type {
-    flex: 0.4;
-
-    text-align: left;
-  }
-
-  .texture-node__resolution {
+  .textures-table__resolution {
     flex: 0;
 
     color: var(--text-color-alt);
 
     font-size: 12 * $ptr;
+  }
+
+  .textures-table__mesh-name {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .textures-header__close {

@@ -67,6 +67,11 @@ class HierarchyTree extends ResizableWindow
     }
   }
 
+  find_object3d_by_name(name)
+  {
+    return this.first_node.find_object3d_by_name(name);
+  }
+
   handle_close_button_click()
   {
     this.hide();

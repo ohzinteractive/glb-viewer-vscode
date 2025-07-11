@@ -32,9 +32,9 @@ class UIController
     this.scene_controller.focus_camera_on_object(object3d);
   }
 
-  build_hierarchy_tree(object3d)
+  update_panel_contents(object3d)
   {
-    this.panel.build_hierarchy_tree(object3d);
+    this.panel.update_contents(object3d);
   }
 
   handle_action_click(action, active)

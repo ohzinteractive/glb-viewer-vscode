@@ -2,7 +2,10 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.1.9] - 2025-07-10
+## [2.1.9] - 2025-07-11
+
+### Improved
+ - Big improvements to textures panel with new info and UI
 
 ### Added
  - Added search functionality to hierarchy

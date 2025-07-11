@@ -14,7 +14,6 @@ class Textures extends ResizableWindow
     this.name = name;
     this.panel = panel;
     this.$header = drag_handle;
-    this.$content = content_container;
 
     this.canvas = document.createElement('canvas');
     this.canvas_ctx = this.canvas.getContext('2d');
@@ -33,6 +32,9 @@ class Textures extends ResizableWindow
 
     this.$close_button = container.querySelector('.textures-header__close');
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
+
+    this.texture_list = [];
+    this.texture_table = container.querySelector('.textures-table');
   }
 
   init(scene_controller)
@@ -50,9 +52,10 @@ class Textures extends ResizableWindow
     this.$container.classList.add('hidden');
   }
 
-  async build_textures_list(object3d)
+  extract_texture_list(object3d)
   {
-    const textures = [];
+    const texture_map = new Map();
+
     const material_types = [
       'map',
       'emissiveMap',
@@ -78,74 +81,139 @@ class Textures extends ResizableWindow
 
     object3d.traverse((child) =>
     {
-      if (child.material)
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+
+      for (const material of materials)
       {
-        for (let i = 0; i < material_types.length; i++)
+        if (!material) continue;
+
+        for (const channel of material_types)
         {
-          const material_type = material_types[i];
+          const tex = material[channel];
 
-          if (child.material[material_type])
+          if (tex && tex.isTexture)
           {
-            const texture = {
-              name: child.material[material_type].name || 'Unknown Texture',
-              uuid: child.material[material_type].uuid,
-              image: child.material[material_type].image || child.material[material_type].source || undefined,
-              material_type: material_type,
-              material_name: child.material.name || 'Unknown Material',
-              instance: child.material[material_type]
-            };
-
-            if (!textures.find(t => t.uuid === texture.uuid))
+            if (!texture_map.has(tex.uuid))
             {
-              textures.push(texture);
+              texture_map.set(tex.uuid, {
+                name: tex.name || 'Unknown Texture',
+                uuid: tex.uuid,
+                image: tex.image || tex.source || undefined,
+                instance: tex,
+                used_in: []
+              });
             }
+
+            const entry = texture_map.get(tex.uuid);
+
+            entry.used_in.push({
+              material_name: material.name || 'Unknown Material',
+              channel: channel,
+              mesh_name: child.name || 'Unnamed Mesh'
+            });
           }
         }
       }
     });
 
-    const textures_list = Array.from(textures);
+    this.texture_list = Array.from(texture_map.values());
 
-    const texture_nodes = [];
-    for (let i = 0; i < textures_list.length; i++)
+    /* output example:
     {
-      const texture = textures_list[i];
-      const label = document.createElement('div');
-      const material_name = document.createElement('div');
-      const type = document.createElement('div');
-      const resolution = document.createElement('div');
-      const node = document.createElement('div');
+      name: 'WoodTexture',
+      uuid: 'abc-123',
+      image: <HTMLImageElement>,
+      instance: <THREE.Texture>,
+      used_in: [
+        {
+          material_name: 'FloorMaterial',
+          channel: 'map',
+          mesh_name: 'FloorMesh'
+        },
+        {
+          material_name: 'WallMaterial',
+          channel: 'roughnessMap',
+          mesh_name: 'WallMesh'
+        }
+      ]
+    }
+    */
+  }
 
-      node.classList.add('texture-node');
-      label.classList.add('texture-node__label');
-      material_name.classList.add('texture-node__material-name');
-      type.classList.add('texture-node__type');
-      resolution.classList.add('texture-node__resolution');
+  update_contents(object3d)
+  {
+    this.extract_texture_list(object3d);
+    this.build_textures_list();
+  }
+
+  async build_textures_list()
+  {
+    const texture_rows = [];
+    for (let i = 0; i < this.texture_list.length; i++)
+    {
+      const texture = this.texture_list[i];
+      const label = document.createElement('td');
+      const mesh_names = document.createElement('td');
+      const materials = document.createElement('td');
+      const types = document.createElement('td');
+      const resolution = document.createElement('td');
+      const download = document.createElement('td');
+      const row = document.createElement('tr');
+
+      row.addEventListener('click', () =>
+      {
+        this.handle_row_click(row);
+      });
+
+      resolution.classList.add('textures-table__resolution');
       label.textContent = texture.name;
-      material_name.textContent = texture.material_name || 'Unknown Material';
-      type.textContent = texture.material_type || 'Unknown';
-      // console.log(texture);
-
+      label.title = texture.name;
+      for (const material of texture.used_in)
+      {
+        const material_elem = document.createElement('div');
+        const type_elem = document.createElement('div');
+        const mesh_elem = document.createElement('div');
+        mesh_elem.classList.add('textures-table__mesh-name');
+        material_elem.textContent = material.material_name || 'Unknown Material';
+        material_elem.title = material.material_name || 'Unknown Material';
+        type_elem.textContent = material.channel || 'Unknown';
+        type_elem.title = material.channel || 'Unknown';
+        mesh_elem.textContent = material.mesh_name || 'Unknown Mesh';
+        mesh_elem.title = material.mesh_name || 'Unknown Mesh';
+        materials.appendChild(material_elem);
+        types.appendChild(type_elem);
+        mesh_names.appendChild(mesh_elem);
+        mesh_elem.addEventListener('click', () =>
+        {
+          if (this.panel.handle_mesh_name_click(material.mesh_name)) this.handle_close_button_click();
+        });
+      }
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
 
-      node.appendChild(label);
-      node.appendChild(material_name);
-      node.appendChild(type);
-      node.appendChild(resolution);
+      const ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>';
+      download.innerHTML = ICON;
+      download.classList.add('textures__icon');
 
+      row.appendChild(label);
+      row.appendChild(mesh_names);
+      row.appendChild(materials);
+      row.appendChild(types);
+      row.appendChild(resolution);
+      row.appendChild(download);
       this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
 
-      node.dataset.bitmap_uuid = texture.uuid;
+      row.dataset.bitmap_uuid = texture.uuid;
 
-      node.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
-      node.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
-      texture_nodes.push(node);
+      row.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
+      // row.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
+      download.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
+      texture_rows.push(row);
     }
 
-    texture_nodes.sort((a, b) =>
+    texture_rows.sort((a, b) =>
     {
-      const a_resolution = a.querySelector('.texture-node__resolution').textContent;
-      const b_resolution = b.querySelector('.texture-node__resolution').textContent;
+      const a_resolution = a.querySelector('.textures-table__resolution').textContent;
+      const b_resolution = b.querySelector('.textures-table__resolution').textContent;
 
       const [a_width, a_height] = a_resolution.split('x').map(Number);
       const [b_width, b_height] = b_resolution.split('x').map(Number);
@@ -156,29 +224,21 @@ class Textures extends ResizableWindow
       return b_pixels - a_pixels;
     });
 
-    if (texture_nodes.length > 0)
+    if (texture_rows.length > 0)
     {
-      for (let i = 0; i < texture_nodes.length; i++)
+      for (let i = 0; i < texture_rows.length; i++)
       {
-        this.$content.appendChild(texture_nodes[i]);
+        this.$content_container.appendChild(texture_rows[i]);
       }
     }
     else
     {
-      this.$content.innerHTML = '<div class="texture-node">No textures found</div>';
+      this.$content_container.innerHTML = '<div class="texture-node">No textures found</div>';
     }
   }
 
   async get_image_bitmap(texture, full_size = false)
   {
-    // if (texture.image instanceof HTMLImageElement ||
-    //     texture.image instanceof HTMLCanvasElement ||
-    //     texture.image instanceof ImageBitmap)
-    // {
-    //   return texture.image;
-    // }
-    // else if (texture.image instanceof Object)
-    // {
     const width = full_size ? texture.image.width : Math.min(texture.image.width || 512, 512);
     const height = full_size ? texture.image.height : Math.min(texture.image.height || 512, 512);
 
@@ -206,12 +266,6 @@ class Textures extends ResizableWindow
     const imageBitmap = await createImageBitmap(imageData);
 
     return imageBitmap;
-    // }
-    // else
-    // {
-    //   console.warn('Unsupported texture image type:', texture.image);
-    //   return null;
-    // }
   }
 
   linearToSrgb(value)
@@ -289,6 +343,19 @@ class Textures extends ResizableWindow
   {
     this.hide();
     this.panel.deactivate_button(this.name);
+  }
+
+  handle_row_click(row)
+  {
+    const selected_row = this.$content_container.querySelector('.selected');
+    if (selected_row)
+    {
+      selected_row.classList.remove('selected');
+    }
+    if (row !== selected_row)
+    {
+      row.classList.add('selected');
+    }
   }
 }
 

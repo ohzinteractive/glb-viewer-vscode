@@ -33,16 +33,25 @@ class Panel
     }
   }
 
-  build_hierarchy_tree(object3d)
+  update_contents(object3d)
   {
     this.contents.hierarchy.build_hierarchy_tree(object3d);
-    this.contents.textures.build_textures_list(object3d);
-    // this.contents.hierarchy.expand_all();
+    this.contents.textures.update_contents(object3d);
   }
 
   handle_object_click(object3d)
   {
     this.ui_controller.handle_object_click(object3d);
+  }
+
+  handle_mesh_name_click(mesh_name)
+  {
+    const object3d = this.contents.hierarchy.find_object3d_by_name(mesh_name);
+    if (object3d)
+    {
+      this.ui_controller.handle_object_click(object3d);
+      return true;
+    }
   }
 
   init(scene_controller, details_panel)
