@@ -5,6 +5,7 @@ import { InputController } from 'pit-js';
 import {
   AlwaysDepth,
   AmbientLight,
+  AxesHelper,
   Box3,
   BufferGeometry,
   Color,
@@ -17,6 +18,7 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshNormalMaterial,
+  Object3D,
   PerspectiveCamera,
   PMREMGenerator,
   Raycaster,
@@ -86,6 +88,13 @@ class SceneController
     this.selected_skinned_mesh = new SkinnedMesh(new BufferGeometry(), wireframe_material.clone());
     this.selected_skinned_mesh.renderOrder = 500;
 
+    this.selected_empty_object = new Object3D();
+    const axis1 = new AxesHelper(0.5);
+    const axis2 = new AxesHelper(0.5);
+    axis2.scale.set(-1, -1, -1);
+    this.selected_empty_object.add(axis1);
+    this.selected_empty_object.add(axis2);
+
     this.subscribers = [];
   }
 
@@ -128,7 +137,7 @@ class SceneController
       this.animation_controller.init_gltf(gltf);
 
       this.scene.add(this.model);
-
+      this.model.updateMatrixWorld(true);
       this.model.traverse(child =>
       {
         child.frustumCulled = false;
@@ -231,11 +240,15 @@ class SceneController
 
   highlight_object(obj)
   {
+    this.selected_mesh.visible = false;
+    this.selected_skinned_mesh.visible = false;
+    this.selected_empty_object.visible = false;
+    this.selected_skinned_mesh.removeFromParent();
+    this.selected_mesh.removeFromParent();
+    this.selected_empty_object.removeFromParent();
+
     if (obj.geometry)
     {
-      this.selected_skinned_mesh.removeFromParent();
-      this.selected_mesh.removeFromParent();
-
       if (obj.isSkinnedMesh)
       {
         this.selected_skinned_mesh.visible = true;
@@ -261,25 +274,34 @@ class SceneController
     }
     else
     {
-      this.selected_mesh.visible = false;
-      this.selected_skinned_mesh.visible = false;
+      if (obj.children.length === 0 || obj.type === 'Bone')
+      {
+        this.selected_empty_object.visible = true;
+        this.scene.add(this.selected_empty_object);
+        obj.getWorldPosition(this.selected_empty_object.position);
+      }
     }
   }
 
   focus_camera_on_object(obj)
   {
+    console.log(obj);
     this.highlight_object(obj);
     const box = new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
 
+    if (center.length() < 0.001)
+    {
+      obj.getWorldPosition(center);
+    }
     const size = box.getSize(new Vector3());
     const bounding_sphere_radius = size.length() / 2;
 
     const fov = MathUtils.degToRad(this.camera.fov);
     const aspect = this.camera.aspect;
 
-    const distance_for_height = bounding_sphere_radius / Math.sin(fov / 2);
-    const distance_for_width = bounding_sphere_radius / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
+    const distance_for_height = Math.max(1, bounding_sphere_radius) / Math.sin(fov / 2);
+    const distance_for_width = Math.max(1, bounding_sphere_radius) / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
     const fit_distance = Math.max(distance_for_height, distance_for_width) * 1.2;
 
     const direction = new Vector3();
