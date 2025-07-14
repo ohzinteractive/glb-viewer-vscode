@@ -28,6 +28,7 @@ class Textures extends ResizableWindow
       this.image_preview_elem.style.visibility = 'hidden';
     });
 
+    this.texture_container = {};
     this.bitmap_container = {};
 
     this.$close_button = container.querySelector('.textures-header__close');
@@ -200,9 +201,9 @@ class Textures extends ResizableWindow
       row.appendChild(types);
       row.appendChild(resolution);
       row.appendChild(download);
-      this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
-
-      row.dataset.bitmap_uuid = texture.uuid;
+      this.texture_container[texture.uuid] = texture.instance;
+      // this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
+      row.dataset.texture_uuid = texture.uuid;
 
       row.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
       // row.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
@@ -303,14 +304,20 @@ class Textures extends ResizableWindow
     return this.canvas.toDataURL();
   }
 
-  on_texture_node_mouse_enter(evt)
+  async on_texture_node_mouse_enter(evt)
   {
     const dataset = evt.srcElement.dataset;
-    const bitmap = this.bitmap_container[dataset.bitmap_uuid];
+    const texture_uuid = dataset.texture_uuid;
 
-    if (dataset.bitmap_data_url === undefined)
+    let bitmap = this.bitmap_container[texture_uuid];
+
+    if (bitmap === undefined)
     {
+      const texture = this.texture_container[texture_uuid];
+      bitmap = await this.get_image_bitmap(texture);
       dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
+
+      this.bitmap_container[texture_uuid] = bitmap;
     }
     this.preview_image(dataset.bitmap_data_url, bitmap.width, bitmap.height);
   }
@@ -331,6 +338,7 @@ class Textures extends ResizableWindow
 
   async download_image(texture, name)
   {
+    console.log('download image');
     const bitmap = await this.get_image_bitmap(texture, true);
     const data_url = this.image_bitmap_to_data_url(bitmap);
     const a = document.createElement('a');
