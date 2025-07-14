@@ -30,6 +30,11 @@ class HierarchyNode
       ICON_CLOSED_EYE: '<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M8 6h8v2H8V6zm-4 4V8h4v2H4zm-2 2v-2h2v2H2zm0 2v-2H0v2h2zm2 2H2v-2h2v2zm4 2H4v-2h4v2zm8 0v2H8v-2h8zm4-2v2h-4v-2h4zm2-2v2h-2v-2h2zm0-2h2v2h-2v-2zm-2-2h2v2h-2v-2zm0 0V8h-4v2h4zm-10 1h4v4h-4v-4z" fill="currentColor"/> </svg>'
     };
 
+    this.total_children_count = 0;
+    object3d.traverse(child =>
+    {
+      this.total_children_count += child.children.length;
+    });
     this.create_element();
   }
 
@@ -54,7 +59,7 @@ class HierarchyNode
 
     this.$label = document.createElement('div');
     this.$label.className = 'tree-node__label';
-    this.$label.textContent = this.object3d.name || this.object3d.type;
+    this.$label.textContent = (this.object3d.name || this.object3d.type) + (this.total_children_count > 0 ? ` (${this.total_children_count})` : '');
 
     this.$label_wrapper = document.createElement('div');
     this.$label_wrapper.className = 'tree-node__label-wrapper';
