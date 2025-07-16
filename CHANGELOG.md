@@ -1,6 +1,17 @@
 # Changelog
 
 All notable changes to the GLB Viewer extension will be documented in this file.
+## [2.2.0] - 2025-07-14
+
+### Improved
+ - Reworked texture window
+ - Reworked hierarchy window
+ - Now when opening the hierarchy, the first 3 levels are expanded
+ - Total children count is displayed alongside name
+
+### Fixed
+ - Empty objects and bone selections
+ - Root object in hierarchy was duplicated
 
 ## [2.1.9] - 2025-07-11
 
