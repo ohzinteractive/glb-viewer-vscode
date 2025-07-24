@@ -260,6 +260,32 @@ class HierarchyNode
 
     return results;
   }
+
+  sort_by_name()
+  {
+    const children = [...this.children];
+    children.sort((a, b) =>
+    {
+      return a.object3d.name.localeCompare(b.object3d.name);
+    });
+
+    for (let i = 0; i < children.length; i++)
+    {
+      const child = children[i].$element;
+      this.$children.appendChild(child);
+      this.children[i].sort_by_name();
+    }
+  }
+
+  sort_by_index()
+  {
+    for (let i = 0; i < this.children.length; i++)
+    {
+      const child = this.children[i].$element;
+      this.$children.appendChild(child);
+      this.children[i].sort_by_index();
+    }
+  }
 }
 
 export { HierarchyNode };

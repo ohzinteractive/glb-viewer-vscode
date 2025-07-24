@@ -49,6 +49,8 @@ class HierarchyTree extends ResizableWindow
     this.$content_container.appendChild($node);
 
     this.first_node.expand_down_until_depth(3);
+    this.first_node.sort_by_name();
+    // this.first_node.sort_by_index();
   }
 
   find_node_by_object3d(object3d)
