@@ -1,10 +1,11 @@
-import { VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
+import { LineMaterial, VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
 import { Renderer } from './Renderer.js';
 
 import { InputController } from 'pit-js';
 import {
   AlwaysDepth,
   AmbientLight,
+  ArrowHelper,
   AxesHelper,
   Box3,
   BufferGeometry,
@@ -89,11 +90,24 @@ class SceneController
     this.selected_skinned_mesh.renderOrder = 500;
 
     this.selected_empty_object = new Object3D();
-    const axis1 = new AxesHelper(0.5);
-    const axis2 = new AxesHelper(0.5);
-    axis2.scale.set(-1, -1, -1);
-    this.selected_empty_object.add(axis1);
-    this.selected_empty_object.add(axis2);
+
+    const right_arrow   = new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#ff0000');
+    const up_arrow      = new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#00ff00');
+    const forward_arrow = new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#0000ff');
+
+    this.selected_empty_object.add(right_arrow);
+    this.selected_empty_object.add(up_arrow);
+    this.selected_empty_object.add(forward_arrow);
+
+    this.selected_empty_object.traverse(child =>
+    {
+      if (child.material)
+      {
+        child.material.depthTest = false;
+        child.material.depthFunc = AlwaysDepth;
+        child.renderOrder = 99999;
+      }
+    });
 
     this.subscribers = [];
   }
@@ -221,9 +235,16 @@ class SceneController
         }
       }
     }
-
+    this.selected_empty_object.scale.setScalar(this.getWorldSizeFromScreenSize(100, this.selected_empty_object.position, this.camera));
     this.renderer.render(this.scene, this.camera);
     this.input.clear();
+  }
+
+  getWorldSizeFromScreenSize(desiredScreenSize, target_pos, camera)
+  {
+    const vFov = (camera.fov * Math.PI) / 180; // Convert vertical FOV to radians
+    const heightAtDistance = 2 * Math.tan(vFov / 2) * camera.position.distanceTo(target_pos);
+    return (desiredScreenSize / window.innerHeight) * heightAtDistance;
   }
 
   animate(elapsed_time)
@@ -274,13 +295,18 @@ class SceneController
     }
     else
     {
-      if (obj.children.length === 0 || obj.type === 'Bone')
-      {
-        this.selected_empty_object.visible = true;
-        this.scene.add(this.selected_empty_object);
-        obj.getWorldPosition(this.selected_empty_object.position);
-      }
+      // if (obj.children.length === 0 || obj.type === 'Bone')
+      // {
+      //   this.selected_empty_object.visible = true;
+      //   this.scene.add(this.selected_empty_object);
+      //   obj.getWorldPosition(this.selected_empty_object.position);
+      // }
     }
+
+    this.selected_empty_object.visible = true;
+    this.scene.add(this.selected_empty_object);
+    obj.getWorldPosition(this.selected_empty_object.position);
+    obj.getWorldQuaternion(this.selected_empty_object.quaternion);
   }
 
   focus_camera_on_object(obj)
