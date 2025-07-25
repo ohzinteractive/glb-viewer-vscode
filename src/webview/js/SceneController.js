@@ -80,6 +80,8 @@ class SceneController
     this.elapsed_time_at_button_pressed = 0;
 
     this.grid = new GridHelper(10, 10, '#4B4B4B', '#4B4B4B');
+    this.grid.material.depthWrite = false;
+    this.grid.renderOrder = -999999;
     this.scene.add(this.grid);
 
     const wireframe_material = new MeshBasicMaterial({ color: '#50AF8E', wireframe: true, depthTest: false, depthFunc: AlwaysDepth, depthWrite: false, transparent: true, opacity: 0.5 });
@@ -97,6 +99,14 @@ class SceneController
     this.selected_empty_object.add(right_arrow);
     this.selected_empty_object.add(up_arrow);
     this.selected_empty_object.add(forward_arrow);
+
+    this.axis_helper = new Object3D();
+
+    this.axis_helper.add(new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#ff0000'));
+    this.axis_helper.add(new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#00ff00'));
+    this.axis_helper.add(new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#0000ff'));
+
+    this.scene.add(this.axis_helper);
 
     this.selected_empty_object.traverse(child =>
     {
@@ -183,7 +193,7 @@ class SceneController
         this.camera.near = 0.01;
       }
       this.ui_controller.update_panel_contents(this.model);
-      this.focus_camera_on_object(this.model);
+      this.focus_camera_on_object(this.model, false);
 
       for (let i = 0; i < this.subscribers.length; i++)
       {
@@ -231,6 +241,7 @@ class SceneController
         {
           this.selected_mesh.visible = false;
           this.selected_skinned_mesh.visible = false;
+          this.selected_empty_object.visible = false;
         }
       }
     }
@@ -292,26 +303,22 @@ class SceneController
       obj.getWorldScale(this.selected_mesh.scale);
       obj.getWorldQuaternion(this.selected_mesh.quaternion);
     }
-    else
-    {
-      // if (obj.children.length === 0 || obj.type === 'Bone')
-      // {
-      //   this.selected_empty_object.visible = true;
-      //   this.scene.add(this.selected_empty_object);
-      //   obj.getWorldPosition(this.selected_empty_object.position);
-      // }
-    }
 
-    this.selected_empty_object.visible = true;
+    if (this.axis_helper.visible)
+    {
+      this.selected_empty_object.visible = true;
+    }
     this.scene.add(this.selected_empty_object);
     obj.getWorldPosition(this.selected_empty_object.position);
     obj.getWorldQuaternion(this.selected_empty_object.quaternion);
   }
 
-  focus_camera_on_object(obj)
+  focus_camera_on_object(obj, highlight = true)
   {
-    console.log(obj);
-    this.highlight_object(obj);
+    if (highlight)
+    {
+      this.highlight_object(obj);
+    }
     const box = new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
 
@@ -372,6 +379,9 @@ class SceneController
       break;
     case 'selection-wireframe':
       this.toggle_selection_wireframe(active);
+      break;
+    case 'origin-arrows':
+      this.toggle_origin_arrows(active);
       break;
     default:
       break;
@@ -486,6 +496,12 @@ class SceneController
   {
     this.selected_mesh.material.visible = active;
     this.selected_skinned_mesh.material.visible = active;
+  }
+
+  toggle_origin_arrows(active)
+  {
+    this.axis_helper.visible = active;
+    this.selected_empty_object.visible = active;
   }
 
   set_line_length(value)
