@@ -104,7 +104,8 @@
   }
 
   .details__item-content {
-
+    max-width: 300px;
+    word-wrap: break-word;
   }
 
   .details__item:hover {
