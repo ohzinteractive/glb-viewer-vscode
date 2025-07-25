@@ -1,6 +1,19 @@
 # Changelog
 
 All notable changes to the GLB Viewer extension will be documented in this file.
+## [2.3.0] - 2025-07-25
+
+### Added
+ - Origin axis helper for objects and center grid
+ - Inspect json button in info panel
+
+### Improved
+ - Names in the hierarchy are now properly sorted by name by default
+
+### Fixed
+ - Issue when opening info panels on a model with no materials
+
+ 
 ## [2.2.0] - 2025-07-14
 
 ### Improved
