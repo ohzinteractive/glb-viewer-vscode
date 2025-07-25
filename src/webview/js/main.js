@@ -1,5 +1,6 @@
 import { SceneController } from './SceneController';
 import { UIController } from './UiController';
+import { VSCodeContext } from './VSCodeContext';
 
 /* global acquireVsCodeApi */
 class MainApplication
@@ -9,7 +10,7 @@ class MainApplication
     this.ui_controller = new UIController(this);
     this.scene_controller = new SceneController(this);
 
-    this.vscode = acquireVsCodeApi();
+    VSCodeContext.ctx = acquireVsCodeApi();
   }
 
   init()
@@ -32,7 +33,7 @@ class MainApplication
       }
     });
 
-    this.vscode.postMessage({ type: 'ready' });
+    VSCodeContext.ctx.postMessage({ type: 'ready' });
   }
 }
 

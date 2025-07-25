@@ -170,6 +170,18 @@ function activate(context)
             dataUri
           });
         }
+        if (message.command === 'openJson')
+        {
+          const jsonContent = JSON.stringify(message.payload, null, 2);
+
+          vscode.workspace.openTextDocument({
+            content: jsonContent,
+            language: 'json'
+          }).then(doc =>
+          {
+            vscode.window.showTextDocument(doc, vscode.ViewColumn.Active, true);
+          });
+        }
       });
 
       // webviewPanel.onDidChangeViewState(e =>

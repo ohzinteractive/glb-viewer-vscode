@@ -1,4 +1,5 @@
 import { ResizableWindow } from './ResizeableWindow';
+import { VSCodeContext } from './VSCodeContext';
 
 class Info extends ResizableWindow
 {
@@ -18,6 +19,9 @@ class Info extends ResizableWindow
 
     this.$close_button = container.querySelector('.info-header__close');
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
+
+    this.$inspect_json_button = container.querySelector('.info-button__inspect-json');
+    this.$inspect_json_button.addEventListener('click', this.handle_inspect_json_button_click.bind(this));
   }
 
   init(scene_controller)
@@ -111,6 +115,14 @@ class Info extends ResizableWindow
   {
     this.hide();
     this.panel.deactivate_button(this.name);
+  }
+
+  handle_inspect_json_button_click()
+  {
+    VSCodeContext.ctx.postMessage({
+      command: 'openJson',
+      payload: this.scene_controller.gltf.parser.json
+    });
   }
 }
 

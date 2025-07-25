@@ -1,4 +1,4 @@
-import { LineMaterial, VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
+import { VertexNormalsHelper, VertexTangentsHelper } from 'three/examples/jsm/Addons.js';
 import { Renderer } from './Renderer.js';
 
 import { InputController } from 'pit-js';
@@ -6,7 +6,6 @@ import {
   AlwaysDepth,
   AmbientLight,
   ArrowHelper,
-  AxesHelper,
   Box3,
   BufferGeometry,
   Color,
@@ -145,7 +144,7 @@ class SceneController
 
     this.loader.load(dataUri, (gltf) =>
     {
-      // console.log('GLB loaded', gltf);
+      console.log('GLB loaded', gltf);
       this.model = gltf.scene;
       this.gltf = gltf;
       this.animation_controller.init_gltf(gltf);
