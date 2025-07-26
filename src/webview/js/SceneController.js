@@ -92,9 +92,9 @@ class SceneController
 
     this.selected_empty_object = new Object3D();
 
-    const right_arrow   = new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#ff0000');
-    const up_arrow      = new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#00ff00');
-    const forward_arrow = new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#0000ff');
+    const right_arrow   = new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#EA334C');
+    const up_arrow      = new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#80CA1E');
+    const forward_arrow = new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#2D83E8');
 
     this.selected_empty_object.add(right_arrow);
     this.selected_empty_object.add(up_arrow);
@@ -102,9 +102,9 @@ class SceneController
 
     this.axis_helper = new Object3D();
 
-    this.axis_helper.add(new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#ff0000'));
-    this.axis_helper.add(new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#00ff00'));
-    this.axis_helper.add(new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#0000ff'));
+    this.axis_helper.add(new ArrowHelper(new Vector3(1, 0, 0), new Vector3(0, 0, 0), 1, '#EA334C', 0));
+    this.axis_helper.add(new ArrowHelper(new Vector3(0, 1, 0), new Vector3(0, 0, 0), 1, '#80CA1E', 0));
+    this.axis_helper.add(new ArrowHelper(new Vector3(0, 0, 1), new Vector3(0, 0, 0), 1, '#2D83E8', 0));
 
     this.scene.add(this.axis_helper);
 

@@ -85,8 +85,8 @@
             "position",
             "rotation",
             "scale",
-            "globalScale"
-
+            "globalScale",
+            "userData"
           ],
           "uniqueItems": true
         }

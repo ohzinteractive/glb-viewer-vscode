@@ -29,7 +29,7 @@
     background-color: var(--background-color-alt);
   }
 
-  .tree-node__icon {
+  .tree-node__folder-icon {
     display: flex;
 
     flex-shrink: 0;
@@ -46,12 +46,42 @@
     transition: transform 0.1s ease;
   }
 
-  .tree-node__icon--object {
+  .tree-node__icon {
+    display: flex;
+
+    flex-shrink: 0;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-right: 4 * $ptr;
+
+    width: 12 * $ptr;
+    height: 12 * $ptr;
+
+    transition: transform 0.1s ease;
+  }
+
+
+  .tree-node__icon--geometry {
     color: var(--icon-green);
   }
 
-  .tree-node__icon--empty-object {
+  .tree-node__icon--object {
     color: var(--icon-orange);
+  }
+
+  .tree-node__icon--object-group {
+    color: var(--icon-orange);
+  }
+
+  .tree-node__icon--bone {
+    color: var(--icon-green);
+  }
+
+  .tree-node__icon--armature {
+    color: var(--icon-green);
   }
 
   .tree-node__label {
