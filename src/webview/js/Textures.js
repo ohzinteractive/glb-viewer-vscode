@@ -95,10 +95,10 @@ class Textures extends ResizableWindow
 
           if (tex && tex.isTexture)
           {
-            if (!texture_map.has(tex.uuid))
+            if (!texture_map.has(tex.name))
             {
-              texture_map.set(tex.uuid, {
-                name: tex.name || 'Unknown Texture',
+              texture_map.set(tex.name, {
+                name: tex.name,
                 uuid: tex.uuid,
                 image: tex.image || tex.source || undefined,
                 instance: tex,
@@ -106,7 +106,7 @@ class Textures extends ResizableWindow
               });
             }
 
-            const entry = texture_map.get(tex.uuid);
+            const entry = texture_map.get(tex.name);
 
             entry.used_in.push({
               material_name: material.name || 'Unknown Material',
@@ -170,16 +170,35 @@ class Textures extends ResizableWindow
       resolution.classList.add('textures-table__resolution');
       label.textContent = texture.name;
       label.title = texture.name;
-      for (const material of texture.used_in)
+
+      // Check if all channels are the same
+      const channels = texture.used_in.map(material => material.channel || 'Unknown');
+      const allChannelsSame = channels.every(channel => channel === channels[0]);
+
+      // Check if all material names are the same
+      const materialNames = texture.used_in.map(material => material.material_name || 'Unknown Material');
+      const allMaterialNamesSame = materialNames.every(name => name === materialNames[0]);
+
+      for (let i = 0; i < texture.used_in.length; i++)
       {
+        const material = texture.used_in[i];
         const material_elem = document.createElement('div');
         const type_elem = document.createElement('div');
         const mesh_elem = document.createElement('div');
         mesh_elem.classList.add('textures-table__mesh-name');
-        material_elem.textContent = material.material_name || 'Unknown Material';
-        material_elem.title = material.material_name || 'Unknown Material';
-        type_elem.textContent = material.channel || 'Unknown';
-        type_elem.title = material.channel || 'Unknown';
+
+        if (!allMaterialNamesSame)
+        {
+          material_elem.textContent = material.material_name || 'Unknown Material';
+          material_elem.title = material.material_name || 'Unknown Material';
+        }
+
+        if (!allChannelsSame)
+        {
+          type_elem.textContent = material.channel || 'Unknown';
+          type_elem.title = material.channel || 'Unknown';
+        }
+
         mesh_elem.textContent = material.mesh_name || 'Unknown Mesh';
         mesh_elem.title = material.mesh_name || 'Unknown Mesh';
         materials.appendChild(material_elem);
@@ -190,6 +209,21 @@ class Textures extends ResizableWindow
           if (this.panel.handle_mesh_name_click(material.mesh_name)) this.handle_close_button_click();
         });
       }
+      if (allChannelsSame)
+      {
+        const type_elem = document.createElement('div');
+        type_elem.textContent = texture.used_in[0].channel;
+        type_elem.title = texture.used_in[0].channel;
+        types.appendChild(type_elem);
+      }
+      if (allMaterialNamesSame)
+      {
+        const material_elem = document.createElement('div');
+        material_elem.textContent = texture.used_in[0].material_name;
+        material_elem.title = texture.used_in[0].material_name;
+        materials.appendChild(material_elem);
+      }
+
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
 
       download.innerHTML = this.DOWNLOAD_ICON;
