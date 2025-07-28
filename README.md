@@ -9,6 +9,7 @@ A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB f
 1. Click on any `.gltf .glb` file in VS Code's explorer window
 2. The file will be opened automatically in a new tab using the GLTF/GLB Viewer
    - If that doesn't happen, you can right click manually on the file and choose 'open with:' GLTF/GLB Viewer
+   - From the "open with" menu, you can also configure the default viewer to be this one
 3. Interact with the 3D model using your mouse:
    - Left click and drag to rotate
    - Right click and drag to pan
