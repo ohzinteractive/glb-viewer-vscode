@@ -1,6 +1,12 @@
 # Changelog
 
 All notable changes to the GLB Viewer extension will be documented in this file.
+
+## [2.4.0] - 2025-07-27
+
+### Added
+ - New hierarchy icons
+
 ## [2.3.0] - 2025-07-25
 
 ### Added

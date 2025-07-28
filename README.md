@@ -1,6 +1,6 @@
-# GLB Viewer for VS Code
+# GLTF/GLB Viewer for VS Code
 
-A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binary) files. This extension allows you to preview and interact with 3D models directly within VS Code.
+A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB files. This extension allows you to preview and interact with 3D models directly within VS Code.
 
 ![Preview](https://github.com/ohzinteractive/vscode-glb-viewer/blob/main/previews/preview-2.1.1.png?raw=true)
 
@@ -8,7 +8,7 @@ A Visual Studio Code extension that provides a built-in viewer for GLB (GL Binar
 ## Features
 
 - Preview GLB files directly in VS Code
-- Automatic file association with `.glb` files
+- Automatic file association with `.gltf .glb` files
 - Interactive 3D model viewing
 - DRACO support
 - KTX2 support (GPU Texture Compression)
@@ -34,14 +34,14 @@ See [CHANGELOG.md](./CHANGELOG.md) for details about each release.
 
 1. Open VS Code
 2. Go to the Extensions view (Ctrl+Shift+X / Cmd+Shift+X)
-3. Search for "GLB Viewer"
+3. Search for "GLTF/GLB Viewer"
 4. Click Install
 
 ## Usage
 
 1. Open any `.glb` file in VS Code
 2. The file will automatically open in the GLB Viewer
-3. You might need to click on the file to 'open with:' GLB Viewer
+3. You might need to click on the file to 'open with:' GLTF/GLB Viewer
 4. Interact with the 3D model using your mouse:
    - Left click and drag to rotate
    - Right click and drag to pan
