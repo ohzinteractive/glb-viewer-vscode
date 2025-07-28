@@ -1,5 +1,6 @@
 import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
+import { TexturePreview } from './TexturePreview';
 
 class Textures extends ResizableWindow
 {
@@ -18,15 +19,12 @@ class Textures extends ResizableWindow
     this.canvas = document.createElement('canvas');
     this.canvas_ctx = this.canvas.getContext('2d');
 
-    this.image_preview_elem = document.createElement('img');
-    this.image_preview_elem.style.visibility = 'hidden';
-    this.image_preview_elem.style.position = 'absolute';
-    document.body.appendChild(this.image_preview_elem);
+    this.texture_preview = new TexturePreview();
 
-    this.$container.addEventListener('mouseleave', () =>
-    {
-      this.image_preview_elem.style.visibility = 'hidden';
-    });
+    // this.$container.addEventListener('mouseleave', () =>
+    // {
+    //   this.texture_preview.hide();
+    // });
 
     this.texture_container = {};
     this.bitmap_container = {};
@@ -36,6 +34,8 @@ class Textures extends ResizableWindow
 
     this.texture_list = [];
     this.texture_table = container.querySelector('.textures-table');
+
+    this.DOWNLOAD_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>';
   }
 
   init(scene_controller)
@@ -50,6 +50,7 @@ class Textures extends ResizableWindow
 
   hide()
   {
+    this.texture_preview.hide();
     this.$container.classList.add('hidden');
   }
 
@@ -191,8 +192,7 @@ class Textures extends ResizableWindow
       }
       resolution.textContent = `${texture.image.width}x${texture.image.height}`;
 
-      const ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>';
-      download.innerHTML = ICON;
+      download.innerHTML = this.DOWNLOAD_ICON;
       download.classList.add('textures__icon');
 
       row.appendChild(label);
@@ -204,6 +204,7 @@ class Textures extends ResizableWindow
       this.texture_container[texture.uuid] = texture.instance;
       // this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
       row.dataset.texture_uuid = texture.uuid;
+      row.dataset.texture_name = texture.name;
 
       row.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
       // row.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
@@ -319,21 +320,8 @@ class Textures extends ResizableWindow
 
       this.bitmap_container[texture_uuid] = bitmap;
     }
-    this.preview_image(dataset.bitmap_data_url, bitmap.width, bitmap.height);
-  }
-
-  preview_image(bitmap_data_url, width, height)
-  {
-    this.image_preview_elem.src = bitmap_data_url;
-    const aspect = width / height;
-    this.image_preview_elem.style.width = '256px';
-    this.image_preview_elem.style.height = `${256 / aspect}px`;
-
-    // this.image_preview_elem.style.left = ((window.innerWidth / 2) - 128) + 'px';
-    this.image_preview_elem.style.left = '20px';
-    // this.image_preview_elem.style.top = ((window.innerHeight / 2) - (128 * (1 / aspect))) + 'px';
-    this.image_preview_elem.style.top = ((window.innerHeight) - (256 * (1 / aspect))) - 20 + 'px';
-    this.image_preview_elem.style.visibility = 'visible';
+    this.texture_preview.set_image(dataset.bitmap_data_url, bitmap.width, bitmap.height, dataset.texture_name);
+    this.texture_preview.show();
   }
 
   async download_image(texture, name)

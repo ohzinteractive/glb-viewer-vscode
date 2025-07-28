@@ -82,10 +82,12 @@
 
     padding: 5 * $ptr 10 * $ptr;
 
+    width: 150px;
+
     background-color: var(--background-color-alt);
 
     border-radius: $border-radius;
-    width: 150px;
+
     svg {
       width: 16 * $ptr;
       height: 16 * $ptr;

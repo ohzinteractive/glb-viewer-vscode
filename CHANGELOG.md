@@ -2,6 +2,14 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.4.1] - 2025-07-28
+
+### Added
+ - Texture preview window
+
+### Improved
+ - Hierarchy window
+
 ## [2.4.0] - 2025-07-27
 
 ### Added
@@ -19,7 +27,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ### Fixed
  - Issue when opening info panels on a model with no materials
 
- 
+
 ## [2.2.0] - 2025-07-14
 
 ### Improved
