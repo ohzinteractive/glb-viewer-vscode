@@ -322,9 +322,11 @@ class SceneController
     const box = new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
 
+    let max_radius = 0.01;
     if (center.length() < 0.001)
     {
       obj.getWorldPosition(center);
+      max_radius = 1;
     }
     const size = box.getSize(new Vector3());
     const bounding_sphere_radius = size.length() / 2;
@@ -332,14 +334,13 @@ class SceneController
     const fov = MathUtils.degToRad(this.camera.fov);
     const aspect = this.camera.aspect;
 
-    const distance_for_height = Math.max(1, bounding_sphere_radius) / Math.sin(fov / 2);
-    const distance_for_width = Math.max(1, bounding_sphere_radius) / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
+    const distance_for_height = Math.max(max_radius, bounding_sphere_radius) / Math.sin(fov / 2);
+    const distance_for_width = Math.max(max_radius, bounding_sphere_radius) / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
     const fit_distance = Math.max(distance_for_height, distance_for_width) * 1.2;
 
     const direction = new Vector3();
     this.camera.getWorldDirection(direction);
     direction.negate();
-
     const new_position = center.clone().add(direction.multiplyScalar(fit_distance));
     this.camera.position.copy(new_position);
     this.camera.updateProjectionMatrix();
