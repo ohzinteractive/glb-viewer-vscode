@@ -2,6 +2,18 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.5.0] - 2025-07-28
+
+### Added
+ - Support for skeleton visualization
+ - Support for skeleton animation
+
+### Improved
+ - Texture window now has better organization for texture items
+
+### Fixed
+ - Info panel reporting wrong number of vertices
+
 ## [2.4.1] - 2025-07-28
 
 ### Added
