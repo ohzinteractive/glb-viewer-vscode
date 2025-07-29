@@ -15,6 +15,7 @@ import {
   FrontSide,
   GridHelper,
   HemisphereLight,
+  InstancedMesh,
   MathUtils,
   Matrix4,
   Mesh,
@@ -93,6 +94,9 @@ class SceneController
     this.selected_mesh.renderOrder = 500;
     this.selected_skinned_mesh = new SkinnedMesh(new BufferGeometry(), wireframe_material.clone());
     this.selected_skinned_mesh.renderOrder = 500;
+
+    this.selected_instanced_mesh = new InstancedMesh(new BufferGeometry(), wireframe_material.clone());
+    this.selected_instanced_mesh.renderOrder = 500;
 
     this.selected_empty_object = new Object3D();
 
@@ -253,9 +257,7 @@ class SceneController
         }
         else
         {
-          this.selected_mesh.visible = false;
-          this.selected_skinned_mesh.visible = false;
-          this.selected_empty_object.visible = false;
+          this.clear_selection();
         }
       }
     }
@@ -286,16 +288,21 @@ class SceneController
 
   highlight_object(obj, instance_id)
   {
-    this.selected_mesh.visible = false;
-    this.selected_skinned_mesh.visible = false;
-    this.selected_empty_object.visible = false;
+    this.clear_selection();
+
     this.skeleton_visualizer.hide_all();
     this.selected_skinned_mesh.removeFromParent();
+    this.selected_instanced_mesh.removeFromParent();
     this.selected_mesh.removeFromParent();
     this.selected_empty_object.removeFromParent();
 
     if (obj.geometry)
     {
+      console.log(obj);
+      if (obj.isInstancedMesh)
+      {
+        console.log('is instanced', obj);
+      }
       if (obj.isSkinnedMesh)
       {
         this.selected_skinned_mesh.visible = true;
@@ -308,11 +315,26 @@ class SceneController
       }
       else
       {
-        this.selected_mesh.visible = true;
-        this.selected_mesh.geometry = obj.geometry;
-        this.selected_mesh.morphTargetDictionary = obj.morphTargetDictionary;
-        this.selected_mesh.morphTargetInfluences = obj.morphTargetInfluences;
-        this.scene.add(this.selected_mesh);
+        if (obj.isInstancedMesh)
+        {
+          this.selected_instanced_mesh.visible               = true;
+          this.selected_instanced_mesh.geometry              = obj.geometry;
+          this.selected_instanced_mesh.morphTargetDictionary = obj.morphTargetDictionary;
+          this.selected_instanced_mesh.morphTargetInfluences = obj.morphTargetInfluences;
+          this.selected_instanced_mesh.count                 = obj.count;
+          this.selected_instanced_mesh.instanceColor         = obj.instanceColor;
+          this.selected_instanced_mesh.instanceMatrix        = obj.instanceMatrix;
+          this.selected_instanced_mesh.morphTexture          = obj.morphTexture;
+          this.scene.add(this.selected_instanced_mesh);
+        }
+        else
+        {
+          this.selected_mesh.visible = true;
+          this.selected_mesh.geometry = obj.geometry;
+          this.selected_mesh.morphTargetDictionary = obj.morphTargetDictionary;
+          this.selected_mesh.morphTargetInfluences = obj.morphTargetInfluences;
+          this.scene.add(this.selected_mesh);
+        }
         // console.log('NORMAL OBJECT SELECTED', obj, this.selected_mesh);
       }
       obj.getWorldPosition(this.selected_mesh.position);
@@ -403,7 +425,6 @@ class SceneController
 
   handle_object_click(object3d, instance_id)
   {
-    console.log('asdlkj');
     this.ui_controller.handle_object_click(object3d, instance_id);
   }
 
@@ -568,6 +589,14 @@ class SceneController
       this.remove_normal_helpers();
       this.populate_normal_helpers();
     }
+  }
+
+  clear_selection()
+  {
+    this.selected_mesh.visible = false;
+    this.selected_skinned_mesh.visible = false;
+    this.selected_empty_object.visible = false;
+    this.selected_instanced_mesh.visible = false;
   }
 }
 
