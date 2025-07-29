@@ -298,11 +298,6 @@ class SceneController
 
     if (obj.geometry)
     {
-      console.log(obj);
-      if (obj.isInstancedMesh)
-      {
-        console.log('is instanced', obj);
-      }
       if (obj.isSkinnedMesh)
       {
         this.selected_skinned_mesh.visible = true;
@@ -311,7 +306,6 @@ class SceneController
         this.selected_skinned_mesh.morphTargetDictionary = obj.morphTargetDictionary;
         this.selected_skinned_mesh.morphTargetInfluences = obj.morphTargetInfluences;
         this.scene.add(this.selected_skinned_mesh);
-        // console.log('SKINNED MESH SELECTED', obj, this.selected_skinned_mesh);
       }
       else
       {
@@ -335,7 +329,6 @@ class SceneController
           this.selected_mesh.morphTargetInfluences = obj.morphTargetInfluences;
           this.scene.add(this.selected_mesh);
         }
-        // console.log('NORMAL OBJECT SELECTED', obj, this.selected_mesh);
       }
       obj.getWorldPosition(this.selected_mesh.position);
       obj.getWorldScale(this.selected_mesh.scale);

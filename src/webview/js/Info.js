@@ -40,7 +40,7 @@ class Info extends ResizableWindow
     this.$container.classList.add('hidden');
   }
 
-  rendered_vertex_count(scene)
+  model_vertex_count(scene)
   {
     let total = 0;
     scene.traverse((child) =>
@@ -53,28 +53,66 @@ class Info extends ResizableWindow
     return total;
   }
 
+  rendered_vertex_count(scene)
+  {
+    let total = 0;
+    scene.traverse((child) =>
+    {
+      if (child.geometry && child.isInstancedMesh === undefined)
+      {
+        total += child.geometry.getAttribute('position').count;
+      }
+    });
+    return total;
+  }
+
+  instanced_vertex_count(scene)
+  {
+    let total = 0;
+    scene.traverse((child) =>
+    {
+      if (child.isInstancedMesh)
+      {
+        total += child.geometry.getAttribute('position').count * child.count;
+      }
+    });
+    return total;
+  }
+
   fill_info()
   {
     const gltf = this.scene_controller.gltf;
+    const model_vertices = this.model_vertex_count(this.scene_controller.model);
     const vertices = this.rendered_vertex_count(this.scene_controller.model);
-
+    const instanced_vertices = this.instanced_vertex_count(this.scene_controller.model);
     this.$content.innerHTML = '';
 
-    this.create_node('Drawcalls',      this.scene_controller.scene_drawcall_count);
-    this.create_node('Geometries', gltf.parser.json.meshes?.length || 0);
-    this.create_node('Textures',   gltf.parser.json.textures?.length || 0);
-    this.create_node('Animations', gltf.animations.length);
-    this.create_node('Materials',  gltf.parser.json.materials?.length || 0);
-    this.create_node('Images',     gltf.parser.json.images?.length || 0);
-    this.create_node('Vertices',   vertices);
-    this.create_node('Generator',  gltf.asset.generator || 'Unknown');
-    if (gltf.parser.json.extensionsUsed)
+    this.create_node('drawcalls', 'Drawcalls',   this.scene_controller.scene_drawcall_count);
+    this.create_node('geometries', 'Geometries', gltf.parser.json.meshes?.length || 0);
+    this.create_node('textures', 'Textures',     gltf.parser.json.textures?.length || 0);
+    this.create_node('animations', 'Animations', gltf.animations.length);
+    this.create_node('materials', 'Materials',   gltf.parser.json.materials?.length || 0);
+    this.create_node('images', 'Images',         gltf.parser.json.images?.length || 0);
+
+    if (instanced_vertices > 0)
     {
-      this.create_node('Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
+      this.create_node('model-vertices', 'Model vertices',     model_vertices);
+      this.create_node('drawn-vertices', 'Drawn vertices',     vertices + instanced_vertices);
+      this.create_node('regular-vertices',   '---> Regular Vertices', vertices);
+      this.create_node('instanced-vertices', '---> Instanced vertices', instanced_vertices);
+      this.create_node('generator', 'Generator',  gltf.asset.generator || 'Unknown');
     }
     else
     {
-      this.create_node('Extensions', 'None');
+      this.create_node('model-vertices', 'Vertices',     model_vertices);
+    }
+    if (gltf.parser.json.extensionsUsed)
+    {
+      this.create_node('extensions', 'Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');
+    }
+    else
+    {
+      this.create_node('extensions', 'Extensions', 'None');
     }
   }
 
@@ -88,14 +126,14 @@ class Info extends ResizableWindow
     return this.scene_controller.animation_controller.animations.length;
   }
 
-  create_node(label, value)
+  create_node(id, label, value)
   {
     const $node = document.createElement('div');
     const $label = document.createElement('div');
     const $value = document.createElement('div');
 
     $node.classList.add('info-node');
-    $node.classList.add(`info-node--${label.toLowerCase()}`);
+    $node.classList.add(`info-node--${id}`);
     $label.classList.add('info-node__label');
     $value.classList.add('info-node__value');
 
