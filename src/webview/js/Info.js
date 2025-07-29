@@ -55,14 +55,12 @@ class Info extends ResizableWindow
 
   fill_info()
   {
-    const info = this.scene_controller.renderer.renderer.info;
     const gltf = this.scene_controller.gltf;
-    const vertices = this.rendered_vertex_count(this.scene_controller.scene);
-    // console.log(gltf);
+    const vertices = this.rendered_vertex_count(this.scene_controller.model);
 
     this.$content.innerHTML = '';
 
-    this.create_node('Drawcalls',      info.render.calls);
+    this.create_node('Drawcalls',      this.scene_controller.scene_drawcall_count);
     this.create_node('Geometries', gltf.parser.json.meshes?.length);
     this.create_node('Textures',   gltf.parser.json.textures?.length || 0);
     this.create_node('Animations', gltf.animations.length);
@@ -70,7 +68,6 @@ class Info extends ResizableWindow
     this.create_node('Images',     gltf.parser.json.images?.length || 0);
     this.create_node('Vertices',   vertices);
     this.create_node('Generator',  gltf.asset.generator || 'Unknown');
-    // console.log(gltf.parser.json);
     if (gltf.parser.json.extensionsUsed)
     {
       this.create_node('Extensions', gltf.parser.json.extensionsUsed.length > 0 ? (gltf.parser.json.extensionsUsed.join('<br> ')) : 'None');

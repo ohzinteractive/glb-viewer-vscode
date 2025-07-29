@@ -34,10 +34,15 @@ export class Renderer
     this.renderer.clear(true, true, true);
 
     this.renderer.render(scene, camera);
-
     this.renderer.clear(false, true, false);
 
     this.renderer.render(overlay_scene, camera);
+  }
+
+  get_drawcall_count(scene, camera)
+  {
+    this.renderer.render(scene, camera);
+    return this.renderer.info.render.calls;
   }
 
   resize_if_needed(bounds)

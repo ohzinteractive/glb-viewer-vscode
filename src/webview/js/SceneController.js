@@ -125,6 +125,7 @@ class SceneController
     this.overlay_scene = new Scene();
     this.skeleton_visualizer = new SkeletonVisualizer();
     this.overlay_scene.add(this.skeleton_visualizer);
+    this.scene_drawcall_count = 0;
   }
 
   init(ui_controller)
@@ -186,8 +187,6 @@ class SceneController
         child_box.getSize(child.globalScale);
       });
 
-      this.skeleton_visualizer.init_from_scene(this.model);
-
       const box = new Box3().setFromObject(this.model, true);
       const size = box.getSize(new Vector3()).length();
       const center = box.getCenter(new Vector3());
@@ -200,8 +199,14 @@ class SceneController
       {
         this.camera.near = 0.01;
       }
-      this.ui_controller.update_panel_contents(this.model);
+
       this.focus_camera_on_object(this.model, false);
+
+      this.scene_drawcall_count = this.renderer.get_drawcall_count(this.model, this.camera);
+
+      this.ui_controller.update_panel_contents(this.model);
+
+      this.skeleton_visualizer.init_from_scene(this.model);
 
       for (let i = 0; i < this.subscribers.length; i++)
       {
