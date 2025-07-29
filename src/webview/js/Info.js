@@ -61,7 +61,7 @@ class Info extends ResizableWindow
     this.$content.innerHTML = '';
 
     this.create_node('Drawcalls',      this.scene_controller.scene_drawcall_count);
-    this.create_node('Geometries', gltf.parser.json.meshes?.length);
+    this.create_node('Geometries', gltf.parser.json.meshes?.length || 0);
     this.create_node('Textures',   gltf.parser.json.textures?.length || 0);
     this.create_node('Animations', gltf.animations.length);
     this.create_node('Materials',  gltf.parser.json.materials?.length || 0);
