@@ -122,9 +122,9 @@ class SceneController
     });
 
     this.subscribers = [];
-
+    this.overlay_scene = new Scene();
     this.skeleton_visualizer = new SkeletonVisualizer();
-    this.scene.add(this.skeleton_visualizer);
+    this.overlay_scene.add(this.skeleton_visualizer);
   }
 
   init(ui_controller)
@@ -255,7 +255,7 @@ class SceneController
     }
     this.selected_empty_object.scale.setScalar(this.getWorldSizeFromScreenSize(100, this.selected_empty_object.position, this.camera));
     this.skeleton_visualizer.update();
-    this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.scene, this.camera, this.overlay_scene);
     this.input.clear();
   }
 

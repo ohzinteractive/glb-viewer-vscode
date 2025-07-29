@@ -7,7 +7,8 @@ export class Renderer
     this.container_size = { width: 1, height: 1 };
     this.DOMContainer = DOMContainer;
 
-    this.renderer = new WebGLRenderer({ antialias: true });
+    this.renderer = new WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    this.renderer.autoClear = false;
     this.renderer.setSize(1, 1);
     DOMContainer.appendChild(this.renderer.domElement);
 
@@ -23,15 +24,20 @@ export class Renderer
     this.resize_observer.observe(DOMContainer);
   }
 
-  render(scene, camera)
+  render(scene, camera, overlay_scene)
   {
     camera.aspect = this.container_size.width / this.container_size.height;
     camera.updateProjectionMatrix();
 
     this.renderer.setClearColor(camera.clear_color);
     this.renderer.setClearAlpha(camera.clear_alpha);
+    this.renderer.clear(true, true, true);
 
     this.renderer.render(scene, camera);
+
+    this.renderer.clear(false, true, false);
+
+    this.renderer.render(overlay_scene, camera);
   }
 
   resize_if_needed(bounds)
