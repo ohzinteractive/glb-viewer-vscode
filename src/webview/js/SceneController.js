@@ -254,6 +254,7 @@ class SceneController
       }
     }
     this.selected_empty_object.scale.setScalar(this.getWorldSizeFromScreenSize(100, this.selected_empty_object.position, this.camera));
+    this.skeleton_visualizer.update();
     this.renderer.render(this.scene, this.camera);
     this.input.clear();
   }

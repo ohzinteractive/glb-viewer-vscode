@@ -71,4 +71,28 @@ export class SkeletonVisualizer extends Object3D
       this.bones_mesh_dic[name].visible = true;
     });
   }
+
+  update()
+  {
+    for (let i = 0; i < this.bones.length; i++)
+    {
+      const bone = this.bones[i];
+      const mesh = this.bones_mesh_dic[bone.name];
+
+      if (bone.children.length > 0)
+      {
+        bone.getWorldPosition(mesh.position);
+        bone.getWorldQuaternion(mesh.quaternion);
+        const next_child_pos = new Vector3().copy(mesh.position);
+        bone.children[0].getWorldPosition(next_child_pos);
+        const dir = next_child_pos.clone().sub(mesh.position).normalize();
+        mesh.quaternion.setFromUnitVectors(new Vector3(0, 0, 1), dir);
+        mesh.scale.z = mesh.position.distanceTo(next_child_pos);
+      }
+      else
+      {
+        bone.getWorldPosition(mesh.position);
+      }
+    }
+  }
 }
