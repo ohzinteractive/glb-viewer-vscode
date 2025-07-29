@@ -9,6 +9,7 @@ import {
   Box3,
   BufferGeometry,
   Color,
+  ConeGeometry,
   DirectionalLight,
   DoubleSide,
   FrontSide,
@@ -24,6 +25,7 @@ import {
   Raycaster,
   Scene,
   SkinnedMesh,
+  SphereGeometry,
   Vector3
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -34,6 +36,7 @@ import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { AnimationController } from './AnimationController.js';
 import { StudioLightScene } from './StudioLightScene.js';
 import { Time } from './Time.js';
+import { SkeletonVisualizer } from './SkeletonVisualizer.js';
 
 class SceneController
 {
@@ -119,6 +122,9 @@ class SceneController
     });
 
     this.subscribers = [];
+
+    this.skeleton_visualizer = new SkeletonVisualizer();
+    this.scene.add(this.skeleton_visualizer);
   }
 
   init(ui_controller)
@@ -179,6 +185,8 @@ class SceneController
         child_box.getCenter(child.globalPosition);
         child_box.getSize(child.globalScale);
       });
+
+      this.skeleton_visualizer.init_from_scene(this.model);
 
       const box = new Box3().setFromObject(this.model, true);
       const size = box.getSize(new Vector3()).length();
@@ -274,6 +282,7 @@ class SceneController
     this.selected_mesh.visible = false;
     this.selected_skinned_mesh.visible = false;
     this.selected_empty_object.visible = false;
+    this.skeleton_visualizer.hide_all();
     this.selected_skinned_mesh.removeFromParent();
     this.selected_mesh.removeFromParent();
     this.selected_empty_object.removeFromParent();
@@ -311,6 +320,11 @@ class SceneController
     this.scene.add(this.selected_empty_object);
     obj.getWorldPosition(this.selected_empty_object.position);
     obj.getWorldQuaternion(this.selected_empty_object.quaternion);
+
+    if (obj.isBone)
+    {
+      this.skeleton_visualizer.show_bone_hierarchy(obj);
+    }
   }
 
   focus_camera_on_object(obj, highlight = true)
@@ -326,7 +340,7 @@ class SceneController
     if (center.length() < 0.001)
     {
       obj.getWorldPosition(center);
-      max_radius = 1;
+      max_radius = 0.25;
     }
     const size = box.getSize(new Vector3());
     const bounding_sphere_radius = size.length() / 2;
