@@ -25,11 +25,11 @@ class UIController
 
   }
 
-  handle_object_click(object3d)
+  handle_object_click(object3d, instance_id)
   {
-    this.details.handle_object_click(object3d);
-    this.panel.contents.hierarchy.handle_object_click(object3d);
-    this.scene_controller.focus_camera_on_object(object3d);
+    this.details.handle_object_click(object3d, instance_id);
+    this.panel.contents.hierarchy.handle_object_click(object3d, instance_id);
+    this.scene_controller.focus_camera_on_object(object3d, true, instance_id);
   }
 
   update_panel_contents(object3d)

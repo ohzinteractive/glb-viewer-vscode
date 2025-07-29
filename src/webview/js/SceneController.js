@@ -16,6 +16,7 @@ import {
   GridHelper,
   HemisphereLight,
   MathUtils,
+  Matrix4,
   Mesh,
   MeshBasicMaterial,
   MeshNormalMaterial,
@@ -248,7 +249,7 @@ class SceneController
         const visible_intersection = intersections.find(inter => inter.object.visible);
         if (visible_intersection)
         {
-          this.handle_object_click(visible_intersection.object);
+          this.handle_object_click(visible_intersection.object, visible_intersection.instanceId);
         }
         else
         {
@@ -283,7 +284,7 @@ class SceneController
     this.subscribers.push(object);
   }
 
-  highlight_object(obj)
+  highlight_object(obj, instance_id)
   {
     this.selected_mesh.visible = false;
     this.selected_skinned_mesh.visible = false;
@@ -317,15 +318,31 @@ class SceneController
       obj.getWorldPosition(this.selected_mesh.position);
       obj.getWorldScale(this.selected_mesh.scale);
       obj.getWorldQuaternion(this.selected_mesh.quaternion);
+
+      if (instance_id !== undefined)
+      {
+        const mat = new Matrix4();
+        obj.getMatrixAt(instance_id, mat);
+        mat.decompose(this.selected_mesh.position, this.selected_mesh.quaternion, this.selected_mesh.scale);
+      }
     }
 
     if (this.axis_helper.visible)
     {
       this.selected_empty_object.visible = true;
     }
+
     this.scene.add(this.selected_empty_object);
+
     obj.getWorldPosition(this.selected_empty_object.position);
     obj.getWorldQuaternion(this.selected_empty_object.quaternion);
+
+    if (instance_id !== undefined)
+    {
+      const mat = new Matrix4();
+      obj.getMatrixAt(instance_id, mat);
+      mat.decompose(this.selected_empty_object.position, this.selected_empty_object.quaternion, new Vector3());
+    }
 
     if (obj.isBone)
     {
@@ -333,14 +350,15 @@ class SceneController
     }
   }
 
-  focus_camera_on_object(obj, highlight = true)
+  focus_camera_on_object(obj, highlight = true, instance_id)
   {
     if (highlight)
     {
-      this.highlight_object(obj);
+      this.highlight_object(obj, instance_id);
     }
     const box = new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
+    const size = box.getSize(new Vector3());
 
     let max_radius = 0.01;
     if (center.length() < 0.001)
@@ -348,7 +366,16 @@ class SceneController
       obj.getWorldPosition(center);
       max_radius = 0.25;
     }
-    const size = box.getSize(new Vector3());
+
+    if (instance_id !== undefined)
+    {
+      const mat = new Matrix4();
+      obj.getMatrixAt(instance_id, mat);
+      center.setFromMatrixPosition(mat);
+      box.setFromBufferAttribute(obj.geometry.attributes.position);
+      box.getSize(size);
+    }
+
     const bounding_sphere_radius = size.length() / 2;
 
     const fov = MathUtils.degToRad(this.camera.fov);
@@ -374,9 +401,10 @@ class SceneController
     }
   }
 
-  handle_object_click(object3d)
+  handle_object_click(object3d, instance_id)
   {
-    this.ui_controller.handle_object_click(object3d);
+    console.log('asdlkj');
+    this.ui_controller.handle_object_click(object3d, instance_id);
   }
 
   handle_action_click(action, active)

@@ -91,10 +91,16 @@ class Details extends ResizableWindow
           value = JSON.stringify(value);
         }
       }
-      if (key === 'type' && (value === 'Mesh' || value === 'SkinnedMesh'))
+
+      if (key === 'type')
       {
-        value += ` (${obj.geometry.attributes.position.count} vertices)`;
+        if (obj.geometry)
+        {
+          value = this.get_mesh_type(obj);
+          value += ` (${obj.geometry.attributes.position.count} vertices)`;
+        }
       }
+
       const $new_details_item = document.createElement('div');
       $new_details_item.classList.add('details__item');
 
@@ -109,6 +115,14 @@ class Details extends ResizableWindow
 
       $item_label.textContent   = this.prettify_name(key) + ': ';
       $item_content.textContent = value;
+
+      if (key === 'type' && obj.isInstancedMesh)
+      {
+        const $instanced_item_content = document.createElement('div');
+        $instanced_item_content.classList.add('details__item-content');
+        $new_details_item.appendChild($instanced_item_content);
+        $instanced_item_content.textContent = `Instance count: ${obj.count} (${obj.geometry.attributes.position.count * obj.count} vertices)`;
+      }
 
       const $item_copy_icon = document.createElement('div');
       $item_copy_icon.classList.add('details__item-copy-icon');
@@ -156,6 +170,23 @@ class Details extends ResizableWindow
     {
       return name;
     }
+  }
+
+  get_mesh_type(obj)
+  {
+    if (obj.isSkinnedMesh)
+    {
+      return 'SkinnedMesh';
+    }
+    if (obj.isInstancedMesh)
+    {
+      return 'InstancedMesh';
+    }
+    if (obj.isMesh)
+    {
+      return 'Mesh';
+    }
+    return obj.type;
   }
 }
 
