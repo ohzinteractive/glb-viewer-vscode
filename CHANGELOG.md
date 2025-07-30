@@ -2,6 +2,13 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.6.0] - 2025-07-29
+
+### Improved
+ - Better instancing compatibility
+ - More details in the info panel when using instancing
+ - Visibility icons in the hierarchy are now better
+
 ## [2.5.0] - 2025-07-28
 
 ### Added
