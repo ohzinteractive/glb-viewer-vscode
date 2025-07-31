@@ -66,6 +66,8 @@
 
     cursor: pointer;
 
+    width: 18 * $ptr;
+
     &:hover {
       transform: scale(1.1);
     }

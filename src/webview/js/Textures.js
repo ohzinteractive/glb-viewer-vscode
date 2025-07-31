@@ -1,5 +1,6 @@
 import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
+import { TextureItem } from './TextureItem';
 import { TexturePreview } from './TexturePreview';
 
 class Textures extends ResizableWindow
@@ -32,10 +33,8 @@ class Textures extends ResizableWindow
     this.$close_button = container.querySelector('.textures-header__close');
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
 
-    this.texture_list = [];
+    this.texture_items = [];
     this.texture_table = container.querySelector('.textures-table');
-
-    this.DOWNLOAD_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>';
   }
 
   init(scene_controller)
@@ -118,8 +117,7 @@ class Textures extends ResizableWindow
       }
     });
 
-    this.texture_list = Array.from(texture_map.values());
-
+    const texture_list = Array.from(texture_map.values());
     /* output example:
     {
       name: 'WoodTexture',
@@ -140,6 +138,7 @@ class Textures extends ResizableWindow
       ]
     }
     */
+    this.texture_items = texture_list.map(texture => new TextureItem(texture, this));
   }
 
   update_contents(object3d)
@@ -151,98 +150,18 @@ class Textures extends ResizableWindow
   async build_textures_list()
   {
     const texture_rows = [];
-    for (let i = 0; i < this.texture_list.length; i++)
+    for (let i = 0; i < this.texture_items.length; i++)
     {
-      const texture = this.texture_list[i];
-      const label = document.createElement('td');
-      const mesh_names = document.createElement('td');
-      const materials = document.createElement('td');
-      const types = document.createElement('td');
-      const resolution = document.createElement('td');
-      const download = document.createElement('td');
-      const row = document.createElement('tr');
+      const texture = this.texture_items[i];
+      const row = texture.get_row();
 
-      row.addEventListener('click', () =>
-      {
-        this.handle_row_click(row);
-      });
-
-      resolution.classList.add('textures-table__resolution');
-      label.textContent = texture.name;
-      label.title = texture.name;
-
-      // Check if all channels are the same
-      const channels = texture.used_in.map(material => material.channel || 'Unknown');
-      const allChannelsSame = channels.every(channel => channel === channels[0]);
-
-      // Check if all material names are the same
-      const materialNames = texture.used_in.map(material => material.material_name || 'Unknown Material');
-      const allMaterialNamesSame = materialNames.every(name => name === materialNames[0]);
-
-      for (let i = 0; i < texture.used_in.length; i++)
-      {
-        const material = texture.used_in[i];
-        const material_elem = document.createElement('div');
-        const type_elem = document.createElement('div');
-        const mesh_elem = document.createElement('div');
-        mesh_elem.classList.add('textures-table__mesh-name');
-
-        if (!allMaterialNamesSame)
-        {
-          material_elem.textContent = material.material_name || 'Unknown Material';
-          material_elem.title = material.material_name || 'Unknown Material';
-        }
-
-        if (!allChannelsSame)
-        {
-          type_elem.textContent = material.channel || 'Unknown';
-          type_elem.title = material.channel || 'Unknown';
-        }
-
-        mesh_elem.textContent = material.mesh_name || 'Unknown Mesh';
-        mesh_elem.title = material.mesh_name || 'Unknown Mesh';
-        materials.appendChild(material_elem);
-        types.appendChild(type_elem);
-        mesh_names.appendChild(mesh_elem);
-        mesh_elem.addEventListener('click', () =>
-        {
-          if (this.panel.handle_mesh_name_click(material.mesh_name)) this.handle_close_button_click();
-        });
-      }
-      if (allChannelsSame)
-      {
-        const type_elem = document.createElement('div');
-        type_elem.textContent = texture.used_in[0].channel;
-        type_elem.title = texture.used_in[0].channel;
-        types.appendChild(type_elem);
-      }
-      if (allMaterialNamesSame)
-      {
-        const material_elem = document.createElement('div');
-        material_elem.textContent = texture.used_in[0].material_name;
-        material_elem.title = texture.used_in[0].material_name;
-        materials.appendChild(material_elem);
-      }
-
-      resolution.textContent = `${texture.image.width}x${texture.image.height}`;
-
-      download.innerHTML = this.DOWNLOAD_ICON;
-      download.classList.add('textures__icon');
-
-      row.appendChild(label);
-      row.appendChild(mesh_names);
-      row.appendChild(materials);
-      row.appendChild(types);
-      row.appendChild(resolution);
-      row.appendChild(download);
       this.texture_container[texture.uuid] = texture.instance;
-      // this.bitmap_container[texture.uuid] = await this.get_image_bitmap(texture.instance);
       row.dataset.texture_uuid = texture.uuid;
       row.dataset.texture_name = texture.name;
 
-      row.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
-      // row.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
-      download.addEventListener('click', this.download_image.bind(this, texture.instance, texture.name));
+      row.addEventListener('click', this.on_texture_node_click.bind(this));
+      // row.addEventListener('mouseenter', this.on_texture_node_mouse_enter.bind(this));
+
       texture_rows.push(row);
     }
 
@@ -339,23 +258,69 @@ class Textures extends ResizableWindow
     return this.canvas.toDataURL();
   }
 
-  async on_texture_node_mouse_enter(evt)
+  // async on_texture_node_mouse_enter(evt)
+  // {
+  //   const row = evt.srcElement;
+  //   const selected_row = this.$content_container.querySelector('.selected');
+  //   if (selected_row)
+  //   {
+  //     selected_row.classList.remove('selected');
+  //   }
+  //   if (row !== selected_row)
+  //   {
+  //     row.classList.add('selected');
+  //     const dataset = row.dataset;
+  //     const texture_uuid = dataset.texture_uuid;
+
+  //     let bitmap = this.bitmap_container[texture_uuid];
+
+  //     if (bitmap === undefined)
+  //     {
+  //       const texture = this.texture_container[texture_uuid];
+  //       bitmap = await this.get_image_bitmap(texture);
+  //       dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
+
+  //       this.bitmap_container[texture_uuid] = bitmap;
+  //     }
+  //     this.texture_preview.set_image(dataset.bitmap_data_url, bitmap.width, bitmap.height, dataset.texture_name);
+  //     this.texture_preview.show();
+  //   }
+  // }
+
+  async on_texture_node_click(evt)
   {
-    const dataset = evt.srcElement.dataset;
-    const texture_uuid = dataset.texture_uuid;
+    evt.preventDefault();
+    evt.stopPropagation();
 
-    let bitmap = this.bitmap_container[texture_uuid];
-
-    if (bitmap === undefined)
+    const row = evt.currentTarget;
+    const selected_row = this.$content_container.querySelector('.selected');
+    if (selected_row)
     {
-      const texture = this.texture_container[texture_uuid];
-      bitmap = await this.get_image_bitmap(texture);
-      dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
-
-      this.bitmap_container[texture_uuid] = bitmap;
+      selected_row.classList.remove('selected');
     }
-    this.texture_preview.set_image(dataset.bitmap_data_url, bitmap.width, bitmap.height, dataset.texture_name);
-    this.texture_preview.show();
+    if (row !== selected_row)
+    {
+      row.classList.add('selected');
+      const dataset = row.dataset;
+      const texture_uuid = dataset.texture_uuid;
+
+      let bitmap = this.bitmap_container[texture_uuid];
+
+      if (bitmap === undefined)
+      {
+        const texture = this.texture_container[texture_uuid];
+        bitmap = await this.get_image_bitmap(texture);
+        dataset.bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
+
+        this.bitmap_container[texture_uuid] = bitmap;
+      }
+      this.texture_preview.set_image(dataset.bitmap_data_url, bitmap.width, bitmap.height, dataset.texture_name);
+      this.texture_preview.show();
+    }
+    else
+    {
+      this.texture_preview.hide();
+    }
   }
 
   async download_image(texture, name)
@@ -375,16 +340,11 @@ class Textures extends ResizableWindow
     this.panel.deactivate_button(this.name);
   }
 
-  handle_row_click(row)
+  handle_mesh_name_click(mesh_name, row)
   {
-    const selected_row = this.$content_container.querySelector('.selected');
-    if (selected_row)
+    if (this.panel.handle_mesh_name_click(mesh_name))
     {
-      selected_row.classList.remove('selected');
-    }
-    if (row !== selected_row)
-    {
-      row.classList.add('selected');
+      this.handle_close_button_click();
     }
   }
 }
