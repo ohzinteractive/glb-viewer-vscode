@@ -112,7 +112,12 @@ class TextureItem
 
     this.columns.download.innerHTML = this.DOWNLOAD_ICON;
     this.columns.download.classList.add('textures__icon');
-    this.columns.download.addEventListener('click', this.parent.download_image.bind(this, this.instance, this.name));
+    this.columns.download.addEventListener('click', (evt) =>
+    {
+      evt.preventDefault();
+      evt.stopPropagation();
+      this.parent.download_image(this);
+    });
 
     this.set_collapsed_content();
     this.set_expanded_content();

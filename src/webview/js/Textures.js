@@ -277,14 +277,14 @@ class Textures extends ResizableWindow
     }
   }
 
-  async download_image(texture, name)
+  async download_image(texture_item)
   {
     console.log('download image');
-    const bitmap = await this.get_image_bitmap(texture, true);
+    const bitmap = await this.get_image_bitmap(texture_item.instance, true);
     const data_url = this.image_bitmap_to_data_url(bitmap);
     const a = document.createElement('a');
     a.href = data_url;
-    a.download = `${name} (${bitmap.width}x${bitmap.height})`;
+    a.download = `${texture_item.name} (${bitmap.width}x${bitmap.height})`;
     a.click();
   }
 
