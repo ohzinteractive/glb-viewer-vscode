@@ -1,6 +1,6 @@
 class TextureItem
 {
-  constructor(texture, parent)
+  constructor(texture, parent, key)
   {
     this.parent = parent;
     this.name = texture.name;
@@ -10,11 +10,16 @@ class TextureItem
     this.used_in = texture.used_in;
     this.expanded = false;
 
+    this.bitmap = null;
+
+    this.key = key;
+
     this.mesh_elements = [];
     this.material_elements = [];
     this.type_elements = [];
 
     this.row = document.createElement('tr');
+    this.row.addEventListener('click', () => this.parent.on_row_click(this));
 
     this.columns = {
       toggle: document.createElement('td'),
@@ -25,6 +30,24 @@ class TextureItem
       resolution: document.createElement('td'),
       download: document.createElement('td')
     };
+
+    this.collapsed_meshes = document.createElement('div');
+    this.collapsed_materials = document.createElement('div');
+    this.collapsed_types = document.createElement('div');
+
+    this.expanded_meshes = document.createElement('div');
+    this.expanded_meshes.classList.add('hidden');
+    this.expanded_materials = document.createElement('div');
+    this.expanded_materials.classList.add('hidden');
+    this.expanded_types = document.createElement('div');
+    this.expanded_types.classList.add('hidden');
+
+    this.columns.mesh_names.appendChild(this.collapsed_meshes);
+    this.columns.materials.appendChild(this.collapsed_materials);
+    this.columns.types.appendChild(this.collapsed_types);
+    this.columns.mesh_names.appendChild(this.expanded_meshes);
+    this.columns.materials.appendChild(this.expanded_materials);
+    this.columns.types.appendChild(this.expanded_types);
 
     this.DOWNLOAD_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download-icon lucide-download"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>';
     this.OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>';
@@ -54,7 +77,13 @@ class TextureItem
       mesh_elem.classList.add('textures-table__mesh-name');
       mesh_elem.textContent = material.mesh_name || 'Unknown Mesh';
       mesh_elem.title = material.mesh_name || 'Unknown Mesh';
-      mesh_elem.addEventListener('click', () => this.parent.handle_mesh_name_click(material.mesh_name, this.row));
+      mesh_elem.addEventListener('click', (evt) =>
+      {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        this.parent.handle_mesh_name_click(material.mesh_name, this.row);
+      });
 
       material_elem.classList.add('textures-table__material-name');
       material_elem.textContent = material.material_name || 'Unknown Material';
@@ -86,42 +115,63 @@ class TextureItem
     this.columns.download.addEventListener('click', this.parent.download_image.bind(this, this.instance, this.name));
 
     this.set_collapsed_content();
+    this.set_expanded_content();
+  }
+
+  set_bitmap(bitmap)
+  {
+    this.bitmap = bitmap;
   }
 
   set_collapsed_content()
   {
-    this.columns.mesh_names.textContent = '';
-    this.columns.types.textContent = '';
-    this.columns.materials.textContent = '';
-
     if (this.mesh_elements.length > 1)
     {
-      this.columns.mesh_names.textContent = `[${this.mesh_elements.length} meshes]`;
+      this.collapsed_meshes.textContent = `[${this.mesh_elements.length} meshes]`;
     }
     else
     {
-      this.columns.mesh_names.appendChild(this.mesh_elements[0]);
+      this.collapsed_meshes.appendChild(this.mesh_elements[0]);
     }
 
     if (this.type_elements.length > 1 && !this.all_channels_same())
     {
       const set = new Set(this.type_elements.map(el => el.textContent));
-      this.columns.types.textContent = `[${set.size} types]`;
+      this.collapsed_types.textContent = `[${set.size} types]`;
     }
     else
     {
-      this.columns.types.appendChild(this.type_elements[0]);
+      this.collapsed_types.appendChild(this.type_elements[0]);
     }
 
     if (this.material_elements.length > 1 && !this.all_material_names_same())
     {
       const set = new Set(this.material_elements.map(el => el.textContent));
-      this.columns.materials.textContent = `[${set.size} materials]`;
+      this.collapsed_materials.textContent = `[${set.size} materials]`;
     }
     else
     {
-      this.columns.materials.appendChild(this.material_elements[0]);
+      this.collapsed_materials.appendChild(this.material_elements[0]);
     }
+  }
+
+  set_expanded_content()
+  {
+    for (let i = 0; i < this.mesh_elements.length; i++)
+    {
+      const el = this.mesh_elements[i];
+      const clonedEl = el.cloneNode(true);
+      clonedEl.addEventListener('click', (evt) =>
+      {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.parent.handle_mesh_name_click(el.textContent, this.row);
+      });
+      this.expanded_meshes.appendChild(clonedEl);
+    }
+
+    this.expanded_materials.innerHTML = this.material_elements.map(el => el.outerHTML).join('');
+    this.expanded_types.innerHTML = this.type_elements.map(el => el.outerHTML).join('');
   }
 
   all_channels_same()
@@ -158,15 +208,26 @@ class TextureItem
       this.columns.toggle.title = 'Collapse';
       this.columns.toggle.innerHTML = this.CLOSE_ICON;
 
-      this.columns.mesh_names.innerHTML = this.mesh_elements.map(el => el.outerHTML).join('');
-      this.columns.materials.innerHTML = this.material_elements.map(el => el.outerHTML).join('');
-      this.columns.types.innerHTML = this.type_elements.map(el => el.outerHTML).join('');
+      this.expanded_meshes.classList.remove('hidden');
+      this.expanded_materials.classList.remove('hidden');
+      this.expanded_types.classList.remove('hidden');
+
+      this.collapsed_materials.classList.add('hidden');
+      this.collapsed_types.classList.add('hidden');
+      this.collapsed_meshes.classList.add('hidden');
     }
     else
     {
       this.columns.toggle.title = 'Expand';
       this.columns.toggle.innerHTML = this.OPEN_ICON;
-      this.set_collapsed_content();
+
+      this.expanded_materials.classList.add('hidden');
+      this.expanded_types.classList.add('hidden');
+      this.expanded_meshes.classList.add('hidden');
+
+      this.collapsed_materials.classList.remove('hidden');
+      this.collapsed_types.classList.remove('hidden');
+      this.collapsed_meshes.classList.remove('hidden');
     }
   }
 }

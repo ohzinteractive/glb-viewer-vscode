@@ -37,9 +37,21 @@ class TexturePreview extends ResizableWindow
 
     if (!this.has_changed)
     {
+      const new_top = ((window.innerHeight) - (this.$container.offsetHeight)) + 'px';
       this.$container.style.left = '10px';
-      this.$container.style.top = ((window.innerHeight) - (this.$container.offsetHeight)) + 'px';
+      this.$container.style.top = new_top;
     }
+    // else
+    // {
+    //   // Has been moved: only adjust if needed to keep inside window
+    //   const current_top = this.$container.style.top.replace('px', '') * 1;
+    //   const min_top = ((window.innerHeight) - (this.$container.offsetHeight));
+
+    //   if (current_top > min_top)
+    //   {
+    //     this.$container.style.top = min_top + 'px';
+    //   }
+    // }
   }
 
   handle_close_button_click()
