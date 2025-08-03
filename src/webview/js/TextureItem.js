@@ -77,13 +77,6 @@ class TextureItem
       mesh_elem.classList.add('textures-table__mesh-name');
       mesh_elem.textContent = material.mesh_name || 'Unknown Mesh';
       mesh_elem.title = material.mesh_name || 'Unknown Mesh';
-      mesh_elem.addEventListener('click', (evt) =>
-      {
-        evt.preventDefault();
-        evt.stopPropagation();
-
-        this.parent.handle_mesh_name_click(material.mesh_name, this.row);
-      });
 
       material_elem.classList.add('textures-table__material-name');
       material_elem.textContent = material.material_name || 'Unknown Material';
@@ -136,7 +129,14 @@ class TextureItem
     }
     else
     {
-      this.collapsed_meshes.appendChild(this.mesh_elements[0]);
+      const clonedElement = this.mesh_elements[0].cloneNode(true);
+      clonedElement.addEventListener('click', (evt) =>
+      {
+        evt.preventDefault();
+        evt.stopPropagation();
+        this.parent.handle_mesh_name_click(this.mesh_elements[0].textContent, this.row);
+      });
+      this.collapsed_meshes.appendChild(clonedElement);
     }
 
     if (this.type_elements.length > 1 && !this.all_channels_same())
@@ -146,7 +146,7 @@ class TextureItem
     }
     else
     {
-      this.collapsed_types.appendChild(this.type_elements[0]);
+      this.collapsed_types.appendChild(this.type_elements[0].cloneNode(true));
     }
 
     if (this.material_elements.length > 1 && !this.all_material_names_same())
@@ -156,7 +156,7 @@ class TextureItem
     }
     else
     {
-      this.collapsed_materials.appendChild(this.material_elements[0]);
+      this.collapsed_materials.appendChild(this.material_elements[0].cloneNode(true));
     }
   }
 
