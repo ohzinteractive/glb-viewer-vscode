@@ -1,3 +1,5 @@
+import { VSCodeContext } from './VSCodeContext';
+
 class GeometryItem
 {
   constructor(geometry, meshes = [], parent, index)
@@ -42,7 +44,7 @@ class GeometryItem
     this.columns.meshes.classList.add('geometries__meshes');
     this.columns.attributes.classList.add('geometries__attributes');
     this.columns.copy.classList.add('geometries__icon');
-    this.columns.copy.title = 'Copy Details to Clipboard';
+    this.columns.copy.title = 'Open details JSON in new tab';
 
     this.columns.meshes.appendChild(this.$collapsed_meshes);
     this.columns.meshes.appendChild(this.$expanded_meshes);
@@ -52,7 +54,7 @@ class GeometryItem
 
     this.OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>';
     this.CLOSE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>';
-    this.COPY_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-icon lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>';
+    this.COPY_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link-icon lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
     this.CHECK_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-icon lucide-check"><path d="M20 6 9 17l-5-5"/></svg>';
 
     this.init();
@@ -102,7 +104,7 @@ class GeometryItem
     }
 
     this.columns.copy.innerHTML = this.COPY_ICON;
-    this.columns.copy.addEventListener('click', this.handle_copy_button_click.bind(this));
+    this.columns.copy.addEventListener('click', this.handle_inspect_json_button_click.bind(this));
 
     this.$row.appendChild(this.columns.toggle);
     this.$row.appendChild(this.columns.name);
@@ -133,7 +135,7 @@ class GeometryItem
 
     if (this.attribute_elements.length > 0)
     {
-      this.$collapsed_attributes.textContent = `[${this.attribute_elements.length} attributes]`;
+      this.$collapsed_attributes.textContent = `[${Object.keys(this.geometry.attributes).join(', ')}]`;
     }
     else
     {
@@ -262,12 +264,13 @@ class GeometryItem
     }
   }
 
-  handle_copy_button_click(evt)
+  handle_inspect_json_button_click()
   {
-    evt.preventDefault();
-    evt.stopPropagation();
     const details = this.get_geometry_details();
-    navigator.clipboard.writeText(JSON.stringify(details, null, 2));
+    VSCodeContext.ctx.postMessage({
+      command: 'openJson',
+      payload: details
+    });
 
     this.columns.copy.innerHTML = this.CHECK_ICON;
     setTimeout(() =>
