@@ -16,7 +16,6 @@
       z-index: 1;
 
       background-color: var(--background-color);
-
     }
 
     th, td {
@@ -36,6 +35,13 @@
     tr {
       &:nth-child(even) {
         background-color: var(--background-color-alt);
+      }
+
+      &:hover {
+        background-color: var(--background-color-hover);
+        transform: scale(1.01);
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
       }
 
       &.selected {

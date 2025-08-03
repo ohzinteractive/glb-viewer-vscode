@@ -19,6 +19,19 @@
                     path(d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22")
             .panel-button-label
                 | Textures
+        .button.panel-button(data-name="materials").hidden
+            .panel-button-icon
+                svg(width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+                    rect(width="18" height="18" x="3" y="3" rx="2")
+                    path(d="M12 9v6")
+                    path(d="M16 15v6")
+                    path(d="M16 3v6")
+                    path(d="M3 15h18")
+                    path(d="M3 9h18")
+                    path(d="M8 15v6")
+                    path(d="M8 3v6")
+            .panel-button-label
+                | Materials
         .button.panel-button(data-name="animations").hidden
             .panel-button-icon
                 svg(width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
@@ -45,5 +58,7 @@
     include ./tree
     include ./textures
     include ./texture_preview
+    include ./materials
+    include ./material_details
     include ./info
     include ./animations

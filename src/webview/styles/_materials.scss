@@ -1,0 +1,66 @@
+.materials {
+  min-width: 600 * $ptr;
+
+  color: var(--text-color);
+}
+
+  .materials-content {
+    padding: 0 !important;
+  }
+
+  .materials__icon {
+
+    cursor: pointer;
+
+    width: 18 * $ptr;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+    }
+  }
+
+  .materials-header__close {
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .materials-item {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 10 * $ptr;
+
+    &.selected {
+      border: 1px solid var(--border-color-alt);
+
+      border-radius: $border-radius;
+    }
+
+    &:hover {
+      background-color: var(--background-color-hover);
+      transform: scale(1.01);
+      cursor: pointer;
+      transition: transform 0.1s ease-in-out;
+    }
+
+    &:nth-child(even) {
+      background-color: var(--background-color-alt);
+    }
+
+  }
