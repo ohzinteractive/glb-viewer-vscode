@@ -1,4 +1,5 @@
 import { ResizableWindow } from './ResizeableWindow';
+import { VSCodeContext } from './VSCodeContext';
 
 class MaterialDetails extends ResizableWindow
 {
@@ -17,7 +18,18 @@ class MaterialDetails extends ResizableWindow
 
     this.$header_message = document.querySelector('.material-details__header-message');
     this.$header_title = document.querySelector('.material-details__header-title');
+
     this.$close = document.querySelector('.material-details__close');
+    this.$close.addEventListener('click', () =>
+    {
+      this.hide();
+    });
+
+    this.$inspect_json = document.querySelector('.material-details__inspect-json');
+    this.$inspect_json.addEventListener('click', () =>
+    {
+      this.handle_inspect_json_button_click();
+    });
   }
 
   init(scene_controller)
@@ -165,6 +177,14 @@ class MaterialDetails extends ResizableWindow
   {
     const spaced = name.replace(/([A-Z])/g, ' $1').toLowerCase();
     return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+  }
+
+  handle_inspect_json_button_click()
+  {
+    VSCodeContext.ctx.postMessage({
+      command: 'openJson',
+      payload: this.material
+    });
   }
 }
 

@@ -78,3 +78,32 @@
       height: 16 * $ptr;
     }
   }
+
+  .material-details__inspect-json {
+    display: flex;
+
+    flex-direction: row;
+
+    align-self: center;
+
+    gap: 8 * $ptr;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    position: relative;
+
+    margin: 10 * $ptr;
+
+    padding: 5 * $ptr 10 * $ptr;
+
+    background-color: var(--background-color-alt);
+
+    border-radius: $border-radius;
+
+    svg {
+      width: 16 * $ptr;
+      height: 16 * $ptr;
+    }
+  }
