@@ -1,0 +1,38 @@
+.watermark {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+
+  padding: 10 * $ptr;
+
+  width: fit-content;
+
+  color: var(--text-color-alt);
+
+  font-size: 10 * $ptr;
+
+  text-align: center;
+
+  a {
+    color: var(--text-color-alt);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    &:hover {
+      color: var(--text-color);
+    }
+  }
+}
+
+.watermark-heart {
+    margin-right: 5 * $ptr;
+    margin-left: 4 * $ptr;
+
+    svg {
+        width: 10 * $ptr;
+        height: auto;
+    }
+}
