@@ -1,4 +1,5 @@
 import { Animations } from './Animations';
+import { Geometries } from './Geometries';
 import { HierarchyTree } from './HierarchyTree';
 import { Info } from './Info';
 import { Materials } from './Materials';
@@ -18,6 +19,7 @@ class Panel
       hierarchy: new HierarchyTree(this, 'hierarchy'),
       textures: new Textures(this, 'textures'),
       materials: new Materials(this, 'materials'),
+      geometries: new Geometries(this, 'geometries'),
       info: new Info(this, 'info'),
       animations: new Animations(this, 'animations')
     };
@@ -26,6 +28,7 @@ class Panel
       hierarchy: this.$buttons_container.querySelector('.panel-button[data-name="hierarchy"]'),
       textures: this.$buttons_container.querySelector('.panel-button[data-name="textures"]'),
       materials: this.$buttons_container.querySelector('.panel-button[data-name="materials"]'),
+      geometries: this.$buttons_container.querySelector('.panel-button[data-name="geometries"]'),
       info: this.$buttons_container.querySelector('.panel-button[data-name="info"]'),
       animations: this.$buttons_container.querySelector('.panel-button[data-name="animations"]')
     };
@@ -41,6 +44,7 @@ class Panel
     this.contents.hierarchy.build_hierarchy_tree(object3d);
     this.contents.textures.update_contents(object3d);
     this.contents.materials.update_contents(object3d);
+    this.contents.geometries.update_contents(object3d);
   }
 
   handle_object_click(object3d)
@@ -82,6 +86,11 @@ class Panel
     if (this.contents.materials.get_material_count() > 0)
     {
       this.buttons.materials.classList.remove('hidden');
+    }
+
+    if (this.contents.geometries.get_geometries_count() > 0)
+    {
+      this.buttons.geometries.classList.remove('hidden');
     }
 
     if (this.contents.info.get_animation_count() > 0)
