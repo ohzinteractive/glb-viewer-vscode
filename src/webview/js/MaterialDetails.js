@@ -20,19 +20,20 @@ class MaterialDetails extends ResizableWindow
     this.$close = document.querySelector('.material-details__close');
   }
 
-  init()
+  init(scene_controller)
   {
+    this.scene_controller = scene_controller;
   }
 
   show()
   {
+    this.$container.classList.remove('hidden');
     if (!this.has_changed)
     {
-      this.$container.style.left = '';
-      this.$container.style.top = '';
-      this.$container.style.right = '';
+      this.$container.style.right = '10px';
+      this.$container.style.left = 'initial';
+      this.$container.style.top = '54px';
     }
-    this.$container.classList.remove('hidden');
   }
 
   hide()

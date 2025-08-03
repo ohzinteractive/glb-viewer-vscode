@@ -44,6 +44,7 @@ class Materials extends ResizableWindow
   handle_close_button_click()
   {
     this.hide();
+    this.panel.deactivate_button(this.name);
   }
 
   update_contents(object3d)
