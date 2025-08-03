@@ -7,6 +7,8 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ### Added
  - Material window
  - Material details window
+ - Geometry window
+ - Geometry details window
 
 ## [2.6.0] - 2025-07-29
 

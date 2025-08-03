@@ -22,7 +22,7 @@ A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB f
 - Interactive 3D model viewing
 - DRACO compression support
 - KTX2 support (GPU Texture Compression)
-- Hierarchy, Animations, Textures, Materials and Info panels
+- Hierarchy, Animations, Textures, Materials, Geometries and Info panels
 - Play and stop individual animations
 - Visualize textures, their resolution, and their relationship and usage with the materials
 - Download textures
