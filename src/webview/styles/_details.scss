@@ -89,6 +89,7 @@
 
     width: 100%;
     max-height: 200 * $ptr;
+    min-height: 40 * $ptr;
 
     text-overflow: ellipsis;
 
@@ -105,6 +106,7 @@
 
   .details__item-content {
     max-width: 300px;
+
     word-wrap: break-word;
   }
 
