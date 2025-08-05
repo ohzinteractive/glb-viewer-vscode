@@ -8,23 +8,105 @@ class MaterialItem
 
     this.parent = parent;
 
-    this.$material_element = document.createElement('div');
-    this.$material_element.className = 'materials-item';
+    this.$row = document.createElement('tr');
+    this.$row.className = 'materials-row';
 
-    const meshCount = this.meshes.length;
-    const meshText = meshCount === 1 ? '1 mesh' : `${meshCount} meshes`;
+    this.columns = {
+      toggle: document.createElement('td'),
+      name: document.createElement('td'),
+      meshes: document.createElement('td'),
+      more: document.createElement('td')
+    };
 
-    this.$material_element.innerHTML = `
-      <div class="material-name">${this.material.name || `Material ${this.material.uuid}`}</div>
-      <div class="material-meshes">${meshText}</div>
-    `;
+    this.mesh_elements = [];
+    this.expanded = false;
 
-    this.$material_element.addEventListener('click', this.handle_click.bind(this));
+    this.$collapsed_meshes = document.createElement('div');
+    this.$collapsed_meshes.classList.add('materials-row__collapsed-meshes');
+
+    this.$expanded_meshes = document.createElement('div');
+    this.$expanded_meshes.classList.add('materials-row__expanded-meshes');
+    this.$expanded_meshes.classList.add('hidden');
+
+    this.columns.toggle.classList.add('materials__icon');
+    this.columns.name.classList.add('materials-row__name');
+    this.columns.meshes.classList.add('materials-row__meshes');
+    this.columns.more.classList.add('materials__icon');
+    this.columns.more.title = 'Open details';
+
+    this.columns.meshes.appendChild(this.$collapsed_meshes);
+    this.columns.meshes.appendChild(this.$expanded_meshes);
+
+    this.OPEN_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>';
+    this.CLOSE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>';
+    this.MORE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-receipt-text-icon lucide-receipt-text"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M14 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/></svg>';
+
+    this.init();
+
+    this.$row.addEventListener('click', this.handle_row_select.bind(this));
+  }
+
+  init()
+  {
+    this.columns.name.textContent = this.material.name || `Material ${this.material.uuid}`;
+    this.columns.name.title = this.material.name || `Material ${this.material.uuid}`;
+
+    this.mesh_elements = [];
+    for (let i = 0; i < this.meshes.length; i++)
+    {
+      const mesh = this.meshes[i];
+      const mesh_elem = document.createElement('div');
+      mesh_elem.classList.add('materials-row__mesh-name');
+      mesh_elem.textContent = mesh.name;
+      mesh_elem.title = mesh.name;
+      this.mesh_elements.push(mesh_elem);
+    }
+
+    this.set_collapsed_content();
+    this.set_expanded_content();
+
+    if (this.meshes.length > 1)
+    {
+      this.columns.toggle.innerHTML = this.OPEN_ICON;
+      this.columns.toggle.title = 'Expand';
+      this.columns.toggle.addEventListener('click', this.handle_expand_button_click.bind(this));
+    }
+    else
+    {
+      this.columns.toggle.innerHTML = '';
+    }
+
+    this.columns.more.innerHTML = this.MORE_ICON;
+    this.columns.more.addEventListener('click', this.handle_more_button_click.bind(this));
+
+    this.$row.appendChild(this.columns.toggle);
+    this.$row.appendChild(this.columns.name);
+    this.$row.appendChild(this.columns.meshes);
+    this.$row.appendChild(this.columns.more);
+  }
+
+  set_collapsed_content()
+  {
+    this.$collapsed_meshes.innerHTML = '';
+    if (this.mesh_elements.length > 1)
+    {
+      this.$collapsed_meshes.textContent = `[${this.mesh_elements.length} meshes]`;
+    }
+    else
+    {
+      this.$collapsed_meshes.appendChild(this.mesh_elements[0].cloneNode(true));
+    }
+  }
+
+  set_expanded_content()
+  {
+    this.$expanded_meshes.innerHTML = '';
+    this.mesh_elements.forEach(mesh_elem => this.$expanded_meshes.appendChild(mesh_elem.cloneNode(true)));
   }
 
   get_element()
   {
-    return this.$material_element;
+    return this.$row;
   }
 
   get_material_details()
@@ -56,17 +138,46 @@ class MaterialItem
     };
   }
 
-  handle_click()
+  handle_expand_button_click(evt)
   {
-    document.querySelectorAll('.materials-item').forEach((item) =>
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    this.expanded = !this.expanded;
+
+    this.$expanded_meshes.classList.toggle('hidden');
+    this.$collapsed_meshes.classList.toggle('hidden');
+
+    if (this.expanded)
     {
-      item.classList.remove('selected');
-    });
+      this.columns.toggle.innerHTML = this.CLOSE_ICON;
+      this.columns.toggle.title = 'Collapse';
+    }
+    else
+    {
+      this.columns.toggle.innerHTML = this.OPEN_ICON;
+      this.columns.toggle.title = 'Expand';
+    }
+  }
+
+  handle_more_button_click(evt)
+  {
+    evt.preventDefault();
+    evt.stopPropagation();
 
     const details = this.get_material_details();
     this.parent.material_details.show_material_details(details);
+  }
 
-    this.$material_element.classList.add('selected');
+  handle_row_select()
+  {
+    const selected_row = document.querySelector('.materials-row.selected');
+    selected_row?.classList.remove('selected');
+
+    if (selected_row !== this.$row)
+    {
+      this.$row.classList.add('selected');
+    }
   }
 }
 
