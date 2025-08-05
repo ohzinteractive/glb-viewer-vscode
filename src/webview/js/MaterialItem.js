@@ -111,35 +111,6 @@ class MaterialItem
     return this.$row;
   }
 
-  get_material_details()
-  {
-    return {
-      name: this.material.name || `Material ${this.material.uuid}`,
-      type: this.material.type || 'Unknown',
-      uuid: this.material.uuid,
-      color: this.material.color ? this.material.color.getHexString() : null,
-      transparent: this.material.transparent,
-      opacity: this.material.opacity,
-      wireframe: this.material.wireframe,
-      side: this.material.side,
-      userData: this.material.userData || {},
-      meshes: this.meshes.map(mesh => ({
-        name: mesh.name || `Mesh ${mesh.uuid}`,
-        uuid: mesh.uuid,
-        type: mesh.type
-      })),
-      properties: {
-        hasColor: !!this.material.color,
-        hasTexture: !!this.material.map,
-        hasNormalMap: !!this.material.normalMap,
-        hasRoughnessMap: !!this.material.roughnessMap,
-        hasMetalnessMap: !!this.material.metalnessMap,
-        hasEmissiveMap: !!this.material.emissiveMap,
-        hasAOMap: !!this.material.aoMap
-      }
-    };
-  }
-
   handle_expand_button_click(evt)
   {
     evt.preventDefault();
@@ -167,8 +138,7 @@ class MaterialItem
     evt.preventDefault();
     evt.stopPropagation();
 
-    const details = this.get_material_details();
-    this.parent.material_details.show_material_details(details);
+    this.parent.material_details.show_material_details(this.material);
   }
 
   handle_row_select()

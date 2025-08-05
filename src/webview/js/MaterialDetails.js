@@ -1,3 +1,4 @@
+import { DoubleSide, FrontSide } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
 import { VSCodeContext } from './VSCodeContext';
 
@@ -71,90 +72,16 @@ class MaterialDetails extends ResizableWindow
 
   create_material_details()
   {
-    /*
-      name: this.material.name || `Material ${this.material.uuid}`,
-      type: this.material.type || 'Unknown',
-      uuid: this.material.uuid,
-      color: this.material.color ? this.material.color.getHexString() : null,
-      transparent: this.material.transparent,
-      opacity: this.material.opacity,
-      wireframe: this.material.wireframe,
-      side: this.material.side,
-      userData: this.material.userData || {},
-      meshes: this.meshes.map(mesh => ({
-        name: mesh.name || `Mesh ${mesh.uuid}`,
-        uuid: mesh.uuid,
-        type: mesh.type
-      })),
-      properties: {
-        hasColor: !!this.material.color,
-        hasTexture: !!this.material.map,
-        hasNormalMap: !!this.material.normalMap,
-        hasRoughnessMap: !!this.material.roughnessMap,
-        hasMetalnessMap: !!this.material.metalnessMap,
-        hasEmissiveMap: !!this.material.emissiveMap,
-        hasAOMap: !!this.material.aoMap
-      }
-     */
     this.$content.innerHTML = '';
-    for (const key in this.material)
+    if (this.material.isMeshBasicMaterial)
     {
-      let name = this.prettify_name(key);
-      let value = this.material[key];
-
-      switch (key)
-      {
-      case 'meshes':
-        name += ` (${this.material.meshes.length})`;
-        value = this.material.meshes.map(mesh => mesh.name).join(', ');
-        break;
-      case 'properties':
-        value = '';
-        for (const property in this.material.properties)
-        {
-          value += `<div class="material-details__item-property">${property}: ${this.material.properties[property]}</div>`;
-        }
-        break;
-      case 'userData':
-        value = '';
-        for (const property in this.material.userData)
-        {
-          value += `${property}: ${this.material.userData[property]}<br>`;
-        }
-        if (value === '')
-        {
-          value = 'no user data';
-        }
-        break;
-      default:
-        if (typeof value === 'object')
-        {
-          value = '';
-          for (const property in this.material[key])
-          {
-            value += `${property}: ${this.material[key][property]}<br>`;
-          }
-          if (value === '')
-          {
-            value = 'no values';
-          }
-          break;
-        }
-        break;
-      }
-
-      const $detail_item = document.createElement('div');
-      $detail_item.className = 'material-details__item';
-      $detail_item.innerHTML = `
-        <div class="material-details__item-label">${name}</div>
-        <div class="material-details__item-content">${value}</div>
-      `;
-      $detail_item.addEventListener('click', () =>
-      {
-        this.copy_to_clipboard(name + ': ' + value);
-      });
-      this.$content.appendChild($detail_item);
+      this.display_basic_material();
     }
+    else
+    {
+      this.display_physical_material();
+    }
+
     this.$container.classList.remove('hidden');
   }
 
@@ -185,6 +112,97 @@ class MaterialDetails extends ResizableWindow
       command: 'openJson',
       payload: this.material
     });
+  }
+
+  __displase_base_material_properties()
+  {
+    this.create_property_element('Name', this.material.name);
+    this.create_property_element('Transparent', this.material.transparent);
+    if (this.material.transparent)
+    {
+      this.create_property_element('Opacity', this.material.opacity);
+    }
+    this.create_property_element('Side', this.material.side === DoubleSide ? 'DoubleSide' : this.material.side === FrontSide ? 'FrontSide' : 'BackSide');
+    this.create_property_element('User data', JSON.stringify(this.material.userData));
+  }
+
+  display_basic_material()
+  {
+    this.create_property_element('Type', 'MeshBasicMaterial');
+    this.__displase_base_material_properties();
+
+    if (this.material.alphaMap)
+    {
+      this.create_texture_property_element('alphaMap', this.material.alphaMap.name);
+    }
+    this.create_color_property_element('color', '#' + this.material.color.getHexString());
+
+    if (this.material.lightMap)
+    {
+      this.create_texture_property_element('lightMap', this.material.lightMap.name);
+    }
+
+    if (this.material.map)
+    {
+      this.create_texture_property_element('map', this.material.map.name);
+    }
+
+    if (this.material.specularMap)
+    {
+      this.create_texture_property_element('specularMap', this.material.specularMap.name);
+    }
+  }
+
+  display_physical_material()
+  {
+    this.create_property_element('Type', 'MeshPhysicalMaterial');
+    this.__displase_base_material_properties();
+    this.create_color_property_element('color', '#' + this.material.color.getHexString());
+  }
+
+  create_property_element(name, value)
+  {
+    const $detail_item = document.createElement('div');
+    $detail_item.className = 'material-details__item';
+    $detail_item.innerHTML = `
+        <div class="material-details__item-label">${name}</div>
+        <div class="material-details__item-content">${value}</div>
+      `;
+    $detail_item.addEventListener('click', () =>
+    {
+      this.copy_to_clipboard(name + ': ' + value);
+    });
+    this.$content.appendChild($detail_item);
+  }
+
+  create_color_property_element(name, value)
+  {
+    const $detail_item = document.createElement('div');
+    $detail_item.className = 'material-details__item';
+    $detail_item.innerHTML = `
+        <div class="material-details__item-label">${name}</div>
+        <div class="material-details__item-content">${value}</div>
+      `;
+    $detail_item.addEventListener('click', () =>
+    {
+      this.copy_to_clipboard(name + ': ' + value);
+    });
+    this.$content.appendChild($detail_item);
+  }
+
+  create_texture_property_element(name, value)
+  {
+    const $detail_item = document.createElement('div');
+    $detail_item.className = 'material-details__item';
+    $detail_item.innerHTML = `
+        <div class="material-details__item-label">${name}</div>
+        <div class="material-details__item-content">${value}</div>
+      `;
+    $detail_item.addEventListener('click', () =>
+    {
+      this.copy_to_clipboard(name + ': ' + value);
+    });
+    this.$content.appendChild($detail_item);
   }
 }
 
