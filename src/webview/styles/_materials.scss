@@ -65,6 +65,14 @@
 
   }
 
+  .materials-row__name {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   .materials-table {
     width: 100%;
 

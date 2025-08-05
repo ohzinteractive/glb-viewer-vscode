@@ -49,7 +49,9 @@ class MaterialItem
   init()
   {
     this.columns.name.textContent = this.material.name || `Material ${this.material.uuid}`;
-    this.columns.name.title = this.material.name || `Material ${this.material.uuid}`;
+    this.columns.name.title = 'Click for more details';
+
+    this.columns.name.addEventListener('click', this.handle_more_button_click.bind(this));
 
     this.mesh_elements = [];
     for (let i = 0; i < this.meshes.length; i++)
