@@ -66,6 +66,9 @@
     border-radius: 2 * $ptr;
   }
 
+  .material-details__content {
+    font-size: 11 * $ptr;
+  }
   .material-details__item-content {
     display: flex;
 
