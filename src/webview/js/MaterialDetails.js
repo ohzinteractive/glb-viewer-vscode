@@ -178,26 +178,50 @@ class MaterialDetails extends ResizableWindow
   create_color_property_element(name, value)
   {
     const $detail_item = document.createElement('div');
+    const $label = document.createElement('div');
+    const $content = document.createElement('div');
+    const $value = document.createElement('div');
+    const $color_box = document.createElement('div');
+
     $detail_item.className = 'material-details__item';
-    $detail_item.innerHTML = `
-        <div class="material-details__item-label">${name}</div>
-        <div class="material-details__item-content">${value}</div>
-      `;
-    $detail_item.addEventListener('click', () =>
+    $label.className = 'material-details__item-label';
+    $content.className = 'material-details__item-content';
+    $color_box.className = 'material-details__item-color-box';
+
+    $label.textContent = name;
+    $color_box.style.backgroundColor = value;
+    $value.textContent = value;
+
+    $content.appendChild($color_box);
+    $content.appendChild($value);
+
+    $detail_item.appendChild($label);
+    $detail_item.appendChild($content);
+
+    $content.addEventListener('click', () =>
     {
       this.copy_to_clipboard(name + ': ' + value);
     });
+
     this.$content.appendChild($detail_item);
   }
 
   create_texture_property_element(name, value)
   {
     const $detail_item = document.createElement('div');
+    const $label = document.createElement('div');
+    const $content = document.createElement('div');
+
     $detail_item.className = 'material-details__item';
-    $detail_item.innerHTML = `
-        <div class="material-details__item-label">${name}</div>
-        <div class="material-details__item-content">${value}</div>
-      `;
+    $label.className = 'material-details__item-label';
+    $content.className = 'material-details__item-content';
+
+    $label.textContent = name;
+    $content.textContent = value;
+
+    $detail_item.appendChild($label);
+    $detail_item.appendChild($content);
+
     $detail_item.addEventListener('click', () =>
     {
       this.copy_to_clipboard(name + ': ' + value);

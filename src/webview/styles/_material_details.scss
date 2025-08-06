@@ -57,7 +57,24 @@
     color: var(--text-color-alt);
   }
 
+  .material-details__item-color-box {
+    width: 16 * $ptr;
+    height: 16 * $ptr;
+
+    border: 1px solid var(--text-color);
+
+    border-radius: 2 * $ptr;
+  }
+
   .material-details__item-content {
+    display: flex;
+
+    flex-direction: row;
+
+    column-gap: 10 * $ptr;
+
+    align-items: center;
+
     max-width: 300px;
 
     word-wrap: break-word;
