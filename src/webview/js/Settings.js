@@ -10,7 +10,8 @@ class Settings
     this.$closeButton = document.querySelector('.settings-button__close');
     this.$content = document.querySelector('.settings__content');
     this.$actions = document.querySelectorAll('.settings__action');
-    this.$slider = document.querySelector('.settings__slider');
+    this.$vector_size_slider = document.querySelector('.settings__slider--vector-size');
+    this.$fov_slider = document.querySelector('.settings__slider--fov');
   }
 
   init(scene_controller)
@@ -40,13 +41,21 @@ class Settings
       });
     }
 
-    this.input_slider = new InputSlider(this.$slider, 0, 10, 0.1, this.handle_slider_change.bind(this));
-    this.input_slider.init();
+    this.input_vector_size_slider = new InputSlider(this.$vector_size_slider, 0, 10, 0.1, this.handle_vector_size_slider_change.bind(this));
+    this.input_vector_size_slider.init();
+
+    this.input_fov_slider = new InputSlider(this.$fov_slider, 0, 200, 0.5, this.handle_fov_slider_change.bind(this), 75);
+    this.input_fov_slider.init();
   }
 
-  handle_slider_change(value)
+  handle_vector_size_slider_change(value)
   {
     this.scene_controller.set_line_length(value);
+  }
+
+  handle_fov_slider_change(value)
+  {
+    this.scene_controller.set_fov(value);
   }
 
   handle_action_click(action)

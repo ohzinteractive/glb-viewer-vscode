@@ -9,7 +9,6 @@ import {
   Box3,
   BufferGeometry,
   Color,
-  ConeGeometry,
   DirectionalLight,
   DoubleSide,
   FrontSide,
@@ -27,7 +26,6 @@ import {
   Raycaster,
   Scene,
   SkinnedMesh,
-  SphereGeometry,
   Vector3
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -36,9 +34,9 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { AnimationController } from './AnimationController.js';
+import { SkeletonVisualizer } from './SkeletonVisualizer.js';
 import { StudioLightScene } from './StudioLightScene.js';
 import { Time } from './Time.js';
-import { SkeletonVisualizer } from './SkeletonVisualizer.js';
 
 class SceneController
 {
@@ -590,6 +588,12 @@ class SceneController
     this.selected_skinned_mesh.visible = false;
     this.selected_empty_object.visible = false;
     this.selected_instanced_mesh.visible = false;
+  }
+
+  set_fov(value)
+  {
+    this.camera.fov = value;
+    this.camera.updateProjectionMatrix();
   }
 }
 

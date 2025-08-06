@@ -1,13 +1,13 @@
 class InputSlider
 {
-  constructor(container, min, max, step, on_change)
+  constructor(container, min, max, step, on_change, default_value = 0.5)
   {
     this.min = min;
     this.max = max;
     this.step = step;
     this.is_dragging = false;
     this.callback = on_change;
-    this.current_value = 0.5;
+    this.current_value = default_value;
 
     this.$container = container;
     this.$container.classList.add('slider');
