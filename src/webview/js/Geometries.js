@@ -68,8 +68,12 @@ class Geometries extends ResizableWindow
         geometry_to_meshes.get(child.geometry).push(child);
       }
     });
-
-    this.geometry_items = Array.from(geometry_to_meshes.entries()).map(([geometry, meshes], index) =>
+    const geo_array = Array.from(geometry_to_meshes.entries());
+    geo_array.sort((a, b) =>
+    {
+      return b[0].attributes.position.count - a[0].attributes.position.count;
+    });
+    this.geometry_items = geo_array.map(([geometry, meshes], index) =>
       new GeometryItem(geometry, meshes, this, index)
     );
   }

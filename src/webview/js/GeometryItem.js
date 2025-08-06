@@ -34,6 +34,7 @@ class GeometryItem
     this.columns = {
       toggle: document.createElement('td'),
       name: document.createElement('td'),
+      vertex_count: document.createElement('td'),
       meshes: document.createElement('td'),
       attributes: document.createElement('td'),
       copy: document.createElement('td')
@@ -41,6 +42,7 @@ class GeometryItem
 
     this.columns.toggle.classList.add('geometries__icon');
     this.columns.name.classList.add('geometries__name');
+    this.columns.vertex_count.classList.add('geometries__vertex-count');
     this.columns.meshes.classList.add('geometries__meshes');
     this.columns.attributes.classList.add('geometries__attributes');
     this.columns.copy.classList.add('geometries__icon');
@@ -62,10 +64,17 @@ class GeometryItem
     this.$row.addEventListener('click', this.select_row.bind(this));
   }
 
+  get_vertex_count()
+  {
+    return this.geometry.attributes.position.count;
+  }
+
   init()
   {
-    this.columns.name.textContent = this.geometry.name || `Geometry ${this.index + 1}`;
-    this.columns.name.title = this.geometry.name || `Geometry ${this.index + 1}`;
+    const base_name = this.meshes[0].isInstancedMesh ? 'InstancedGeometry' : 'Geometry';
+    this.columns.name.textContent = this.geometry.name || `${base_name} ${this.index + 1}`;
+    this.columns.name.title = this.geometry.name || `${base_name} ${this.index + 1}`;
+    this.columns.vertex_count.textContent = `${this.get_vertex_count()}`;
 
     this.mesh_elements = [];
     for (let i = 0; i < this.meshes.length; i++)
@@ -85,7 +94,7 @@ class GeometryItem
       const key = keys[i];
       const attribute_elem = document.createElement('div');
       attribute_elem.classList.add('geometries-row__attribute');
-      attribute_elem.textContent = `${key}: ${this.beautify_attribute(this.geometry.attributes[key])}`;
+      attribute_elem.textContent = `${key}`;// : ${this.beautify_attribute(this.geometry.attributes[key])}
       this.attribute_elements.push(attribute_elem);
     }
 
@@ -108,8 +117,9 @@ class GeometryItem
 
     this.$row.appendChild(this.columns.toggle);
     this.$row.appendChild(this.columns.name);
-    this.$row.appendChild(this.columns.meshes);
+    this.$row.appendChild(this.columns.vertex_count);
     this.$row.appendChild(this.columns.attributes);
+    this.$row.appendChild(this.columns.meshes);
     this.$row.appendChild(this.columns.copy);
   }
 
@@ -185,32 +195,6 @@ class GeometryItem
     return this.$row;
   }
 
-  get_geometry_details()
-  {
-    return {
-      name: this.geometry.name || `Geometry ${this.geometry.uuid}`,
-      type: this.geometry.type || 'Unknown',
-      uuid: this.geometry.uuid,
-      vertexCount: this.geometry.attributes.position ? this.geometry.attributes.position.count : 0,
-      faceCount: this.geometry.index ? this.geometry.index.count / 3 : 0,
-      attributes: this.geometry.attributes,
-      userData: this.geometry.userData || {},
-      meshes: this.meshes.map(mesh => ({
-        name: mesh.name || `Mesh ${mesh.uuid}`,
-        uuid: mesh.uuid,
-        type: mesh.type
-      })),
-      properties: {
-        hasPosition: !!this.geometry.attributes.position,
-        hasNormal: !!this.geometry.attributes.normal,
-        hasUV: !!this.geometry.attributes.uv,
-        hasTangent: !!this.geometry.attributes.tangent,
-        hasColor: !!this.geometry.attributes.color,
-        hasIndex: !!this.geometry.index
-      }
-    };
-  }
-
   select_row()
   {
     const selected_row = document.querySelector('.geometries-row.selected');
@@ -219,8 +203,6 @@ class GeometryItem
     if (selected_row !== this.$row)
     {
       this.$row.classList.add('selected');
-      const details = this.get_geometry_details();
-      console.log('Geometry details:', details);
     }
   }
 
@@ -254,22 +236,14 @@ class GeometryItem
 
   beautify_attribute(attribute)
   {
-    if (typeof attribute === 'object')
-    {
-      return JSON.stringify(attribute, null, 2);
-    }
-    else
-    {
-      return attribute;
-    }
+    return `(${attribute.array.length} elements)`;
   }
 
   handle_inspect_json_button_click()
   {
-    const details = this.get_geometry_details();
     VSCodeContext.ctx.postMessage({
       command: 'openJson',
-      payload: details
+      payload: this.geometry.toJSON()
     });
 
     this.columns.copy.innerHTML = this.CHECK_ICON;
