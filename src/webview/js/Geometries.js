@@ -7,13 +7,14 @@ class Geometries extends ResizableWindow
   {
     const container = document.querySelector('.geometries');
     const drag_handle = container.querySelector('.geometries-header');
-    const content_container = container.querySelector('.geometries-content');
+    const resize_content = container.querySelector('.resize-content-wrapper');
 
-    super(container, drag_handle, content_container);
+    super(container, drag_handle, resize_content);
 
     this.name = name;
     this.panel = panel;
     this.$header = drag_handle;
+    this.$rows_container = container.querySelector('.geometries-content');
 
     this.$header_title = container.querySelector('.geometries-header__title');
 
@@ -76,11 +77,11 @@ class Geometries extends ResizableWindow
   build_geometries_list()
   {
     // $content_container is the table body
-    this.$content_container.innerHTML = '';
+    this.$rows_container.innerHTML = '';
 
     if (this.geometry_items.length < 1)
     {
-      this.$content_container.innerHTML = '<div class="geometries-empty">No geometries found</div>';
+      this.$rows_container.innerHTML = '<div class="geometries-empty">No geometries found</div>';
       return;
     }
 
@@ -88,7 +89,7 @@ class Geometries extends ResizableWindow
     {
       const $geometry_row = this.geometry_items[i].get_row();
 
-      this.$content_container.appendChild($geometry_row);
+      this.$rows_container.appendChild($geometry_row);
     }
   }
 

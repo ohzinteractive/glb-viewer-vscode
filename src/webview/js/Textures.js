@@ -9,13 +9,14 @@ class Textures extends ResizableWindow
   {
     const container = document.querySelector('.textures');
     const drag_handle = container.querySelector('.textures-header');
-    const content_container = container.querySelector('.textures-content');
+    const resize_content = container.querySelector('.resize-content-wrapper');
 
-    super(container, drag_handle, content_container);
+    super(container, drag_handle, resize_content);
 
     this.name = name;
     this.panel = panel;
     this.$header = drag_handle;
+    this.$rows_container = container.querySelector('.textures-content');
 
     this.canvas = document.createElement('canvas');
     this.canvas_ctx = this.canvas.getContext('2d');
@@ -168,12 +169,12 @@ class Textures extends ResizableWindow
     {
       for (let i = 0; i < texture_rows.length; i++)
       {
-        this.$content_container.appendChild(texture_rows[i]);
+        this.$rows_container.appendChild(texture_rows[i]);
       }
     }
     else
     {
-      this.$content_container.innerHTML = '<div class="texture-node">No textures found</div>';
+      this.$rows_container.innerHTML = '<div class="texture-node">No textures found</div>';
     }
   }
 
@@ -245,7 +246,7 @@ class Textures extends ResizableWindow
 
   async on_row_click(texture_item)
   {
-    const selected_row = this.$content_container.querySelector('.selected');
+    const selected_row = this.$rows_container.querySelector('.selected');
     if (selected_row)
     {
       selected_row.classList.remove('selected');

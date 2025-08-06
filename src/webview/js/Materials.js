@@ -8,13 +8,14 @@ class Materials extends ResizableWindow
   {
     const container = document.querySelector('.materials');
     const drag_handle = container.querySelector('.materials-header');
-    const content_container = container.querySelector('.materials-content');
+    const resize_content = container.querySelector('.resize-content-wrapper');
 
-    super(container, drag_handle, content_container);
+    super(container, drag_handle, resize_content);
 
     this.name = name;
     this.panel = panel;
     this.$header = drag_handle;
+    this.$rows_container = container.querySelector('.materials-content');
 
     this.$header_title = container.querySelector('.materials-header__title');
 
@@ -95,11 +96,11 @@ class Materials extends ResizableWindow
 
   build_materials_list()
   {
-    this.$content_container.innerHTML = '';
+    this.$rows_container.innerHTML = '';
 
     if (this.material_items.length < 1)
     {
-      this.$content_container.innerHTML = '<div class="materials-empty">No materials found</div>';
+      this.$rows_container.innerHTML = '<div class="materials-empty">No materials found</div>';
       return;
     }
 
@@ -107,7 +108,7 @@ class Materials extends ResizableWindow
     {
       const $material_element = this.material_items[i].get_element();
 
-      this.$content_container.appendChild($material_element);
+      this.$rows_container.appendChild($material_element);
     }
   }
 
