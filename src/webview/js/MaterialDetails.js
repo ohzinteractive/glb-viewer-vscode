@@ -73,13 +73,21 @@ class MaterialDetails extends ResizableWindow
   create_material_details()
   {
     this.$content.innerHTML = '';
+    console.log(this.material.isMeshBasicMaterial, this.material.isMeshStandardMaterial, this.material.isMeshPhysicalMaterial);
     if (this.material.isMeshBasicMaterial)
     {
       this.display_basic_material();
     }
     else
     {
-      this.display_physical_material();
+      if (this.material.isMeshPhysicalMaterial)
+      {
+        this.display_physical_material();
+      }
+      else
+      {
+        this.display_standard_material();
+      }
     }
 
     this.$container.classList.remove('hidden');
@@ -110,13 +118,14 @@ class MaterialDetails extends ResizableWindow
   {
     VSCodeContext.ctx.postMessage({
       command: 'openJson',
-      payload: this.material
+      payload: this.material.toJSON()
     });
   }
 
-  __displase_base_material_properties()
+  __display_base_material_properties(type)
   {
     this.create_property_element('Name', this.material.name);
+    this.create_property_element('Type', type);
     this.create_property_element('Transparent', this.material.transparent);
     if (this.material.transparent)
     {
@@ -128,8 +137,7 @@ class MaterialDetails extends ResizableWindow
 
   display_basic_material()
   {
-    this.create_property_element('Type', 'MeshBasicMaterial');
-    this.__displase_base_material_properties();
+    this.__display_base_material_properties('MeshBasicMaterial');
 
     if (this.material.alphaMap)
     {
@@ -153,11 +161,67 @@ class MaterialDetails extends ResizableWindow
     }
   }
 
+  display_standard_material(type = 'MeshStandardMaterial')
+  {
+    this.__display_base_material_properties(type);
+    this.create_color_property_element('color', '#' + this.material.color.getHexString());
+    this.create_property_element('emissive intensity', this.material.emissiveIntensity);
+    this.create_color_property_element('emissive color', '#' + this.material.emissive.getHexString());
+    this.create_property_element('metalness', this.material.metalness);
+    this.create_property_element('roughness', this.material.roughness);
+
+    if (this.material.map)
+    {
+      this.create_texture_property_element('alpha map', this.material.map.name);
+    }
+    if (this.material.alphaMap)
+    {
+      this.create_texture_property_element('alpha map', this.material.alphaMap.name);
+    }
+    if (this.material.aoMap)
+    {
+      this.create_texture_property_element('ao map', this.material.aoMap.name);
+    }
+    if (this.material.normalMap)
+    {
+      this.create_texture_property_element('normal map', this.material.normalMap.name);
+    }
+    if (this.material.emissiveMap)
+    {
+      this.create_texture_property_element('emissive map', this.material.emissiveMap.name);
+    }
+    if (this.material.metalnessMap)
+    {
+      this.create_texture_property_element('metalness map', this.material.metalnessMap.name);
+    }
+    if (this.material.roughnessMap)
+    {
+      this.create_texture_property_element('metalness map', this.material.roughnessMap.name);
+    }
+  }
+
   display_physical_material()
   {
-    this.create_property_element('Type', 'MeshPhysicalMaterial');
-    this.__displase_base_material_properties();
-    this.create_color_property_element('color', '#' + this.material.color.getHexString());
+    this.display_standard_material('MeshPhysicalMaterial');
+
+    this.create_property_element('transmission', this.material.transmission);
+    this.create_property_element('clearcoat', this.material.clearcoat);
+    this.create_property_element('ior', this.material.ior);
+    this.create_property_element('specular intensity', this.material.specularIntensity);
+    this.create_color_property_element('specular color', '#' + this.material.specularColor.getHexString());
+
+    if (this.material.clearcoatMap)
+    {
+      this.create_texture_property_element('clearcoat map', this.material.clearcoatMap.name);
+    }
+    if (this.material.specularColorMap)
+    {
+      this.create_texture_property_element('specular map', this.material.specularColorMap.name);
+    }
+    if (this.material.transmissionMap)
+    {
+      this.create_texture_property_element('transmission map', this.material.transmissionMap.name);
+    }
   }
 
   create_property_element(name, value)

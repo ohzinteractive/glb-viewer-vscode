@@ -14,6 +14,7 @@ class MaterialItem
     this.columns = {
       toggle: document.createElement('td'),
       name: document.createElement('td'),
+      type: document.createElement('td'),
       meshes: document.createElement('td'),
       more: document.createElement('td')
     };
@@ -30,6 +31,7 @@ class MaterialItem
 
     this.columns.toggle.classList.add('materials__icon');
     this.columns.name.classList.add('materials-row__name');
+    this.columns.type.classList.add('materials-row__type');
     this.columns.meshes.classList.add('materials-row__meshes');
     this.columns.more.classList.add('materials__icon');
     this.columns.more.title = 'Open details';
@@ -50,6 +52,7 @@ class MaterialItem
   {
     this.columns.name.textContent = this.material.name || `Material ${this.material.uuid}`;
     this.columns.name.title = 'Click for more details';
+    this.columns.type.textContent = this.material.type;
 
     this.columns.name.addEventListener('click', this.handle_more_button_click.bind(this));
 
@@ -83,6 +86,7 @@ class MaterialItem
 
     this.$row.appendChild(this.columns.toggle);
     this.$row.appendChild(this.columns.name);
+    this.$row.appendChild(this.columns.type);
     this.$row.appendChild(this.columns.meshes);
     this.$row.appendChild(this.columns.more);
   }
