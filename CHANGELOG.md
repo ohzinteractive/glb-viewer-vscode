@@ -2,13 +2,14 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.7.0] - 2025-08-02
+## [2.7.0] - 2025-08-11
 
 ### Added
  - Material window
  - Material details window
  - Geometry window
  - Geometry details window
+ - Add fov slider in settings
 
 ## [2.6.0] - 2025-07-29
 
