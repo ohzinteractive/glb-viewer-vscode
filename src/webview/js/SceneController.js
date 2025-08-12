@@ -332,29 +332,30 @@ class SceneController
       obj.getWorldScale(this.selected_mesh.scale);
       obj.getWorldQuaternion(this.selected_mesh.quaternion);
 
+      obj.getWorldPosition(this.selected_skinned_mesh.position);
+      obj.getWorldScale(this.selected_skinned_mesh.scale);
+      obj.getWorldQuaternion(this.selected_skinned_mesh.quaternion);
+
+      obj.getWorldPosition(this.selected_instanced_mesh.position);
+      obj.getWorldScale(this.selected_instanced_mesh.scale);
+      obj.getWorldQuaternion(this.selected_instanced_mesh.quaternion);
+
+      obj.getWorldPosition(this.selected_empty_object.position);
+      obj.getWorldQuaternion(this.selected_empty_object.quaternion);
+      this.scene.add(this.selected_empty_object);
+
       if (instance_id !== undefined)
       {
         const mat = new Matrix4();
         obj.getMatrixAt(instance_id, mat);
-        mat.decompose(this.selected_mesh.position, this.selected_mesh.quaternion, this.selected_mesh.scale);
+        const world_mat = obj.matrixWorld.clone().multiply(mat);
+        world_mat.decompose(this.selected_empty_object.position, this.selected_empty_object.quaternion, this.selected_empty_object.scale);
       }
     }
 
     if (this.axis_helper.visible)
     {
       this.selected_empty_object.visible = true;
-    }
-
-    this.scene.add(this.selected_empty_object);
-
-    obj.getWorldPosition(this.selected_empty_object.position);
-    obj.getWorldQuaternion(this.selected_empty_object.quaternion);
-
-    if (instance_id !== undefined)
-    {
-      const mat = new Matrix4();
-      obj.getMatrixAt(instance_id, mat);
-      mat.decompose(this.selected_empty_object.position, this.selected_empty_object.quaternion, new Vector3());
     }
 
     if (obj.isBone)
@@ -384,7 +385,10 @@ class SceneController
     {
       const mat = new Matrix4();
       obj.getMatrixAt(instance_id, mat);
-      center.setFromMatrixPosition(mat);
+
+      const world_mat = obj.matrixWorld.clone().multiply(mat);
+
+      center.setFromMatrixPosition(world_mat);
       box.setFromBufferAttribute(obj.geometry.attributes.position);
       box.getSize(size);
     }
