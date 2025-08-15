@@ -56,17 +56,6 @@ class MaterialItem
 
     this.columns.name.addEventListener('click', this.handle_more_button_click.bind(this));
 
-    this.mesh_elements = [];
-    for (let i = 0; i < this.meshes.length; i++)
-    {
-      const mesh = this.meshes[i];
-      const mesh_elem = document.createElement('div');
-      mesh_elem.classList.add('materials-row__mesh-name');
-      mesh_elem.textContent = mesh.name;
-      mesh_elem.title = mesh.name;
-      this.mesh_elements.push(mesh_elem);
-    }
-
     this.set_collapsed_content();
     this.set_expanded_content();
 
@@ -94,20 +83,36 @@ class MaterialItem
   set_collapsed_content()
   {
     this.$collapsed_meshes.innerHTML = '';
-    if (this.mesh_elements.length > 1)
+    if (this.meshes.length > 1)
     {
-      this.$collapsed_meshes.textContent = `[${this.mesh_elements.length} meshes]`;
+      this.$collapsed_meshes.textContent = `[${this.meshes.length} meshes]`;
     }
     else
     {
-      this.$collapsed_meshes.appendChild(this.mesh_elements[0].cloneNode(true));
+      const mesh = this.meshes[0];
+      const mesh_elem = document.createElement('div');
+      mesh_elem.classList.add('materials-row__mesh-name');
+      mesh_elem.textContent = mesh.name;
+      mesh_elem.title = mesh.name;
+      mesh_elem.addEventListener('click', this.handle_mesh_click.bind(this, mesh));
+
+      this.$collapsed_meshes.appendChild(mesh_elem);
     }
   }
 
   set_expanded_content()
   {
     this.$expanded_meshes.innerHTML = '';
-    this.mesh_elements.forEach(mesh_elem => this.$expanded_meshes.appendChild(mesh_elem.cloneNode(true)));
+    for (let i = 0; i < this.meshes.length; i++)
+    {
+      const mesh = this.meshes[i];
+      const mesh_elem = document.createElement('div');
+      mesh_elem.classList.add('materials-row__mesh-name');
+      mesh_elem.textContent = mesh.name;
+      mesh_elem.title = mesh.name;
+      mesh_elem.addEventListener('click', this.handle_mesh_click.bind(this, mesh));
+      this.$expanded_meshes.appendChild(mesh_elem);
+    }
   }
 
   get_element()
@@ -154,6 +159,11 @@ class MaterialItem
     {
       this.$row.classList.add('selected');
     }
+  }
+
+  handle_mesh_click(mesh)
+  {
+    this.parent.panel.handle_mesh_name_click(mesh.name);
   }
 }
 

@@ -77,6 +77,14 @@
 
   }
 
+  .materials-row__mesh-name {
+    &:hover {
+      cursor: pointer;
+
+      text-decoration: underline;
+    }
+  }
+
   .materials-table {
     width: 100%;
 
