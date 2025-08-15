@@ -87,18 +87,18 @@ class Textures extends ResizableWindow
 
           if (tex && tex.isTexture)
           {
-            if (!texture_map.has(tex.name + tex.uuid))
+            if (!texture_map.has(tex.source.uuid))
             {
-              texture_map.set(tex.name + tex.uuid, {
+              texture_map.set(tex.source.uuid, {
                 name: tex.name || 'No name',
-                uuid: tex.uuid,
+                uuid: tex.source.uuid,
                 image: tex.image || tex.source || undefined,
                 instance: tex,
                 used_in: []
               });
             }
 
-            const entry = texture_map.get(tex.name + tex.uuid);
+            const entry = texture_map.get(tex.source.uuid);
 
             entry.used_in.push({
               material_name: material.name || 'Unknown Material',
