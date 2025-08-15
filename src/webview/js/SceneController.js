@@ -47,7 +47,7 @@ class SceneController
     // console.log(REVISION);
 
     this.scene = new Scene();
-    this.camera = new PerspectiveCamera(75, 1, 0.1, 1000);
+    this.camera = new PerspectiveCamera(45, 1, 0.1, 1000);
     this.camera.clear_color = new Color('#3F3F3F');
     this.camera.clear_alpha = 1;
 

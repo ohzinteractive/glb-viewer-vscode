@@ -44,7 +44,7 @@ class Settings
     this.input_vector_size_slider = new InputSlider(this.$vector_size_slider, 0, 10, 0.1, this.handle_vector_size_slider_change.bind(this));
     this.input_vector_size_slider.init();
 
-    this.input_fov_slider = new InputSlider(this.$fov_slider, 0, 200, 0.5, this.handle_fov_slider_change.bind(this), 75);
+    this.input_fov_slider = new InputSlider(this.$fov_slider, 10, 80, 0.5, this.handle_fov_slider_change.bind(this), 45);
     this.input_fov_slider.init();
   }
 
