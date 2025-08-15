@@ -2,6 +2,13 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.8.2] - 2025-08-15
+
+### Fixed 
+
+ - Camera focus on instanced meshes
+
+
 ## [2.8.1] - 2025-08-14
 
 ### Fixed
