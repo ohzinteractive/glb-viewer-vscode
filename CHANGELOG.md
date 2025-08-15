@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.7.1] - 2025-08-14
+
+### Fixed
+ - Fixed issue with textures with no name being grouped together
+
 ## [2.7.0] - 2025-08-11
 
 ### Added

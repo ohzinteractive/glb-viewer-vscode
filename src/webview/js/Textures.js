@@ -87,10 +87,10 @@ class Textures extends ResizableWindow
 
           if (tex && tex.isTexture)
           {
-            if (!texture_map.has(tex.name))
+            if (!texture_map.has(tex.name + tex.uuid))
             {
-              texture_map.set(tex.name, {
-                name: tex.name,
+              texture_map.set(tex.name + tex.uuid, {
+                name: tex.name || 'No name',
                 uuid: tex.uuid,
                 image: tex.image || tex.source || undefined,
                 instance: tex,
@@ -98,7 +98,7 @@ class Textures extends ResizableWindow
               });
             }
 
-            const entry = texture_map.get(tex.name);
+            const entry = texture_map.get(tex.name + tex.uuid);
 
             entry.used_in.push({
               material_name: material.name || 'Unknown Material',
