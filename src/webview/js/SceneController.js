@@ -370,7 +370,7 @@ class SceneController
     {
       this.highlight_object(obj, instance_id);
     }
-    const box = new Box3().setFromObject(obj);
+    const box = obj.boundingBox || new Box3().setFromObject(obj);
     const center = box.getCenter(new Vector3());
     const size = box.getSize(new Vector3());
 
