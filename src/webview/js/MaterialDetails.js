@@ -38,15 +38,29 @@ class MaterialDetails extends ResizableWindow
     this.scene_controller = scene_controller;
   }
 
-  show()
+  show(centered = false)
   {
     this.$container.classList.remove('hidden');
     if (!this.has_changed)
     {
-      this.$container.style.right = '10px';
-      this.$container.style.left = 'initial';
-      this.$container.style.top = '54px';
+      if (centered)
+      {
+        const containerWidth = this.$container.offsetWidth;
+        const containerHeight = this.$container.offsetHeight;
+
+        this.$container.style.right = `calc(50% - ${containerWidth / 2}px)`;
+        this.$container.style.left = 'initial';
+
+        this.$container.style.top = `calc(50% - ${containerHeight / 2}px)`;
+      }
+      else
+      {
+        this.$container.style.right = '10px';
+        this.$container.style.left = 'initial';
+        this.$container.style.top = '54px';
+      }
     }
+    this.bring_forward();
   }
 
   hide()
@@ -62,18 +76,19 @@ class MaterialDetails extends ResizableWindow
     this.$content.innerHTML = '';
   }
 
-  show_material_details(material)
+  show_material_details(material, centered = false)
   {
     this.reset_details();
     this.material = material;
     this.create_material_details();
-    this.show();
+
+    this.show(centered);
   }
 
   create_material_details()
   {
     this.$content.innerHTML = '';
-    console.log(this.material.isMeshBasicMaterial, this.material.isMeshStandardMaterial, this.material.isMeshPhysicalMaterial);
+    // console.log(this.material.isMeshBasicMaterial, this.material.isMeshStandardMaterial, this.material.isMeshPhysicalMaterial);
     if (this.material.isMeshBasicMaterial)
     {
       this.display_basic_material();

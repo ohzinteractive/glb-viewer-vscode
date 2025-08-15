@@ -41,6 +41,11 @@ class UIController
   {
     this.scene_controller.handle_action_click(action, active);
   }
+
+  open_material_details(material, centered = false)
+  {
+    this.panel.contents.materials.material_details.show_material_details(material, centered);
+  }
 }
 
 export { UIController };

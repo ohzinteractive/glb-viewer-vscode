@@ -2,7 +2,7 @@ import { ResizableWindow } from './ResizeableWindow';
 
 class Details extends ResizableWindow
 {
-  constructor()
+  constructor(ui_controller)
   {
     const $container = document.querySelector('.details');
     const $content = document.querySelector('.details__content');
@@ -12,6 +12,7 @@ class Details extends ResizableWindow
 
     this.$content = $content;
     this.$header = $headers;
+    this.ui_controller = ui_controller;
 
     this.vscode_configuration = null;
     this.current_object = null;
@@ -58,6 +59,13 @@ class Details extends ResizableWindow
     for (let i = 0; i < details.length; i++)
     {
       this.$content.appendChild(details[i]);
+    }
+
+    if (!this.has_changed)
+    {
+      this.$container.style.right = '10px';
+      this.$container.style.left = 'initial';
+      this.$container.style.top = '54px';
     }
 
     this.$container.classList.remove('hidden');
@@ -141,7 +149,55 @@ class Details extends ResizableWindow
       $new_details_item.onclick = () => this.copy_to_clipboard(value);
       details.push($new_details_item);
     }
+
+    // Add material button if object has a material
+    if (obj.material)
+    {
+      if (Array.isArray(obj.material))
+      {
+        // Handle array of materials
+        for (let i = 0; i < obj.material.length; i++)
+        {
+          if (obj.material[i])
+          {
+            const $material_button = this.create_material_button(obj.material[i], i);
+            details.push($material_button);
+          }
+        }
+      }
+      else
+      {
+        // Handle single material
+        const $material_button = this.create_material_button(obj.material);
+        details.push($material_button);
+      }
+    }
+
     return details;
+  }
+
+  create_material_button(material)
+  {
+    const $material_button = document.createElement('div');
+
+    $material_button.classList.add('button');
+    $material_button.classList.add('details__material-button');
+
+    $material_button.textContent = 'Open material details';
+    $material_button.title = 'Click to view material details';
+
+    $material_button.addEventListener('click', (e) =>
+    {
+      e.stopPropagation();
+      this.open_material_details(material);
+    });
+
+    return $material_button;
+  }
+
+  open_material_details(material)
+  {
+    this.ui_controller.open_material_details(material, true);
   }
 
   copy_to_clipboard(text)

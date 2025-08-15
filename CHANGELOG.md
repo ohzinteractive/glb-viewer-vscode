@@ -7,6 +7,7 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ### Fixed
  - Fixed issue with textures with no name being grouped together
  - Fov min/max values are now 10-80 and default is 45
+ - Add material detail button to detail window
 
 ## [2.7.0] - 2025-08-11
 
