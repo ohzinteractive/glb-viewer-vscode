@@ -370,10 +370,22 @@ class SceneController
     {
       this.highlight_object(obj, instance_id);
     }
-    const box = obj.boundingBox || new Box3().setFromObject(obj);
+
+    const box = new Box3();
+
+    if (obj.isInstancedMesh)
+    {
+      box.copy(obj.boundingBox);
+      box.applyMatrix4(obj.matrixWorld);
+    }
+    else
+    {
+      box.setFromObject(obj);
+    }
+
     const center = box.getCenter(new Vector3());
     const size = box.getSize(new Vector3());
-
+    console.log(box, center);
     let max_radius = 0.01;
     if (center.length() < 0.001)
     {
@@ -383,6 +395,7 @@ class SceneController
 
     if (instance_id !== undefined)
     {
+      console.log('is an instance', instance_id);
       const mat = new Matrix4();
       obj.getMatrixAt(instance_id, mat);
 
@@ -390,6 +403,7 @@ class SceneController
 
       center.setFromMatrixPosition(world_mat);
       box.setFromBufferAttribute(obj.geometry.attributes.position);
+      box.applyMatrix4(world_mat);
       box.getSize(size);
     }
 
