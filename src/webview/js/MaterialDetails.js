@@ -1,10 +1,10 @@
-import { DoubleSide, FrontSide } from 'three';
+import { DoubleSide, FrontSide, NearestFilter } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
 import { VSCodeContext } from './VSCodeContext';
 
 class MaterialDetails extends ResizableWindow
 {
-  constructor()
+  constructor(panel)
   {
     const $container = document.querySelector('.material-details');
     const $content = document.querySelector('.material-details__content');
@@ -15,6 +15,7 @@ class MaterialDetails extends ResizableWindow
     this.$content = $content;
     this.$header = $headers;
 
+    this.panel = panel;
     this.material = null;
 
     this.$header_message = document.querySelector('.material-details__header-message');
@@ -156,23 +157,23 @@ class MaterialDetails extends ResizableWindow
 
     if (this.material.alphaMap)
     {
-      this.create_texture_property_element('Alpha map', this.material.alphaMap.name);
+      this.create_texture_property_element('Alpha map', this.material.alphaMap);
     }
     this.create_color_property_element('Color', '#' + this.material.color.getHexString());
 
     if (this.material.lightMap)
     {
-      this.create_texture_property_element('Light map', this.material.lightMap.name);
+      this.create_texture_property_element('Light map', this.material.lightMap);
     }
 
     if (this.material.map)
     {
-      this.create_texture_property_element('Map', this.material.map.name);
+      this.create_texture_property_element('Map', this.material.map);
     }
 
     if (this.material.specularMap)
     {
-      this.create_texture_property_element('Specular map', this.material.specularMap.name);
+      this.create_texture_property_element('Specular map', this.material.specularMap);
     }
   }
 
@@ -187,31 +188,31 @@ class MaterialDetails extends ResizableWindow
 
     if (this.material.map)
     {
-      this.create_texture_property_element('Map', this.material.map.name);
+      this.create_texture_property_element('Map', this.material.map);
     }
     if (this.material.alphaMap)
     {
-      this.create_texture_property_element('Alpha map', this.material.alphaMap.name);
+      this.create_texture_property_element('Alpha map', this.material.alphaMap);
     }
     if (this.material.aoMap)
     {
-      this.create_texture_property_element('Ao map', this.material.aoMap.name);
+      this.create_texture_property_element('Ao map', this.material.aoMap);
     }
     if (this.material.normalMap)
     {
-      this.create_texture_property_element('Normal map', this.material.normalMap.name);
+      this.create_texture_property_element('Normal map', this.material.normalMap);
     }
     if (this.material.emissiveMap)
     {
-      this.create_texture_property_element('Emissive map', this.material.emissiveMap.name);
+      this.create_texture_property_element('Emissive map', this.material.emissiveMap);
     }
     if (this.material.metalnessMap)
     {
-      this.create_texture_property_element('Metalness map', this.material.metalnessMap.name);
+      this.create_texture_property_element('Metalness map', this.material.metalnessMap);
     }
     if (this.material.roughnessMap)
     {
-      this.create_texture_property_element('Metalness map', this.material.roughnessMap.name);
+      this.create_texture_property_element('Metalness map', this.material.roughnessMap);
     }
   }
 
@@ -227,15 +228,15 @@ class MaterialDetails extends ResizableWindow
 
     if (this.material.clearcoatMap)
     {
-      this.create_texture_property_element('Clearcoat map', this.material.clearcoatMap.name);
+      this.create_texture_property_element('Clearcoat map', this.material.clearcoatMap);
     }
     if (this.material.specularColorMap)
     {
-      this.create_texture_property_element('Specular map', this.material.specularColorMap.name);
+      this.create_texture_property_element('Specular map', this.material.specularColorMap);
     }
     if (this.material.transmissionMap)
     {
-      this.create_texture_property_element('Transmission map', this.material.transmissionMap.name);
+      this.create_texture_property_element('Transmission map', this.material.transmissionMap);
     }
   }
 
@@ -285,26 +286,46 @@ class MaterialDetails extends ResizableWindow
     this.$content.appendChild($detail_item);
   }
 
-  create_texture_property_element(name, value)
+  async create_texture_property_element(name, map)
   {
     const $detail_item = document.createElement('div');
     const $label = document.createElement('div');
     const $content = document.createElement('div');
+    const $thumbnail_container = document.createElement('div');
+    const $thumbnail = document.createElement('img');
 
     $detail_item.className = 'material-details__item';
     $label.className = 'material-details__item-label';
     $content.className = 'material-details__item-content';
+    $thumbnail_container.className = 'material-details__item-thumbnail-container';
+    $thumbnail.className = 'material-details__item-thumbnail';
+
+    if (map.magFilter === NearestFilter)
+    {
+      $thumbnail.style.imageRendering = 'pixelated';
+    }
 
     $label.textContent = name;
-    $content.textContent = value;
+    $content.textContent = map.name || 'Unnamed texture';
+
+    const image_bitmap = await this.panel.contents.textures.get_image_bitmap(map);
+    const image_bitmap_data_url = this.panel.contents.textures.image_bitmap_to_data_url(image_bitmap);
+
+    $thumbnail.src = image_bitmap_data_url;
 
     $detail_item.appendChild($label);
     $detail_item.appendChild($content);
 
     $detail_item.addEventListener('click', () =>
     {
-      this.copy_to_clipboard(name + ': ' + value);
+      this.copy_to_clipboard(name + ': ' + map.name);
     });
+
+    $thumbnail_container.appendChild($thumbnail);
+    $content.appendChild($thumbnail_container);
+
+    $detail_item.appendChild($thumbnail);
+
     this.$content.appendChild($detail_item);
   }
 }

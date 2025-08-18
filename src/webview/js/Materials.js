@@ -24,7 +24,7 @@ class Materials extends ResizableWindow
 
     this.material_items = [];
 
-    this.material_details = new MaterialDetails();
+    this.material_details = new MaterialDetails(panel);
   }
 
   init(scene_controller)
