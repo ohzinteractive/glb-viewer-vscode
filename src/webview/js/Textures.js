@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
+import { Mesh, MeshBasicMaterial, NearestFilter, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
 import { TextureItem } from './TextureItem';
 import { TexturePreview } from './TexturePreview';
@@ -269,8 +269,10 @@ class Textures extends ResizableWindow
       }
       bitmap_data_url = this.image_bitmap_to_data_url(bitmap);
 
+      const pixelated = texture_item.instance.magFilter === NearestFilter;
+
       this.texture_preview.show();
-      this.texture_preview.set_image(bitmap_data_url, bitmap.width, bitmap.height, texture_item.name);
+      this.texture_preview.set_image(bitmap_data_url, bitmap.width, bitmap.height, texture_item.name, pixelated);
     }
     else
     {

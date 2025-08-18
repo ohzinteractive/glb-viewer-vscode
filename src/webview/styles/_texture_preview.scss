@@ -5,15 +5,20 @@
   }
 
   .texture-preview__content {
-    overflow: hidden;
     display: flex;
 
     align-items: center;
 
     justify-content: center;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
 
   .texture-preview__image {
-    width: fit-content;
-    height: fit-content;
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
   }

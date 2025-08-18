@@ -7,6 +7,10 @@ All notable changes to the GLB Viewer extension will be documented in this file.
 ### Add
  - Textures preview in material details
 
+### Improved
+ - Texture preview too small when resolutions where small. Now it's full size.
+ - Add resolution to texture preview title
+
 
 ## [2.8.3] - 2025-08-15
 

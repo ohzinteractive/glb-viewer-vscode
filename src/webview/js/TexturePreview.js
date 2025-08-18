@@ -29,11 +29,16 @@ class TexturePreview extends ResizableWindow
     this.$container.classList.add('hidden');
   }
 
-  set_image(bitmap_data_url, width, height, texture_name)
+  set_image(bitmap_data_url, width, height, texture_name, pixelated = false)
   {
     this.$image.src = bitmap_data_url;
 
-    this.$title.textContent = texture_name;
+    this.$title.textContent = `${texture_name} (${width}x${height})`;
+
+    if (pixelated)
+    {
+      this.$image.style.imageRendering = 'pixelated';
+    }
 
     if (!this.has_changed)
     {
