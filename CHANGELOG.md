@@ -2,15 +2,21 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.8.4]
+
+### Add
+ - Textures preview in material details
+
+
 ## [2.8.3] - 2025-08-15
 
-### Improved 
+### Improved
 
  - Improved camera focus on instanced meshes
 
 ## [2.8.2] - 2025-08-15
 
-### Fixed 
+### Fixed
 
  - Camera focus on instanced meshes
 
