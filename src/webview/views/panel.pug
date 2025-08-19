@@ -2,12 +2,13 @@
     .panel-buttons.panel-buttons--open
         .button.panel-button(data-name="hierarchy")
             .panel-button-icon
-                svg(width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
-                    circle(cx="12" cy="18" r="3")
-                    circle(cx="6" cy="6" r="3")
-                    circle(cx="18" cy="6" r="3")
-                    path(d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9")
-                    path(d="M12 12v3")
+                svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree-icon lucide-list-tree")
+                    path(d="M21 12h-8")
+                    path(d="M21 6H8")
+                    path(d="M21 18h-8")
+                    path(d="M3 6v4c0 1.1.9 2 2 2h3")
+                    path(d="M3 10v6c0 1.1.9 2 2 2h3")
+
             .panel-button-label
                 | Hierarchy
         .button.panel-button(data-name="textures").hidden
@@ -17,19 +18,18 @@
                     path(d="M14 2v4a2 2 0 0 0 2 2h4")
                     circle(cx="10" cy="12" r="2")
                     path(d="m20 17-1.296-1.296a2.41 2.41 0 0 0-3.408 0L9 22")
+
+
             .panel-button-label
                 | Textures
         .button.panel-button(data-name="materials").hidden
             .panel-button-icon
                 svg(width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
-                    rect(width="18" height="18" x="3" y="3" rx="2")
-                    path(d="M12 9v6")
-                    path(d="M16 15v6")
-                    path(d="M16 3v6")
-                    path(d="M3 15h18")
-                    path(d="M3 9h18")
-                    path(d="M8 15v6")
-                    path(d="M8 3v6")
+                    circle(cx="12" cy="12" r="9")
+                    path(d="M12 3a9 9 0 0 0-9 9h9z" fill="currentColor")
+                    path(d="M12 21a9 9 0 0 0 9-9h-9z" fill="currentColor")
+                    line(x1="3" y1="12" x2="21" y2="12")
+
             .panel-button-label
                 | Materials
         .button.panel-button(data-name="geometries").hidden
@@ -47,10 +47,9 @@
                 | Geometries
         .button.panel-button(data-name="animations").hidden
             .panel-button-icon
-                svg(width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
-                    path(d="M4 10c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2")
-                    path(d="M10 16c-1.1 0-2-.9-2-2v-4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2")
-                    rect(width="8" height="8" x="14" y="14" rx="2")
+                svg(xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play-icon lucide-play")
+                    path(d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z")
+
             .panel-button-label
                 | Animations
         .button.panel-button(data-name="info")
