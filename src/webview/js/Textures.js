@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, NearestFilter, OrthographicCamera, PlaneGeometry, Scene, WebGLRenderTarget } from 'three';
+import { FloatType, LinearSRGBColorSpace, Mesh, MeshBasicMaterial, NearestFilter, OrthographicCamera, PlaneGeometry, Scene, SRGBColorSpace, WebGLRenderTarget } from 'three';
 import { ResizableWindow } from './ResizeableWindow';
 import { TextureItem } from './TextureItem';
 import { TexturePreview } from './TexturePreview';
@@ -183,7 +183,10 @@ class Textures extends ResizableWindow
     const width = full_size ? texture.image.width : Math.min(texture.image.width || 512, 512);
     const height = full_size ? texture.image.height : Math.min(texture.image.height || 512, 512);
 
-    const rt = new WebGLRenderTarget(width, height);
+    const rt = new WebGLRenderTarget(width, height, {
+      type: FloatType
+    });
+    rt.colorSpace = LinearSRGBColorSpace;
     const quadScene = new Scene();
     const quadCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -191,19 +194,21 @@ class Textures extends ResizableWindow
     const quad = new Mesh(new PlaneGeometry(2, 2), material);
     quadScene.add(quad);
 
+    this.scene_controller.renderer.renderer.outputColorSpace = LinearSRGBColorSpace;
     this.scene_controller.renderer.renderer.setRenderTarget(rt);
     this.scene_controller.renderer.renderer.render(quadScene, quadCamera);
     this.scene_controller.renderer.renderer.setRenderTarget(null);
+    this.scene_controller.renderer.renderer.outputColorSpace = SRGBColorSpace;
 
-    // Read pixels
-    const buffer = new Uint8Array(width * height * 4);
+    const buffer = new Float32Array(width * height * 4);
     this.scene_controller.renderer.renderer.readRenderTargetPixels(rt, 0, 0, width, height, buffer);
-
-    const pixel_buffer = new Uint8ClampedArray(buffer);
-    this.convert_pixel_buffer_to_srgb(pixel_buffer);
+    if (texture.colorSpace === 'srgb')
+    {
+      this.convert_pixel_buffer_to_srgb(buffer);
+    }
+    const pixel_buffer = this.convert_to_uint8_array(buffer);
     const imageData = new ImageData(pixel_buffer, width, height);
 
-    // Create ImageBitmap
     const imageBitmap = await createImageBitmap(imageData);
 
     return imageBitmap;
@@ -226,14 +231,32 @@ class Textures extends ResizableWindow
   {
     for (let i = 0; i < buffer.length; i += 4)
     {
-      const r = buffer[i + 0] / 255;
-      const g = buffer[i + 1] / 255;
-      const b = buffer[i + 2] / 255;
+      const r = buffer[i + 0];
+      const g = buffer[i + 1];
+      const b = buffer[i + 2];
 
-      buffer[i]     = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(r) * 255)));
-      buffer[i + 1] = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(g) * 255)));
-      buffer[i + 2] = Math.min(255, Math.max(0, Math.round(this.linearToSrgb(b) * 255)));
+      buffer[i + 0] = this.linearToSrgb(r);
+      buffer[i + 1] = this.linearToSrgb(g);
+      buffer[i + 2] = this.linearToSrgb(b);
     }
+  }
+
+  convert_to_uint8_array(buffer)
+  {
+    const pixel_buffer = new Uint8ClampedArray(buffer.length);
+    for (let i = 0; i < buffer.length; i += 4)
+    {
+      const r = buffer[i + 0];
+      const g = buffer[i + 1];
+      const b = buffer[i + 2];
+      const a = buffer[i + 3];
+
+      pixel_buffer[i + 0] = Math.round(r * 255);
+      pixel_buffer[i + 1] = Math.round(g * 255);
+      pixel_buffer[i + 2] = Math.round(b * 255);
+      pixel_buffer[i + 3] = Math.round(a * 255);
+    }
+    return pixel_buffer;
   }
 
   image_bitmap_to_data_url(image_bitmap)
