@@ -2,39 +2,44 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.10.2]
+## [2.10.3] - 2025-08-19
+
+### Fixed
+ - Fixed issue with material detail name not being displayed correctly
+
+## [2.10.2] - 2025-08-19
 
 ### Improved
  - Updated preview image of package
 
-## [2.10.1]
+## [2.10.1] - 2025-08-19
 
 ### Fixed
  - Selection of empty objects not displaying correctly the axis helper
 
 
-## [2.10.0]
+## [2.10.0] - 2025-08-19
 
 ### Added
  - Changing fov now happens inplace
 
 
-## [2.9.3]
+## [2.9.3] - 2025-08-18
 
 ### Fixed
  - Fixed issue with texture color space on image preview and download
 
-## [2.9.2]
+## [2.9.2] - 2025-08-17
 
 ### Fixed
  - Fixed material icon
 
-## [2.9.1]
+## [2.9.1] - 2025-08-16
 
 ### Improved
  - Changed icons
 
-## [2.9.0]
+## [2.9.0] - 2025-08-16
 
 ### Add
  - Textures preview in material details

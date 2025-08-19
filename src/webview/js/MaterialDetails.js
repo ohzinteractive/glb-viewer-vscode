@@ -140,7 +140,7 @@ class MaterialDetails extends ResizableWindow
 
   __display_base_material_properties(type)
   {
-    this.create_property_element('Name', this.material.name);
+    this.create_property_element('Name', this.material.name || `Material ${this.material.uuid}`);
     this.create_property_element('Type', type);
     this.create_property_element('Transparent', this.material.transparent);
     if (this.material.transparent)
