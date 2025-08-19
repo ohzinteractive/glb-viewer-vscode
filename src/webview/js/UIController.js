@@ -30,6 +30,10 @@ class UIController
     this.details.handle_object_click(object3d, instance_id);
     this.panel.contents.hierarchy.handle_object_click(object3d, instance_id);
     this.scene_controller.focus_camera_on_object(object3d, true, instance_id);
+    if (object3d.material)
+    {
+      this.panel.contents.materials.material_details.update_material_details(object3d.material);
+    }
   }
 
   update_panel_contents(object3d)

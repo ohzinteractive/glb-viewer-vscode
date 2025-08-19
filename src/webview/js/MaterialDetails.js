@@ -86,6 +86,13 @@ class MaterialDetails extends ResizableWindow
     this.show(centered);
   }
 
+  update_material_details(material)
+  {
+    this.reset_details();
+    this.material = material;
+    this.create_material_details();
+  }
+
   create_material_details()
   {
     this.$content.innerHTML = '';
@@ -105,8 +112,6 @@ class MaterialDetails extends ResizableWindow
         this.display_standard_material();
       }
     }
-
-    this.$container.classList.remove('hidden');
   }
 
   copy_to_clipboard(text)
