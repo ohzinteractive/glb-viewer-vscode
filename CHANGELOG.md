@@ -2,11 +2,15 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.10.2]
+
+### Improved
+ - Updated preview image of package
+
 ## [2.10.1]
 
 ### Fixed
  - Selection of empty objects not displaying correctly the axis helper
-
 
 
 ## [2.10.0]
