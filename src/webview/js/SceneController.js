@@ -164,7 +164,7 @@ class SceneController
 
     this.loader.load(dataUri, (gltf) =>
     {
-      console.log('GLB loaded', gltf);
+      // console.log('GLB loaded', gltf);
       this.model = gltf.scene;
       this.gltf = gltf;
       this.animation_controller.init_gltf(gltf);
@@ -352,6 +352,12 @@ class SceneController
         world_mat.decompose(this.selected_empty_object.position, this.selected_empty_object.quaternion, this.selected_empty_object.scale);
       }
     }
+    else
+    {
+      obj.getWorldPosition(this.selected_empty_object.position);
+      obj.getWorldQuaternion(this.selected_empty_object.quaternion);
+      this.scene.add(this.selected_empty_object);
+    }
 
     if (this.axis_helper.visible)
     {
@@ -385,7 +391,6 @@ class SceneController
 
     const center = box.getCenter(new Vector3());
     const size = box.getSize(new Vector3());
-    console.log(box, center);
     let max_radius = 0.01;
     if (center.length() < 0.001)
     {
@@ -395,7 +400,6 @@ class SceneController
 
     if (instance_id !== undefined)
     {
-      console.log('is an instance', instance_id);
       const mat = new Matrix4();
       obj.getMatrixAt(instance_id, mat);
 
