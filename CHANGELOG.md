@@ -2,6 +2,12 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.10.0]
+
+### Added
+ - Changing fov now happens inplace
+
+
 ## [2.9.3]
 
 ### Fixed
