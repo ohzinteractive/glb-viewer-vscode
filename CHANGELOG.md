@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.9.1]
+
+### Improved
+ - Changed icons
+
 ## [2.9.0]
 
 ### Add
