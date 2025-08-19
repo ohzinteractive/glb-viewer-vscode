@@ -2,7 +2,7 @@
 
 A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB files. This extension allows you to preview and interact with 3D models directly within VS Code.
 
-![Preview](https://github.com/ohzinteractive/vscode-glb-viewer/blob/main/previews/preview-2.1.1.png?raw=true)
+![Preview](https://github.com/ohzinteractive/vscode-glb-viewer/blob/main/previews/preview-2.10.0.png?raw=true)
 
 ## Usage
 
