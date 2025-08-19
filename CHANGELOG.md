@@ -2,6 +2,16 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.9.3]
+
+### Fixed
+ - Fixed issue with texture color space on image preview and download
+
+## [2.9.2]
+
+### Fixed
+ - Fixed material icon
+
 ## [2.9.1]
 
 ### Improved

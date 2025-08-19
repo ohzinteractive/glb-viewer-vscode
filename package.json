@@ -1,6 +1,6 @@
 {
   "name": "ohzi-vscode-glb-viewer",
-  "version": "2.9.1",
+  "version": "2.9.3",
   "publisher": "OHZIInteractiveStudio",
   "main": "extension.js",
   "icon": "icon.png",
