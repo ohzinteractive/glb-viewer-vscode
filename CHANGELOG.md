@@ -2,7 +2,7 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
-## [2.8.4]
+## [2.9.0]
 
 ### Add
  - Textures preview in material details
