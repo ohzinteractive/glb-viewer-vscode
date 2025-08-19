@@ -610,6 +610,24 @@ class SceneController
 
   set_fov(value)
   {
+    const fovRatio = Math.tan(MathUtils.degToRad(this.camera.fov) / 2) / Math.tan(MathUtils.degToRad(value) / 2);
+
+    const direction = new Vector3();
+    this.camera.getWorldDirection(direction);
+    direction.negate();
+
+    const center = this.controls.target.clone();
+
+    const currentDistance = this.camera.position.distanceTo(center);
+
+    const newDistance = currentDistance * fovRatio;
+
+    const newPosition = center.clone().add(direction.multiplyScalar(newDistance));
+    this.camera.position.copy(newPosition);
+
+    this.controls.target.copy(center);
+    this.controls.update();
+
     this.camera.fov = value;
     this.camera.updateProjectionMatrix();
   }
