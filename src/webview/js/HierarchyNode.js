@@ -74,6 +74,10 @@ class HierarchyNode
       this.$label_wrapper.appendChild(this.$folder_icon);
       this.$folder_icon.addEventListener('click', (e) => this.handle_icon_click(e));
     }
+    else
+    {
+      this.$element.classList.add('tree-node--leaf');
+    }
 
     this.$icon = document.createElement('div');
     this.$icon.classList.add('tree-node__icon');
