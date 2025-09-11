@@ -121,6 +121,28 @@ function checkFileExtensionDefaults(context)
   context.subscriptions.push(disposable);
 }
 
+async function sendModelAsBase64(panel, modelUri)
+{
+  try
+  {
+    const data = await vscode.workspace.fs.readFile(modelUri); // works with git+ and file+
+
+    const dataBase64 = Buffer.from(data).toString('base64');
+
+    console.log('Sending model data as base64, length:', dataBase64.length);
+
+    // send back as base64 or ArrayBuffer
+    panel.webview.postMessage({
+      type: 'loadModelFromBase64',
+      data: dataBase64
+    });
+  }
+  catch (err)
+  {
+    vscode.window.showErrorMessage(`Failed to read GLB: ${err}`);
+  }
+}
+
 function activate(context)
 {
   const provider =
@@ -134,8 +156,8 @@ function activate(context)
     {
       console.log('Resolving custom editor for:', document.uri.toString());
 
-      const rootUri = webviewPanel.webview.asWebviewUri(document.uri);
-      const dataUri = rootUri.toString();
+      const modelUri = webviewPanel.webview.asWebviewUri(document.uri);
+      const modelUriString = modelUri.toString();
 
       webviewPanel.webview.options = {
         enableScripts: true,
@@ -147,7 +169,7 @@ function activate(context)
         retainContextWhenHidden: true
       };
 
-      webviewPanel.webview.html = getHTML(webviewPanel, dataUri);
+      webviewPanel.webview.html = getHTML(webviewPanel, modelUriString);
 
       // Listen for messages from the WebView
       webviewPanel.webview.onDidReceiveMessage(message =>
@@ -165,10 +187,19 @@ function activate(context)
             root_path: getRootPath(webviewPanel)
           });
 
-          webviewPanel.webview.postMessage({
-            type: 'loadModel',
-            dataUri
-          });
+          console.log('Sending modelUri to WebView:', modelUriString);
+
+          if (modelUriString.includes('git'))
+          {
+            sendModelAsBase64(webviewPanel, document.uri);
+          }
+          else
+          {
+            webviewPanel.webview.postMessage({
+              type: 'loadModelFromUri',
+              dataUri: modelUriString
+            });
+          }
         }
         if (message.command === 'openJson')
         {

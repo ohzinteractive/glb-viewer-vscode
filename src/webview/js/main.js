@@ -24,8 +24,11 @@ class MainApplication
       const message = event.data;
       switch (message.type)
       {
-      case 'loadModel':
-        this.scene_controller.loadModel(message.dataUri);
+      case 'loadModelFromUri':
+        this.scene_controller.loadModelFromUri(message.dataUri);
+        break;
+      case 'loadModelFromBase64':
+        this.scene_controller.loadModelFromBase64(message.data);
         break;
       case 'setRootPath':
         this.scene_controller.setLibURIs(message.root_path);

@@ -135,6 +135,18 @@ class SceneController
   {
     this.ui_controller = ui_controller;
     this.animate();
+
+    const pmrem = new PMREMGenerator(this.renderer.renderer);
+
+    this.renderer.renderer.setClearColor(0x000000);
+    this.scene.environment = pmrem.fromScene(new StudioLightScene()).texture;
+    // this.scene.background = this.scene.environment;
+
+    // this.scene.add(new Mesh(new SphereGeometry(), new MeshStandardMaterial({
+    //   color: 0xffffff,
+    //   roughness: 0.1,
+    //   metalness: 1
+    // })));
   }
 
   setLibURIs(root_path)
@@ -153,7 +165,17 @@ class SceneController
     this.root_path = root_path;
   }
 
-  loadModel(dataUri)
+  loadModelFromBase64(base64)
+  {
+    const binary = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    // Feed this into GLTFLoader instead of fetch()
+    this.loader.parse(binary.buffer, '', (gltf) =>
+    {
+      this.on_model_loaded(gltf);
+    }, console.error);
+  }
+
+  loadModelFromUri(dataUri)
   {
     if (!dataUri)
     {
@@ -164,71 +186,64 @@ class SceneController
 
     this.loader.load(dataUri, (gltf) =>
     {
-      // console.log('GLB loaded', gltf);
-      this.model = gltf.scene;
-      this.gltf = gltf;
-      this.animation_controller.init_gltf(gltf);
+      this.on_model_loaded(gltf);
+    });
+  }
 
-      this.scene.add(this.model);
-      this.model.updateMatrixWorld(true);
-      this.model.traverse(child =>
+  on_model_loaded(gltf)
+  {
+    // console.log('GLB loaded', gltf);
+    this.model = gltf.scene;
+    this.gltf = gltf;
+    this.animation_controller.init_gltf(gltf);
+
+    this.scene.add(this.model);
+    this.model.updateMatrixWorld(true);
+    this.model.traverse(child =>
+    {
+      child.frustumCulled = false;
+      if (child.geometry)
       {
-        child.frustumCulled = false;
-        if (child.geometry)
+        if (child.isSkinnedMesh)
         {
-          if (child.isSkinnedMesh)
-          {
-            child.computeBoundingBox();
-          }
+          child.computeBoundingBox();
         }
-
-        child.globalPosition = new Vector3();
-        child.globalScale    = new Vector3();
-        const child_box            = new Box3();
-        child_box.setFromObject(child);
-        child_box.getCenter(child.globalPosition);
-        child_box.getSize(child.globalScale);
-      });
-
-      const box = new Box3().setFromObject(this.model, true);
-      const size = box.getSize(new Vector3()).length();
-      const center = box.getCenter(new Vector3());
-
-      this.camera.position.copy(center);
-      this.camera.position.z += size * 1.5;
-      this.camera.lookAt(center);
-
-      if (size < 10)
-      {
-        this.camera.near = 0.01;
       }
 
-      this.focus_camera_on_object(this.model, false);
-
-      this.scene_drawcall_count = this.renderer.get_drawcall_count(this.model, this.camera);
-
-      this.ui_controller.update_panel_contents(this.model);
-
-      this.skeleton_visualizer.init_from_scene(this.model);
-
-      for (let i = 0; i < this.subscribers.length; i++)
-      {
-        const subscriber = this.subscribers[i];
-        subscriber.on_model_loaded(this.model);
-      }
+      child.globalPosition = new Vector3();
+      child.globalScale    = new Vector3();
+      const child_box            = new Box3();
+      child_box.setFromObject(child);
+      child_box.getCenter(child.globalPosition);
+      child_box.getSize(child.globalScale);
     });
 
-    const pmrem = new PMREMGenerator(this.renderer.renderer);
+    const box = new Box3().setFromObject(this.model, true);
+    const size = box.getSize(new Vector3()).length();
+    const center = box.getCenter(new Vector3());
 
-    this.renderer.renderer.setClearColor(0x000000);
-    this.scene.environment = pmrem.fromScene(new StudioLightScene()).texture;
-    // this.scene.background = this.scene.environment;
+    this.camera.position.copy(center);
+    this.camera.position.z += size * 1.5;
+    this.camera.lookAt(center);
 
-    // this.scene.add(new Mesh(new SphereGeometry(), new MeshStandardMaterial({
-    //   color: 0xffffff,
-    //   roughness: 0.1,
-    //   metalness: 1
-    // })));
+    if (size < 10)
+    {
+      this.camera.near = 0.01;
+    }
+
+    this.focus_camera_on_object(this.model, false);
+
+    this.scene_drawcall_count = this.renderer.get_drawcall_count(this.model, this.camera);
+
+    this.ui_controller.update_panel_contents(this.model);
+
+    this.skeleton_visualizer.init_from_scene(this.model);
+
+    for (let i = 0; i < this.subscribers.length; i++)
+    {
+      const subscriber = this.subscribers[i];
+      subscriber.on_model_loaded(this.model);
+    }
   }
 
   update()
