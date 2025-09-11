@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.12.0] - 2025-09-11
+
+### Added 
+ - Ability to load models from GIT Timeline
+
 ## [2.11.0] - 2025-09-11
 
 ### Added 
