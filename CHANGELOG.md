@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.11.0] - 2025-09-11
+
+### Added 
+ - Hierarchy vertical lines for improved hiearchy visibility
+
 ## [2.10.3] - 2025-08-19
 
 ### Fixed
