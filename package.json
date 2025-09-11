@@ -107,7 +107,10 @@
   "scripts": {
     "start": "vite build --watch",
     "watch": "vite build --watch",
-    "build": "vite build"
+    "build": "vite build",
+    "create-tag": "node tasks/create_tag.mjs",
+    "create-package": "node tasks/create_package.mjs",
+    "dist": "yarn build && yarn create-package && yarn create-tag"
   },
   "standardx": {
     "ignore": [
