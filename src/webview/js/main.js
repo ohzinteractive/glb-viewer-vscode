@@ -25,6 +25,7 @@ class MainApplication
       switch (message.type)
       {
       case 'loadModelFromUri':
+        this.ui_controller.panel.contents.info.update_extension(message.dataUri);
         this.scene_controller.loadModelFromUri(message.dataUri);
         break;
       case 'loadModelFromBase64':

@@ -19,9 +19,9 @@ class Info extends ResizableWindow
 
     this.$close_button = container.querySelector('.info-header__close');
     this.$close_button.addEventListener('click', this.handle_close_button_click.bind(this));
-
-    this.$inspect_json_button = container.querySelector('.info-button__inspect-json');
-    this.$inspect_json_button.addEventListener('click', this.handle_inspect_json_button_click.bind(this));
+    this.$inspect_button = this.$container.querySelector('.info-button__inspect-json');
+    this.$inspect_button.addEventListener('click', this.handle_inspect_button_click.bind(this));
+    this.extension = '';
   }
 
   init(scene_controller)
@@ -152,12 +152,37 @@ class Info extends ResizableWindow
     this.panel.deactivate_button(this.name);
   }
 
-  handle_inspect_json_button_click()
+  handle_inspect_button_click()
+  {
+    if (this.extension === 'gltf')
+    {
+      this.open_as_text();
+    }
+    else
+    {
+      this.open_as_json();
+    }
+  }
+
+  open_as_json()
   {
     VSCodeContext.ctx.postMessage({
       command: 'openJson',
       payload: this.scene_controller.gltf.parser.json
     });
+  }
+
+  open_as_text()
+  {
+    VSCodeContext.ctx.postMessage({
+      command: 'openAsText'
+    });
+  }
+
+  update_extension(uri)
+  {
+    this.extension = uri.split('.').pop();
+    this.$inspect_button.children[0].textContent = this.extension === 'gltf' ? 'Open as Text' : 'Open as JSON';
   }
 }
 

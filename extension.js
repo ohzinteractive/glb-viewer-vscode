@@ -28,10 +28,10 @@ function getHTML(panel)
 
   html = html.replace(
     'content="content-security-policy-replaced-on-extension-js"',
-    `default-src 'none'; 
+    `default-src 'none';
      img-src ${panel.webview.cspSource} https: data: blob:;
-     script-src ${panel.webview.cspSource}; 
-     style-src ${panel.webview.cspSource} 'unsafe-inline'; 
+     script-src ${panel.webview.cspSource};
+     style-src ${panel.webview.cspSource} 'unsafe-inline';
      connect-src ${panel.webview.cspSource} https:;"
     `
   );
@@ -213,6 +213,11 @@ function activate(context)
             vscode.window.showTextDocument(doc, vscode.ViewColumn.Active, true);
           });
         }
+
+        if (message.command === 'openAsText')
+        {
+          vscode.commands.executeCommand('vscode.openWith', document.uri, 'default');
+        }
       });
 
       // webviewPanel.onDidChangeViewState(e =>
@@ -256,6 +261,20 @@ function activate(context)
       });
     }
   };
+
+  const openAsTextCommand = vscode.commands.registerCommand('glbViewer.openAsText', async(uri) =>
+  {
+    if (!uri && vscode.window.activeTextEditor)
+    {
+      uri = vscode.window.activeTextEditor.document.uri;
+    }
+    if (!uri) return;
+
+    // Force open with default text editor
+    await vscode.commands.executeCommand('vscode.openWith', uri, 'default');
+  });
+
+  context.subscriptions.push(openAsTextCommand);
 
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(
