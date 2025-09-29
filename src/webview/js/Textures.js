@@ -55,8 +55,8 @@ class Textures extends ResizableWindow
       'emissiveMap',
       'roughnessMap',
       'metalnessMap',
+      'aoMap',
       'normalMap',
-      'ambientOcclusionMap',
       'displacementMap',
       'alphaMap',
       'envMap',
@@ -75,41 +75,42 @@ class Textures extends ResizableWindow
 
     object3d.traverse((child) =>
     {
-      const materials = Array.isArray(child.material) ? child.material : [child.material];
-
-      for (const material of materials)
+      if (child.material)
       {
-        if (!material) continue;
-
-        for (const channel of material_types)
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        for (const material of materials)
         {
-          const tex = material[channel];
+          if (!material) continue;
 
-          if (tex && tex.isTexture)
+          for (const channel of material_types)
           {
-            if (!texture_map.has(tex.source.uuid))
+            const tex = material[channel];
+
+            if (tex && tex.isTexture)
             {
-              texture_map.set(tex.source.uuid, {
-                name: tex.name || 'No name',
-                uuid: tex.source.uuid,
-                image: tex.image || tex.source || undefined,
-                instance: tex,
-                used_in: []
+              if (!texture_map.has(tex.source.uuid))
+              {
+                texture_map.set(tex.source.uuid, {
+                  name: tex.name || 'No name',
+                  uuid: tex.source.uuid,
+                  image: tex.image || tex.source || undefined,
+                  instance: tex,
+                  used_in: []
+                });
+              }
+
+              const entry = texture_map.get(tex.source.uuid);
+
+              entry.used_in.push({
+                material_name: material.name || 'Unknown Material',
+                channel: channel,
+                mesh_name: child.name || 'Unnamed Mesh'
               });
             }
-
-            const entry = texture_map.get(tex.source.uuid);
-
-            entry.used_in.push({
-              material_name: material.name || 'Unknown Material',
-              channel: channel,
-              mesh_name: child.name || 'Unnamed Mesh'
-            });
           }
         }
       }
     });
-
     const texture_list = Array.from(texture_map.values());
     /* output example:
     {
@@ -180,9 +181,13 @@ class Textures extends ResizableWindow
 
   async get_image_bitmap(texture, full_size = false)
   {
+    if (texture.source)
+    {
+      return texture.source.data;
+    }
+
     const width = full_size ? texture.image.width : Math.min(texture.image.width || 512, 512);
     const height = full_size ? texture.image.height : Math.min(texture.image.height || 512, 512);
-
     const rt = new WebGLRenderTarget(width, height, {
       type: FloatType
     });
@@ -305,10 +310,16 @@ class Textures extends ResizableWindow
 
   async download_image(texture_item)
   {
-    console.log('download image');
     const bitmap = await this.get_image_bitmap(texture_item.instance, true);
+    console.log(bitmap);
+    console.log('download image', texture_item);
     let name = texture_item.name;
-    const extension = name.split('.').pop();
+
+    let extension = 'png';
+    if (name.split('.').length > 1)
+    {
+      extension = name.split('.').pop();
+    }
     name = name.replace(`.${extension}`, '');
     const data_url = this.image_bitmap_to_data_url(bitmap);
     const a = document.createElement('a');
