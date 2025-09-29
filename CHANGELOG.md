@@ -2,14 +2,24 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [2.13.0] - 2025-09-29
+
+### Fixed
+ - Wrong texture file name after download
+ - Bitmap not being displayed correctly in texture preview
+ - Occlusion textures not being displayed in texture list
+
+### Improved
+  - If file is glTF, it can be opened as text to edit from the info panel
+
 ## [2.12.0] - 2025-09-11
 
-### Added 
+### Added
  - Ability to load models from GIT Timeline
 
 ## [2.11.0] - 2025-09-11
 
-### Added 
+### Added
  - Hierarchy vertical lines for improved hiearchy visibility
 
 ## [2.10.3] - 2025-08-19
