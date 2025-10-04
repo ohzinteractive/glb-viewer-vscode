@@ -10,7 +10,7 @@ function copyPublic() {
     name: 'copy-public',
     apply: 'build',
     writeBundle: () => {
-      fs.cpSync('public', 'dist/webview', { recursive: true });
+      fs.cpSync('glb-viewer-core/public', 'dist/webview', { recursive: true });
       console.log('Copied public to dist');
       return true;
     },
@@ -18,9 +18,9 @@ function copyPublic() {
 }
 
 export default defineConfig({
-  root: 'src/webview',
+  root: 'glb-viewer-core/src/webview',
   build: {
-    outDir: '../../dist/webview',
+    outDir: '../../../dist/webview',
     emptyOutDir: true,
     chunkSizeWarningLimit: 700,
     minify: 'esbuild',
@@ -30,9 +30,9 @@ export default defineConfig({
     },
     rollupOptions: {
       input: {
-        html: path.resolve(__dirname, 'src/webview/index.html'),
-        main: path.resolve(__dirname, 'src/webview/js/main.js'),
-        css: path.resolve(__dirname, 'src/webview/styles/style.scss'),
+        html: path.resolve(__dirname, 'glb-viewer-core/src/webview/index.html'),
+        main: path.resolve(__dirname, 'glb-viewer-core/src/webview/js/main.js'),
+        css: path.resolve(__dirname, 'glb-viewer-core/src/webview/styles/style.scss'),
       },
       output: {
         entryFileNames: 'assets/[name].js',

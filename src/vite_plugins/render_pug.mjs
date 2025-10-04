@@ -4,7 +4,7 @@ import packagejson from '../../package.json';
 
 const renderPug = () =>
 {
-  const templatePath = path.resolve(__dirname, '../../src/webview/index.pug');
+  const templatePath = path.resolve(__dirname, '../../glb-viewer-core/src/webview/index.pug');
 
   return {
     name: 'render-pug-to-html',

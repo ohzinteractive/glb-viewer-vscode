@@ -7,7 +7,7 @@ const watchPugFiles = () =>
     name: 'watch-all-pug',
     buildStart()
     {
-      // Recursively add all .pug files in your src/webview directory
+      // Recursively add all .pug files in your glb-viewer-core/src/webview directory
       const walk = dir =>
       {
         fs.readdirSync(dir).forEach(file =>
@@ -23,7 +23,7 @@ const watchPugFiles = () =>
           }
         });
       };
-      walk(path.resolve(__dirname, '../../src/webview'));
+      walk(path.resolve(__dirname, '../../glb-viewer-core/src/webview'));
     }
   };
 };
