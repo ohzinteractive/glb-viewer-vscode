@@ -2,7 +2,7 @@
 
 A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB files. This extension allows you to preview and interact with 3D models directly within VS Code.
 
-![Preview](https://github.com/ohzinteractive/vscode-glb-viewer/blob/main/previews/preview-2.10.0.png?raw=true)
+![Preview](https://github.com/ohzinteractive/glb-viewer-vscode/blob/main/previews/preview-2.10.0.png?raw=true)
 
 ## Usage
 
@@ -62,7 +62,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for details about each release.
 
 1. Clone the repository:
    ```bash
-   git clone git@github.com:ohzinteractive/vscode-glb-viewer.git
+   git clone git@github.com:ohzinteractive/glb-viewer-vscode.git
    ```
 
 2. Install dependencies:
@@ -101,7 +101,7 @@ To package the extension into a VSIX file for distribution:
    ```
 
 This will create a `.vsix` file in your project directory. You can then:
-- Install it locally by running `code --install-extension ohzi-vscode-glb-viewer-1.0.0.vsix`
+- Install it locally by running `code --install-extension ohzi-glb-viewer-vscode-2.13.0.vsix`
 - Upload it to the VS Code Marketplace for public distribution
 - Share it directly with other users for manual installation
 

@@ -9,7 +9,7 @@
   "keywords": ["GLB", "glb", "glTF", "gltf", "3d", "model", "viewer", "ohzi", "ohzi-interactive", "ohzi-interactive-studio", "three.js", "threejs", "three", "three-js"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ohzinteractive/vscode-glb-viewer"
+    "url": "https://github.com/ohzinteractive/glb-viewer-vscode"
   },
   "engines": {
     "vscode": "^1.80.0"
@@ -20,10 +20,6 @@
     "Federico Gratti <federico.gratti@ohzi.io>"
   ],
   "license": "MIT",
-  "dependencies": {
-    "pit-js": "^4.1.1",
-    "three": "^0.176.0"
-  },
   "activationEvents": [
     "onFileSystem:file",
     "onFileSystem:vsls",
@@ -94,15 +90,7 @@
     }
   },
   "devDependencies": {
-    "chokidar-cli": "^3.0.0",
-    "concurrently": "^9.1.2",
-    "pug": "^3.0.3",
-    "sass": "1.77.5",
-    "standardx": "^7.0.0",
-    "stylelint": "^15.3.0",
-    "stylelint-config-standard-scss": "^7.0.1",
-    "stylelint-order": "^6.0.3",
-    "vite": "^6.3.5"
+    "standardx": "^7.0.0"
   },
   "scripts": {
     "preinstall": "yarn setup-git && yarn setup-submodules && yarn update-submodules && yarn config-hooks",
@@ -113,9 +101,8 @@
     "update-submodules": "yarn update-core",
     "update-core": "node tasks/update_submodule.mjs glb-viewer-core",
     "config-hooks": "git config core.hooksPath git_hooks",
-    "start": "vite build --watch",
-    "watch": "vite build --watch",
-    "build": "vite build",
+    "start": "cd glb-viewer-core && yarn start",
+    "build": "cd glb-viewer-core && yarn build",
     "create-tag": "node tasks/create_tag.mjs",
     "create-package": "node tasks/create_package.mjs",
     "dist": "yarn build && yarn create-package && yarn create-tag",
