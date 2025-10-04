@@ -1,0 +1,3 @@
+[submodule "glb-viewer-core"]
+	path = glb-viewer-core
+	url = https://github.com/ohzinteractive/glb-viewer-core

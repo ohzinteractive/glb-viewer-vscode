@@ -105,18 +105,27 @@
     "vite": "^6.3.5"
   },
   "scripts": {
+    "preinstall": "yarn setup-git && yarn setup-submodules && yarn update-submodules && yarn config-hooks",
+    "postinstall": "yarn setup-submodules && yarn update-submodules",
+    "setup-git": "git init",
+    "setup-submodules": "yarn setup-core-submodule",
+    "setup-core-submodule": "node tasks/setup_submodule.mjs glb-viewer-core",
+    "update-submodules": "yarn update-core",
+    "update-core": "node tasks/update_submodule.mjs glb-viewer-core",
+    "config-hooks": "git config core.hooksPath git_hooks",
     "start": "vite build --watch",
     "watch": "vite build --watch",
     "build": "vite build",
     "create-tag": "node tasks/create_tag.mjs",
     "create-package": "node tasks/create_package.mjs",
-    "dist": "yarn build && yarn create-package && yarn create-tag"
+    "dist": "yarn build && yarn create-package && yarn create-tag",
+    "fix-syntax": "standardx --fix"
   },
   "standardx": {
     "ignore": [
       "vite.config.mjs",
       "rollup.config.mjs",
-      "src/webview/lib/*"
+      "glb-viewer-core/public/lib/*"
     ]
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
