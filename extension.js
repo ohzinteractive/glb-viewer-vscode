@@ -136,7 +136,8 @@ async function sendModelAsBase64(panel, modelUri)
     // send back as base64 or ArrayBuffer
     panel.webview.postMessage({
       type: 'loadModelFromBase64',
-      data: dataBase64
+      data: dataBase64,
+      extension: path.extname(modelUri.fsPath).substring(1)
     });
   }
   catch (err)
