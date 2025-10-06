@@ -6,34 +6,36 @@ const path = require('path');
 
 function getHTML(panel)
 {
-  const distPath = path.join(__dirname, 'dist', 'webview');
-  const htmlPath = path.join(distPath, 'index.html');
+  const publicPath = path.join(__dirname, 'public');
+  const htmlPath = path.join(publicPath, 'webview', 'index.html');
   let html = fs.readFileSync(htmlPath, 'utf8');
 
   // Replace all asset references with webview URIs
-  html = html.replace(/(["'])(\/assets\/[^"']+\.(js|css))\1/g, (match, quote, assetPath) =>
+  html = html.replace(/(["'])(\/webview\/assets\/[^"']+\.(js|css))\1/g, (match, quote, assetPath) =>
   {
-    const assetFullPath = path.join(distPath, assetPath);
+    const assetFullPath = path.join(publicPath, assetPath);
+
     const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
     return `${quote}${webviewUri.toString()}${quote}`;
   });
 
   // Also replace any relative paths to assets
-  html = html.replace(/(["'])\.\/assets\/([^"']+\.(js|css))\1/g, (match, quote, assetFile) =>
+  html = html.replace(/(["'])\.\/webview\/assets\/([^"']+\.(js|css))\1/g, (match, quote, assetFile) =>
   {
-    const assetFullPath = path.join(distPath, 'assets', assetFile);
+    const assetFullPath = path.join(publicPath, 'assets', assetFile);
+
     const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
     return `${quote}${webviewUri.toString()}${quote}`;
   });
 
   html = html.replace(
-    'content="content-security-policy-replaced-on-extension-js"',
-    `default-src 'none';
-     img-src ${panel.webview.cspSource} https: data: blob:;
-     script-src ${panel.webview.cspSource};
-     style-src ${panel.webview.cspSource} 'unsafe-inline';
-     connect-src ${panel.webview.cspSource} https:;"
-    `
+    '<!-- content-security-policy-replaced-on-extension-js-->',
+    `<meta http-equiv="Content-Security-Policy" 
+    default-src 'none'; img-src ${panel.webview.cspSource} https: data: blob:; 
+    script-src ${panel.webview.cspSource}; 
+    style-src ${panel.webview.cspSource} 'unsafe-inline'; 
+    connect-src ${panel.webview.cspSource} https:; 
+    >`
   );
 
   return html;
@@ -62,15 +64,15 @@ class GLBDocument
 //   _disposables.length = 0; // Clear the disposables array
 // }
 
-function getRootPath(webviewPanel)
+function getWebViewPath(webviewPanel)
 {
-  // console.log('getRootPath');
+  // console.log('getWebViewPath');
 
   // Handle requests for library URIs
-  const rootPath = path.join(__dirname);
-  const rootUri = webviewPanel.webview.asWebviewUri(vscode.Uri.file(rootPath));
+  const webviewPath = path.join(__dirname);
+  const webviewUri = webviewPanel.webview.asWebviewUri(vscode.Uri.file(webviewPath));
 
-  return rootUri.toString();
+  return `${webviewUri.toString()}/public/webview`;
 }
 
 function checkFileExtensionDefaults(context)
@@ -162,7 +164,7 @@ function activate(context)
       webviewPanel.webview.options = {
         enableScripts: true,
         localResourceRoots: [
-          vscode.Uri.file(path.join(__dirname, 'dist', 'webview')),
+          vscode.Uri.file(path.join(__dirname, 'public', 'webview')),
           vscode.Uri.file(path.dirname(document.uri.fsPath))
         ],
         enableFindWidget: true,
@@ -183,8 +185,8 @@ function activate(context)
           });
 
           webviewPanel.webview.postMessage({
-            type: 'setRootPath',
-            root_path: getRootPath(webviewPanel)
+            type: 'setWebViewPath',
+            webview_path: getWebViewPath(webviewPanel)
           });
 
           console.log('Sending modelUri to WebView:', modelUriString);
