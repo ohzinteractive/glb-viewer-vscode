@@ -90,7 +90,15 @@
     }
   },
   "devDependencies": {
-    "standardx": "^7.0.0"
+    "pit-js": "^4.1.1",
+    "three": "^0.176.0",
+    "pug": "^3.0.3",
+    "sass": "1.77.5",
+    "standardx": "^7.0.0",
+    "stylelint": "^15.3.0",
+    "stylelint-config-standard-scss": "^7.0.1",
+    "stylelint-order": "^6.0.3",
+    "vite": "^6.3.5"
   },
   "scripts": {
     "preinstall": "yarn setup-git && yarn setup-submodules && yarn update-submodules && yarn config-hooks",
