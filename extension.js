@@ -203,7 +203,7 @@ function activate(context)
             });
           }
         }
-        if (message.command === 'openJson')
+        if (message.type === 'openJson')
         {
           const jsonContent = JSON.stringify(message.payload, null, 2);
 
@@ -216,7 +216,7 @@ function activate(context)
           });
         }
 
-        if (message.command === 'openAsText')
+        if (message.type === 'openAsText')
         {
           vscode.commands.executeCommand('vscode.openWith', document.uri, 'default');
         }
