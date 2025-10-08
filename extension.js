@@ -15,6 +15,24 @@ function getHTML(panel)
   {
     const assetFullPath = path.join(publicPath, assetPath);
 
+    // If it's a CSS file, also process it to replace font URLs
+    if (assetPath.endsWith('.css'))
+    {
+      let css = fs.readFileSync(assetFullPath, 'utf8');
+
+      // Replace font URLs in CSS
+      css = css.replace(/url\((\/webview\/fonts\/[^)]+\.(woff2))\)/g, (match, fontPath) =>
+      {
+        const fontFullPath = path.join(publicPath, fontPath);
+        const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(fontFullPath));
+        return `url(${webviewUri.toString()})`;
+      });
+
+      // Create a data URI for the modified CSS
+      const cssDataUri = `data:text/css;base64,${Buffer.from(css).toString('base64')}`;
+      return `${quote}${cssDataUri}${quote}`;
+    }
+
     const webviewUri = panel.webview.asWebviewUri(vscode.Uri.file(assetFullPath));
     return `${quote}${webviewUri.toString()}${quote}`;
   });
@@ -30,11 +48,12 @@ function getHTML(panel)
 
   html = html.replace(
     '<!-- content-security-policy-replaced-on-extension-js-->',
-    `<meta http-equiv="Content-Security-Policy" 
-    default-src 'none'; img-src ${panel.webview.cspSource} https: data: blob:; 
-    script-src ${panel.webview.cspSource}; 
-    style-src ${panel.webview.cspSource} 'unsafe-inline'; 
-    connect-src ${panel.webview.cspSource} https:; 
+    `<meta http-equiv="Content-Security-Policy"
+    default-src 'none'; img-src ${panel.webview.cspSource} https: data: blob:;
+    script-src ${panel.webview.cspSource};
+    style-src ${panel.webview.cspSource} 'unsafe-inline' data:;
+    font-src ${panel.webview.cspSource} data:;
+    connect-src ${panel.webview.cspSource} https:;
     >`
   );
 
