@@ -4,7 +4,11 @@ A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB f
 
 ![Preview](https://github.com/ohzinteractive/glb-viewer-vscode/blob/main/previews/preview-2.10.0.png?raw=true)
 
-## Usage
+## ⚠️ IMPORTANT: ⚠️
+
+From version 2.13.0 with the launch of the [web version](https://glb.ohzi.io) all core files are now in a separate repository: https://github.com/ohzinteractive/glb-viewer-core. This repository is now only a wrapper for the core files with some VS Code specific code.
+
+## Extension Usage
 
 1. Click on any `.gltf .glb` file in VS Code's explorer window
 2. The file will be opened automatically in a new tab using the GLTF/GLB Viewer
@@ -113,10 +117,11 @@ Note: If you plan to publish to the VS Code Marketplace, you'll need to:
 
 ## Project Structure
 
-- `src/` - Source code directory
-- `dist/` - Built files
+- `glb-viewer-core/` - Core files (submodule)
+- `public/webview/` - Built files
 - `extension.js` - Main extension entry point
 - `vite.config.mjs` - Vite configuration for building the webview
+- `package.json` - Package configuration
 
 ## Contributing
 
