@@ -6,7 +6,7 @@ A Visual Studio Code extension that provides a built-in viewer for GLTF or GLB f
 
 ## ⚠️ IMPORTANT: ⚠️
 
-From version 2.13.0 with the launch of the [web version](https://glb.ohzi.io) all core files are now in a separate repository: https://github.com/ohzinteractive/glb-viewer-core. This repository is now only a wrapper for the core files with some VS Code specific code.
+From version 3.0.0 with the launch of the [web version](https://glb.ohzi.io) all core files are now in a separate repository: https://github.com/ohzinteractive/glb-viewer-core. This repository is now only a wrapper for the core files with some VS Code specific code.
 
 ## Extension Usage
 

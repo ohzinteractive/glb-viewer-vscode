@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [3.0.0] - 2025-10-08
+
+### Changed
+ - All core files are now in a separate repository: https://github.com/ohzinteractive/glb-viewer-core. This repository is now only a wrapper for the core files with some VS Code specific code.
+
 ## [2.13.0] - 2025-09-29
 
 ### Fixed
