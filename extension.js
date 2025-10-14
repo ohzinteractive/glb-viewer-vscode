@@ -149,6 +149,7 @@ async function sendModelAsBase64(panel, modelUri)
     const data = await vscode.workspace.fs.readFile(modelUri); // works with git+ and file+
 
     const dataBase64 = Buffer.from(data).toString('base64');
+    const fileSize = data.byteLength;
 
     console.log('Sending model data as base64, length:', dataBase64.length);
 
@@ -156,7 +157,8 @@ async function sendModelAsBase64(panel, modelUri)
     panel.webview.postMessage({
       type: 'loadModelFromBase64',
       data: dataBase64,
-      extension: path.extname(modelUri.fsPath).substring(1)
+      extension: path.extname(modelUri.fsPath).substring(1),
+      fileSize: fileSize
     });
   }
   catch (err)
@@ -217,9 +219,21 @@ function activate(context)
           }
           else
           {
-            webviewPanel.webview.postMessage({
-              type: 'loadModelFromUri',
-              dataUri: modelUriString
+            // Get file size for URI-based loading
+            vscode.workspace.fs.stat(document.uri).then(stats =>
+            {
+              webviewPanel.webview.postMessage({
+                type: 'loadModelFromUri',
+                dataUri: modelUriString,
+                fileSize: stats.size
+              });
+            }).catch(_err =>
+            {
+              // If stat fails, send without file size
+              webviewPanel.webview.postMessage({
+                type: 'loadModelFromUri',
+                dataUri: modelUriString
+              });
             });
           }
         }
