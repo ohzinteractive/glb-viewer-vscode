@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
 // const _disposables = [];
 
@@ -253,6 +254,37 @@ function activate(context)
         if (message.type === 'openAsText')
         {
           vscode.commands.executeCommand('vscode.openWith', document.uri, 'default');
+        }
+
+        if (message.type === 'openInBlender')
+        {
+          console.log('opening in blender', document.uri.fsPath);
+
+          // vscode.env.openExternal(vscode.Uri.parse('blender://open?file=' + encodeURIComponent(document.uri.fsPath)));
+
+          const filePath = document.uri.fsPath;
+
+          // Path to Blender executable (customize this!)
+          const blenderPath =
+            process.platform === 'darwin'
+              ? '/Applications/Blender.app/Contents/MacOS/Blender'
+              : process.platform === 'win32'
+                ? 'C:\\Program Files\\Blender Foundation\\Blender 4.2\\blender.exe'
+                : 'blender';
+
+          const command = `"${blenderPath}" --python-expr "import bpy; bpy.ops.import_scene.gltf(filepath='${filePath.replace(/\\/g, '\\\\')}')"`; // escape backslashes on Windows
+
+          console.log('RUNNING', command);
+
+          exec(command, (error, stdout, stderr) =>
+          {
+            if (error)
+            {
+              vscode.window.showErrorMessage('Error launching Blender: ' + error.message);
+              return;
+            }
+            console.log(stdout || stderr);
+          });
         }
       });
 
