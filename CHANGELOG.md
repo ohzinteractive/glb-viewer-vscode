@@ -2,6 +2,11 @@
 
 All notable changes to the GLB Viewer extension will be documented in this file.
 
+## [3.1.0] - 2025-10-17
+
+### Added
+ - Ability to open file on Blender from info panel.
+
 ## [3.0.0] - 2025-10-08
 
 ### Changed
