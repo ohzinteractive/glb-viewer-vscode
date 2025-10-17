@@ -44,6 +44,11 @@
     "configuration": {
       "title": "GLB Viewer Settings",
       "properties": {
+        "glbViewer.blenderPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Blender executable"
+        },
         "glbViewer.prettifyPropertyLabels" : {
           "type": "boolean",
           "default": true,

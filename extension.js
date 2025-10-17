@@ -168,6 +168,46 @@ async function sendModelAsBase64(panel, modelUri)
   }
 }
 
+function getDefaultBlenderPath()
+{
+  if (process.platform === 'darwin')
+  {
+    const macPath = '/Applications/Blender.app/Contents/MacOS/Blender';
+    if (fs.existsSync(macPath)) return macPath;
+    return 'blender'; // fallback to PATH
+  }
+
+  if (process.platform === 'win32')
+  {
+    const possiblePaths = [];
+
+    for (let i = 5; i > 2; i--)
+    {
+      for (let j = 6; j > -1; j--)
+      {
+        possiblePaths.push(`C:\\Program Files\\Blender Foundation\\Blender ${i}.${j}\\blender.exe`);
+      }
+    }
+
+    possiblePaths.push('C:\\Program Files\\Blender Foundation\\Blender\\blender.exe');
+
+    for (const p of possiblePaths)
+    {
+      if (fs.existsSync(p)) return p;
+    }
+    return 'blender'; // fallback to PATH
+  }
+
+  return 'blender'; // Linux or others
+}
+
+function getBlenderPath()
+{
+  const config = vscode.workspace.getConfiguration('glbViewer');
+  const customPath = config.get('blenderPath')?.trim();
+  return customPath && customPath.length > 0 ? customPath : getDefaultBlenderPath();
+}
+
 function activate(context)
 {
   const provider =
@@ -260,17 +300,10 @@ function activate(context)
         {
           console.log('opening in blender', document.uri.fsPath);
 
-          // vscode.env.openExternal(vscode.Uri.parse('blender://open?file=' + encodeURIComponent(document.uri.fsPath)));
-
           const filePath = document.uri.fsPath;
 
           // Path to Blender executable (customize this!)
-          const blenderPath =
-            process.platform === 'darwin'
-              ? '/Applications/Blender.app/Contents/MacOS/Blender'
-              : process.platform === 'win32'
-                ? 'C:\\Program Files\\Blender Foundation\\Blender 4.2\\blender.exe'
-                : 'blender';
+          const blenderPath = getBlenderPath();
 
           const command = `"${blenderPath}" --python-expr "import bpy; bpy.ops.import_scene.gltf(filepath='${filePath.replace(/\\/g, '\\\\')}')"`; // escape backslashes on Windows
 
@@ -280,7 +313,7 @@ function activate(context)
           {
             if (error)
             {
-              vscode.window.showErrorMessage('Error launching Blender: ' + error.message);
+              vscode.window.showErrorMessage(`Error launching Blender. Make sure to set the executable path in settings. \n\n${error.message}`);
               return;
             }
             console.log(stdout || stderr);
