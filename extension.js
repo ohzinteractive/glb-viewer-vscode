@@ -252,6 +252,10 @@ function activate(context)
             webview_path: getWebViewPath(webviewPanel)
           });
 
+          webviewPanel.webview.postMessage({
+            type: 'showOpenOnBlenderButton'
+          });
+
           console.log('Sending modelUri to WebView:', modelUriString);
 
           if (modelUriString.includes('git'))
