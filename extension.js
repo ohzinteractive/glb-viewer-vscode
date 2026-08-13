@@ -143,28 +143,31 @@ function checkFileExtensionDefaults(context)
   context.subscriptions.push(disposable);
 }
 
-async function sendModelAsBase64(panel, modelUri)
+async function sendFileAsBase64(panel, fileUri)
 {
   try
   {
-    const data = await vscode.workspace.fs.readFile(modelUri); // works with git+ and file+
+    const data = await vscode.workspace.fs.readFile(fileUri); // works with git+ and file+
 
     const dataBase64 = Buffer.from(data).toString('base64');
     const fileSize = data.byteLength;
-
-    console.log('Sending model data as base64, length:', dataBase64.length);
-
-    // send back as base64 or ArrayBuffer
+    console.log(`Sending file ${fileUri.toString()} data as base64, length: ${fileSize}`);
     panel.webview.postMessage({
-      type: 'loadModelFromBase64',
+      type: 'fetchFileContentResponse',
       data: dataBase64,
-      extension: path.extname(modelUri.fsPath).substring(1),
+      dataUri: fileUri.toString(),
       fileSize: fileSize
     });
   }
   catch (err)
   {
-    vscode.window.showErrorMessage(`Failed to read GLB: ${err}`);
+    panel.webview.postMessage({
+      type: 'fetchFileContentResponse',
+      data: null,
+      error: err.message,
+      dataUri: fileUri.toString(),
+      fileSize: 0
+    });
   }
 }
 
@@ -208,6 +211,8 @@ function getBlenderPath()
   return customPath && customPath.length > 0 ? customPath : getDefaultBlenderPath();
 }
 
+const SAFE_SCHEMES = ['file', 'https', 'http'];
+
 function activate(context)
 {
   const provider =
@@ -221,7 +226,7 @@ function activate(context)
     {
       console.log('Resolving custom editor for:', document.uri.toString());
 
-      const modelUri = webviewPanel.webview.asWebviewUri(document.uri);
+      const modelUri = !SAFE_SCHEMES.includes(document.uri.scheme) ? document.uri : webviewPanel.webview.asWebviewUri(document.uri);
       const modelUriString = modelUri.toString();
 
       webviewPanel.webview.options = {
@@ -258,30 +263,29 @@ function activate(context)
 
           console.log('Sending modelUri to WebView:', modelUriString);
 
-          if (modelUriString.includes('git'))
+          // Get file size for URI-based loading
+          vscode.workspace.fs.stat(document.uri).then(stats =>
           {
-            sendModelAsBase64(webviewPanel, document.uri);
-          }
-          else
-          {
-            // Get file size for URI-based loading
-            vscode.workspace.fs.stat(document.uri).then(stats =>
-            {
-              webviewPanel.webview.postMessage({
-                type: 'loadModelFromUri',
-                dataUri: modelUriString,
-                fileSize: stats.size
-              });
-            }).catch(_err =>
-            {
-              // If stat fails, send without file size
-              webviewPanel.webview.postMessage({
-                type: 'loadModelFromUri',
-                dataUri: modelUriString
-              });
+            webviewPanel.webview.postMessage({
+              type: 'loadModelFromUri',
+              dataUri: modelUriString,
+              fileSize: stats.size
             });
-          }
+          }).catch(_err =>
+          {
+            // If stat fails, send without file size
+            webviewPanel.webview.postMessage({
+              type: 'loadModelFromUri',
+              dataUri: modelUriString
+            });
+          });
         }
+
+        if (message.type === 'fetchFileContent')
+        {
+          sendFileAsBase64(webviewPanel, vscode.Uri.parse(message.dataUri));
+        }
+
         if (message.type === 'openJson')
         {
           const jsonContent = JSON.stringify(message.payload, null, 2);
